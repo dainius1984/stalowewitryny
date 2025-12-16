@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { Portfolio } from "@/components/sections/Portfolio";
 import { Footer } from "@/components/layout/Footer";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Navbar />
         <main className="pt-32 md:pt-28 flex-grow">
           <Hero />
+          <Portfolio />
         </main>
         <Footer />
       </div>
