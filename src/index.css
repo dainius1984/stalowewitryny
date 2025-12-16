@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Font */
+  --font-inter: 'Inter', sans-serif;
+
+  /* Tło - Ciemny "Techniczny" Grafit */
+  --background: 10 10% 3%;      /* #0a0909 - Prawie czarny */
+  --foreground: 0 0% 95%;       /* #f2f2f2 - Złamana biel (tekst) */
+
+  /* Karty (Bento Box) - Jaśniejsze od tła */
+  --card: 240 4% 10%;           /* #18181b */
+  --card-border: 240 4% 16%;    /* #27272a - Delikatna ramka */
+  
+  /* Twój Akcent (Neon Lime - Sprzedażowy) */
+  --primary: 84 100% 50%;        /* #ccff00 - Neon Lime */
+  --primary-foreground: 0 0% 0%; /* Czarny tekst na limonce */
+
+  /* Tekst poboczny (szary) */
+  --muted: 240 5% 65%;
+}
+
+body {
+  font-family: var(--font-inter), sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  /* Antyaliasing sprawia, że fonty są cieńsze i bardziej eleganckie na ciemnym tle */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure font-sans applies Inter everywhere */
+* {
+  font-family: inherit;
+}
+
+/* Opcjonalnie: Fajny efekt "ziarna" na tle, żeby nie było płasko (opcjonalne) */
+.bg-grain {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 10;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
