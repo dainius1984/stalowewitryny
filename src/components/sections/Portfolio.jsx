@@ -1,4 +1,4 @@
-import { Tilt } from "react-parallax-tilt";
+import ReactParallaxTilt from "react-parallax-tilt";
 import { ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
@@ -59,7 +59,7 @@ export function Portfolio() {
         {/* Portfolio Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <Tilt
+            <ReactParallaxTilt
               key={project.url}
               className={cn("group", project.colSpan)}
               glareEnable={true}
@@ -117,7 +117,7 @@ export function Portfolio() {
                   </div>
                 </BentoCard>
               </a>
-            </Tilt>
+            </ReactParallaxTilt>
           ))}
         </div>
       </Container>
