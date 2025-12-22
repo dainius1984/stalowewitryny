@@ -7,7 +7,7 @@ export function Button({
   ...props 
 }) {
   const variants = {
-    primary: "bg-primary text-primary-foreground font-semibold hover:opacity-90 shadow-[0_0_20px_hsl(var(--primary)/0.3)] font-sans",
+    primary: "bg-primary text-primary-foreground font-semibold hover:opacity-90 shadow-[0_0_20px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.6)] font-sans transition-shadow duration-300",
     outline: "border border-white/20 bg-transparent text-white hover:bg-white/10 font-sans",
     ghost: "bg-transparent text-neutral-400 hover:text-white font-sans",
   };

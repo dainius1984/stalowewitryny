@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Zap, Shield, Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { Button } from "@/components/ui/Button";
@@ -31,9 +32,23 @@ const itemVariants = {
 export function Hero() {
   return (
     <div className="relative py-12 md:py-20 overflow-hidden">
+      {/* Video Background */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src="/video/1.mp4" type="video/mp4" />
+      </video>
+      
+      {/* Dark Gradient Overlay for Text Readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80 z-[1]" />
+      
       {/* Animated Grid Background */}
       <div 
-        className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+        className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] z-[2]"
         style={{
           maskImage: "radial-gradient(ellipse 80% 50% at 50% 50%, black 40%, transparent 100%)",
           WebkitMaskImage: "radial-gradient(ellipse 80% 50% at 50% 50%, black 40%, transparent 100%)",
@@ -54,11 +69,11 @@ export function Hero() {
           )}>
             <motion.div className="space-y-6" variants={containerVariants}>
               <motion.h1 
-                className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] font-sans text-white"
+                className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] font-sans text-white"
                 variants={itemVariants}
               >
                 Tworzę strony, które{" "}
-                <span className="text-primary">sprzedają</span>
+                <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">sprzedają</span>
               </motion.h1>
               
               <motion.p 
@@ -67,6 +82,25 @@ export function Hero() {
               >
                 Kodowane od zera. Szybkie. Bezpieczne.
               </motion.p>
+              
+              {/* Trust Bar - USP Highlights */}
+              <motion.div 
+                className="flex flex-wrap items-center gap-6 md:gap-8 pt-2"
+                variants={itemVariants}
+              >
+                <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
+                  <Zap className="w-5 h-5 text-primary" />
+                  <span className="font-medium">Szybkość 100/100</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
+                  <Shield className="w-5 h-5 text-primary" />
+                  <span className="font-medium">Brak luk WordPress</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
+                  <Search className="w-5 h-5 text-primary" />
+                  <span className="font-medium">Kod Przyjazny SEO</span>
+                </div>
+              </motion.div>
               
               <motion.div 
                 className="pt-2"

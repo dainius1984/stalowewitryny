@@ -76,7 +76,7 @@ export function Portfolio() {
               >
                 <BentoCard className={cn(
                   "h-full flex flex-col overflow-hidden p-0",
-                  "hover:border-primary/30 transition-all duration-300"
+                  "hover:border-primary/30 hover:backdrop-blur-md hover:bg-neutral-900/80 transition-all duration-300"
                 )}>
                   {/* Image Container */}
                   <div className="relative h-64 overflow-hidden">
