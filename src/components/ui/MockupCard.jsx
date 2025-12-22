@@ -74,6 +74,7 @@ export function MockupCard({ images, alt, delay, position }) {
           "shadow-lg transition-all duration-500 cursor-pointer",
           "hover:border-[#CCFF00]/50 hover:shadow-[0_0_30px_rgba(204,255,0,0.4)]"
         )}
+        style={{ width: '100%', height: '100%' }}
         onClick={handleImageSwitch}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -83,7 +84,7 @@ export function MockupCard({ images, alt, delay, position }) {
         <div className="absolute inset-0 rounded-[1.5rem] border-2 border-neutral-800 pointer-events-none z-10" />
         
         {/* Screen Content with Image Carousel */}
-        <div className="absolute inset-[4px] rounded-[1.2rem] overflow-hidden bg-neutral-900 relative">
+        <div className="absolute top-[4px] left-[4px] right-[4px] bottom-[4px] rounded-[1.2rem] overflow-hidden bg-neutral-900">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
@@ -98,14 +99,13 @@ export function MockupCard({ images, alt, delay, position }) {
                 alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
                 className="w-full h-full object-cover"
                 style={{ 
-                  minWidth: '100%', 
-                  minHeight: '100%', 
+                  width: '100%',
+                  height: '100%',
                   display: 'block',
+                  objectFit: 'cover',
                   position: 'absolute',
                   top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%'
+                  left: 0
                 }}
                 onError={(e) => {
                   console.error("❌ Image failed to load:", images[currentImageIndex], "Full path:", window.location.origin + images[currentImageIndex]);
