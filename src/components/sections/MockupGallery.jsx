@@ -5,19 +5,19 @@ import { cn } from "@/lib/utils";
 // Project data with multiple images per project
 const mockupProjects = [
   {
-    images: ["/img/white1.png", "/img/white2.png"],
+    images: ["/img/projects/white1.png", "/img/projects/white2.png"],
     alt: "White Effect - Portfolio Project",
     position: "back",
     delay: 0,
   },
   {
-    images: ["/img/autyzm1.png", "/img/autyzm2.png"],
+    images: ["/img/projects/autyzm1.png", "/img/projects/autyzm2.png"],
     alt: "Autyzm od Kuchni - Portfolio Project",
     position: "middle",
     delay: 0.2,
   },
   {
-    images: ["/img/fryzjer1.png", "/img/fryzjer2.png"],
+    images: ["/img/projects/fryzjer1.png", "/img/projects/fryzjer2.png"],
     alt: "Fryzjerka Małgosia - Portfolio Project",
     position: "front",
     delay: 0.4,
