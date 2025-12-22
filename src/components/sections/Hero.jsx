@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Zap, Shield, Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -30,17 +31,44 @@ const itemVariants = {
 };
 
 export function Hero() {
+  const [currentVideo, setCurrentVideo] = useState(0);
+  const videoRef = useRef(null);
+  const videos = ["/video/1.mp4", "/video/2.mp4"];
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleVideoEnd = () => {
+      // Switch to next video
+      setCurrentVideo((prev) => (prev + 1) % videos.length);
+    };
+
+    video.addEventListener("ended", handleVideoEnd);
+    
+    // Load and play current video
+    video.load();
+    video.play().catch((error) => {
+      console.log("Video autoplay prevented:", error);
+    });
+
+    return () => {
+      video.removeEventListener("ended", handleVideoEnd);
+    };
+  }, [currentVideo, videos.length]);
+
   return (
     <div className="relative py-12 md:py-20 overflow-hidden">
-      {/* Video Background */}
+      {/* Video Background - Looping between two videos */}
       <video
+        ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover z-0"
         autoPlay
-        loop
         muted
         playsInline
+        key={currentVideo}
       >
-        <source src="/video/1.mp4" type="video/mp4" />
+        <source src={videos[currentVideo]} type="video/mp4" />
       </video>
       
       {/* Dark Gradient Overlay for Text Readability */}
