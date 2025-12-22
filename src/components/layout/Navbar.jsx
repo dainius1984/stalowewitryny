@@ -7,10 +7,10 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: "Portfolio", href: "#portfolio" },
-    { label: "Proces", href: "#proces" },
-    { label: "Cennik", href: "#cennik" },
-    { label: "Kontakt", href: "#kontakt" },
+    { label: "Portfolio", href: "#portfolio", title: "Zobacz przykłady taniej i solidnej strony internetowej" },
+    { label: "Proces", href: "#proces", title: "Jak powstaje ręcznie kodowana strona internetowa" },
+    { label: "Porównanie", href: "#porownanie", title: "Ręcznie kodowane vs platformy - porównanie" },
+    { label: "Kontakt", href: "#kontakt", title: "Skontaktuj się - darmowa wycena strony internetowej" },
   ];
 
   return (
@@ -24,7 +24,7 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Left: Logo */}
           <div className="flex items-center">
-            <a href="#" className="text-xl md:text-2xl font-black tracking-tighter font-sans text-white">
+            <a href="#" className="text-xl md:text-2xl font-black tracking-tighter font-sans text-white" title="Stalowe Witryny - Tanie i solidne strony internetowe">
               STALOWEWITRYNY
               <span className="text-primary">.</span>
             </a>
@@ -37,6 +37,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-neutral-400 hover:text-white transition-colors font-sans"
+                title={link.title || `Przejdź do sekcji ${link.label}`}
               >
                 {link.label}
               </a>
@@ -78,6 +79,7 @@ export function Navbar() {
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-sm font-medium text-neutral-400 hover:text-white transition-colors py-2 font-sans"
+                  title={link.title || `Przejdź do sekcji ${link.label}`}
                 >
                   {link.label}
                 </a>

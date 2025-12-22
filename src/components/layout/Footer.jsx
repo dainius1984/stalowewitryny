@@ -23,14 +23,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Brand */}
           <div className="space-y-4">
-            <a href="#" className="inline-block">
+            <a href="#" className="inline-block" title="Stalowe Witryny - Strona główna">
               <span className="text-2xl md:text-3xl font-black tracking-tighter font-sans text-white">
                 STALOWEWITRYNY
                 <span className="text-primary">.</span>
               </span>
             </a>
             <p className="text-sm text-neutral-400 font-sans max-w-xs">
-              Tworzę strony, które sprzedają. Kodowane od zera. Szybkie. Bezpieczne.
+              Tanie i solidne strony internetowe dla firm. Kodowane ręcznie, bez abonamentu, strona na własność.
             </p>
           </div>
 
@@ -45,6 +45,7 @@ export function Footer() {
                   key={link.href}
                   href={link.href}
                   className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
+                  title={`Przejdź do sekcji ${link.label}`}
                 >
                   {link.label}
                 </a>
@@ -63,6 +64,7 @@ export function Footer() {
                   key={link.href}
                   href={link.href}
                   className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
+                  title={`Przeczytaj ${link.label}`}
                 >
                   {link.label}
                 </a>

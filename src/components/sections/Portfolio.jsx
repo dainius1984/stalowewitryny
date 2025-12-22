@@ -44,7 +44,7 @@ const projects = [
 
 export function Portfolio() {
   return (
-    <section className="py-12 md:py-20 relative">
+    <section id="portfolio" className="py-12 md:py-20 relative">
       <Container>
         {/* Section Header */}
         <div className="mb-12 md:mb-16 text-center">
@@ -52,8 +52,12 @@ export function Portfolio() {
             Wybrane Realizacje
           </p>
           <h2 className="text-3xl md:text-5xl font-bold text-white font-sans">
-            Zobacz, co potrafię zbudować
+            Przykłady taniej i solidnej strony internetowej
           </h2>
+          <p className="text-base text-neutral-400 mt-4 font-sans max-w-2xl mx-auto">
+            Zobacz realizacje <strong className="text-white">szybkich witryn dla biznesu</strong> – 
+            każda to <strong className="text-white">strona na własność</strong>, bez abonamentu.
+          </p>
         </div>
 
         {/* Portfolio Grid */}
@@ -73,6 +77,7 @@ export function Portfolio() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block h-full"
+                title={`Zobacz przykład szybkiej strony internetowej - ${project.title}`}
               >
                 <BentoCard className={cn(
                   "h-full flex flex-col overflow-hidden p-0",
@@ -82,8 +87,9 @@ export function Portfolio() {
                   <div className="relative h-64 overflow-hidden">
                     <img
                       src={project.image}
-                      alt={project.title}
+                      alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
                       onError={(e) => {
                         // Fallback to a placeholder if image doesn't exist
                         e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";

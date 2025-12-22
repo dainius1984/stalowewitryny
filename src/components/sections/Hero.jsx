@@ -102,15 +102,22 @@ export function Hero() {
                 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] font-sans text-white"
                 variants={itemVariants}
               >
-                Tworzę strony, które{" "}
-                <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">sprzedają</span>
+                Tanie i solidne strony internetowe dla firm –{" "}
+                <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Stalowe Witryny</span>
               </motion.h1>
               
-              <motion.p 
-                className="text-lg text-neutral-400 mt-4 font-sans"
+              <motion.h2 
+                className="text-2xl md:text-3xl font-bold text-neutral-300 mt-4 font-sans"
                 variants={itemVariants}
               >
-                Kodowane od zera. Szybkie. Bezpieczne.
+                Szybkie strony www bez abonamentu i WordPressa
+              </motion.h2>
+              
+              <motion.p 
+                className="text-lg text-neutral-400 mt-2 font-sans"
+                variants={itemVariants}
+              >
+                Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
               </motion.p>
               
               {/* Trust Bar - USP Highlights */}
@@ -124,7 +131,7 @@ export function Hero() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
                   <Shield className="w-5 h-5 text-primary" />
-                  <span className="font-medium">Brak luk WordPress</span>
+                  <span className="font-medium">Strona bez WordPressa</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
                   <Search className="w-5 h-5 text-primary" />
@@ -136,7 +143,7 @@ export function Hero() {
                 className="pt-2"
                 variants={itemVariants}
               >
-                <Button variant="primary">
+                <Button variant="primary" title="Zamów darmową wycenę taniej i solidnej strony internetowej">
                   Darmowa Wycena
                 </Button>
               </motion.div>

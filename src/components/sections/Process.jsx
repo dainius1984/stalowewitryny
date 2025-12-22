@@ -31,13 +31,17 @@ const steps = [
 
 export function Process() {
   return (
-    <section className="py-12 md:py-20 bg-black relative">
+    <section id="proces" className="py-12 md:py-20 bg-black relative">
       <Container>
         {/* Section Header */}
         <div className="mb-12 md:mb-16 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-white font-sans">
-            Jak powstaje Twoja Stalowa Witryna?
+            Dlaczego ręcznie kodowana witryna to zysk dla Twojej firmy?
           </h2>
+          <p className="text-lg text-neutral-400 mt-4 font-sans max-w-3xl mx-auto">
+            Każda <strong className="text-white">szybka witryna dla biznesu</strong> powstaje w 4 krokach. 
+            Tworzę <strong className="text-white">strony na własność</strong> – bez ukrytych kosztów, bez abonamentu.
+          </p>
         </div>
 
         {/* Process Grid */}
@@ -63,8 +67,9 @@ export function Process() {
                 <div className="mb-6 w-full h-48 md:h-56 flex items-center justify-center">
                   <img
                     src={step.image}
-                    alt={`Etap ${step.title.toLowerCase()} - ${step.description.split('.')[0]}`}
+                    alt={`${step.title} - proces tworzenia taniej i solidnej strony internetowej dla firm`}
                     className="max-w-full max-h-full object-contain"
+                    loading="lazy"
                     onError={(e) => {
                       // Fallback to placeholder if image doesn't exist
                       e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%2318181b' width='400' height='300'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='20' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(step.title) + "%3C/text%3E%3C/svg%3E";

@@ -86,8 +86,9 @@ export function MockupCard({ images, alt, delay, position }) {
             >
               <img
                 src={images[currentImageIndex]}
-                alt={`${alt} - View ${currentImageIndex + 1}`}
+                alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
                 className="w-full h-full object-cover"
+                loading="lazy"
                 onError={(e) => {
                   e.target.style.display = "none";
                   e.target.parentElement.style.background = "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)";
