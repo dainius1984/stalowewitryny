@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Zap, Shield, Search } from "lucide-react";
-import ReactParallaxTilt from "react-parallax-tilt";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { MockupGallery } from "@/components/sections/MockupGallery";
 import { cn } from "@/lib/utils";
 
 const containerVariants = {
@@ -31,57 +31,6 @@ const itemVariants = {
   },
 };
 
-// Mockup Card Component with Auto-Scroll Effect
-function MockupCard({ image, alt, delay }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const cardRef = useRef(null);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      className={cn(
-        "relative w-full h-full rounded-[1.5rem] border border-white/10 bg-black overflow-hidden",
-        "shadow-lg transition-all duration-500",
-        "hover:border-[#CCFF00]/50 hover:shadow-[0_0_30px_rgba(204,255,0,0.4)]"
-      )}
-      variants={itemVariants}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        animationDelay: `${delay}s`,
-      }}
-    >
-      {/* Phone/Tablet Frame */}
-      <div className="absolute inset-0 rounded-[1.5rem] border-2 border-neutral-800 pointer-events-none z-10" />
-      
-      {/* Screen Content with Auto-Scroll */}
-      <div
-        className="absolute inset-[4px] rounded-[1.2rem] overflow-hidden bg-neutral-900"
-        style={{
-          backgroundImage: `url(${image})`,
-          backgroundSize: "cover",
-          backgroundPosition: isHovered ? "center bottom" : "center top",
-          backgroundRepeat: "no-repeat",
-          transition: "background-position 8s ease-in-out",
-        }}
-      >
-        {/* Fallback for images that don't exist */}
-        <img
-          src={image}
-          alt={alt}
-          className="w-full h-full object-cover opacity-0"
-          onError={(e) => {
-            e.target.style.display = "none";
-            e.target.parentElement.style.backgroundImage = `linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)`;
-          }}
-        />
-      </div>
-      
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none z-5" />
-    </motion.div>
-  );
-}
 
 export function Hero() {
   const [currentVideo, setCurrentVideo] = useState(0);
@@ -195,79 +144,7 @@ export function Hero() {
           </BentoCard>
 
           {/* Right Card - Span 1 column - Interactive Mockup Gallery */}
-          <BentoCard className={cn(
-            "md:col-span-1 flex items-center justify-center",
-            "p-4 md:p-6 overflow-visible relative"
-          )}>
-            {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-950" />
-            
-            {/* Mockup Gallery Container */}
-            <div className="relative w-full h-full min-h-[300px] md:min-h-[500px] flex items-center justify-center">
-              {/* Mockup Card 1 - Back (Hidden on mobile) */}
-              <ReactParallaxTilt
-                className="hidden md:block absolute w-28 md:w-36 h-[320px] md:h-[420px]"
-                style={{
-                  transform: "translateX(-20%) translateY(10%) rotate(-8deg)",
-                  zIndex: 1,
-                }}
-                tiltMaxAngleX={8}
-                tiltMaxAngleY={8}
-                scale={1.05}
-                transitionSpeed={1500}
-                glareEnable={true}
-                glareMaxOpacity={0.2}
-              >
-                <MockupCard
-                  image="/projects/whiteeffect.jpg"
-                  alt="White Effect - Portfolio Project"
-                  delay={0}
-                />
-              </ReactParallaxTilt>
-
-              {/* Mockup Card 2 - Middle */}
-              <ReactParallaxTilt
-                className="absolute w-32 md:w-36 h-[280px] md:h-[420px]"
-                style={{
-                  transform: "md:translateX(0%) md:translateY(-5%) md:rotate(-4deg)",
-                  zIndex: 2,
-                }}
-                tiltMaxAngleX={8}
-                tiltMaxAngleY={8}
-                scale={1.05}
-                transitionSpeed={1500}
-                glareEnable={true}
-                glareMaxOpacity={0.2}
-              >
-                <MockupCard
-                  image="/projects/autyzm.jpg"
-                  alt="Autyzm od Kuchni - Portfolio Project"
-                  delay={0.2}
-                />
-              </ReactParallaxTilt>
-
-              {/* Mockup Card 3 - Front (Hidden on mobile) */}
-              <ReactParallaxTilt
-                className="hidden md:block relative w-28 md:w-36 h-[320px] md:h-[420px]"
-                style={{
-                  transform: "translateX(20%) translateY(5%) rotate(2deg)",
-                  zIndex: 3,
-                }}
-                tiltMaxAngleX={8}
-                tiltMaxAngleY={8}
-                scale={1.05}
-                transitionSpeed={1500}
-                glareEnable={true}
-                glareMaxOpacity={0.2}
-              >
-                <MockupCard
-                  image="/projects/oraneria.jpg"
-                  alt="Oraneria - Portfolio Project"
-                  delay={0.4}
-                />
-              </ReactParallaxTilt>
-            </div>
-          </BentoCard>
+          <MockupGallery />
 
           {/* Bottom Card - Span 3 columns */}
           <BentoCard className={cn(
