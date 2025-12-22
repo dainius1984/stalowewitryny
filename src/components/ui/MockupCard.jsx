@@ -7,6 +7,15 @@ export function MockupCard({ images, alt, delay, position }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Debug: Log image paths on mount
+  useEffect(() => {
+    console.log(`📱 MockupCard [${position}]:`, {
+      images,
+      currentImage: images[currentImageIndex],
+      alt
+    });
+  }, [images, currentImageIndex, position, alt]);
+
   // Auto-rotate between images every 3 seconds
   useEffect(() => {
     if (!isHovered && images.length > 1) {
@@ -39,8 +48,8 @@ export function MockupCard({ images, alt, delay, position }) {
       className={cn(
         "w-28 md:w-36 h-[280px] md:h-[420px]",
         position === "back" && "hidden md:block absolute",
-        position === "middle" && "absolute md:relative",
-        position === "front" && "hidden md:block relative"
+        position === "middle" && "absolute md:relative z-10",
+        position === "front" && "hidden md:block relative z-20"
       )}
       style={{
         transform: position === "back" 
@@ -78,7 +87,7 @@ export function MockupCard({ images, alt, delay, position }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
-              className="absolute inset-0"
+              className="absolute inset-0 w-full h-full z-0"
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -88,10 +97,31 @@ export function MockupCard({ images, alt, delay, position }) {
                 src={images[currentImageIndex]}
                 alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                style={{ 
+                  minWidth: '100%', 
+                  minHeight: '100%', 
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%'
+                }}
                 onError={(e) => {
+                  console.error("❌ Image failed to load:", images[currentImageIndex], "Full path:", window.location.origin + images[currentImageIndex]);
                   e.target.style.display = "none";
-                  e.target.parentElement.style.background = "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)";
+                  const parent = e.target.parentElement;
+                  if (parent) {
+                    parent.style.background = "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)";
+                    parent.style.display = "flex";
+                    parent.style.alignItems = "center";
+                    parent.style.justifyContent = "center";
+                  }
+                }}
+                onLoad={(e) => {
+                  console.log("✅ Image loaded successfully:", images[currentImageIndex]);
+                  console.log("📏 Image dimensions:", e.target.naturalWidth, "x", e.target.naturalHeight);
+                  console.log("📐 Image display size:", e.target.offsetWidth, "x", e.target.offsetHeight);
                 }}
               />
             </motion.div>
@@ -99,7 +129,7 @@ export function MockupCard({ images, alt, delay, position }) {
 
           {/* Image Indicator Dots (if multiple images) */}
           {images.length > 1 && (
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
               {images.map((_, index) => (
                 <button
                   key={index}
@@ -122,7 +152,7 @@ export function MockupCard({ images, alt, delay, position }) {
           {/* Hover Overlay - Shows "Click to switch" hint */}
           {images.length > 1 && (
             <motion.div
-              className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-15 pointer-events-none"
+              className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-25 pointer-events-none"
               initial={false}
             >
               <div className="text-white/80 text-xs font-medium font-sans px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-full border border-white/20">

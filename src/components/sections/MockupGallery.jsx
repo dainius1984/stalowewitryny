@@ -34,10 +34,10 @@ export function MockupGallery() {
       <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-950" />
       
       {/* Mockup Gallery Container */}
-      <div className="relative w-full h-full min-h-[300px] md:min-h-[500px] flex items-center justify-center">
+      <div className="relative w-full h-full min-h-[300px] md:min-h-[500px] flex items-center justify-center overflow-visible">
         {mockupProjects.map((project, index) => (
           <MockupCard
-            key={index}
+            key={`${project.alt}-${index}`}
             images={project.images}
             alt={project.alt}
             delay={project.delay}
