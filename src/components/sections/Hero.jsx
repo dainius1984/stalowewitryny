@@ -6,6 +6,7 @@ import { BentoCard } from "@/components/ui/BentoCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MockupGallery } from "@/components/sections/MockupGallery";
+import { CompanySurvey } from "@/components/sections/CompanySurvey";
 import { cn } from "@/lib/utils";
 
 const containerVariants = {
@@ -34,6 +35,7 @@ const itemVariants = {
 
 export function Hero() {
   const [currentVideo, setCurrentVideo] = useState(0);
+  const [isSurveyOpen, setIsSurveyOpen] = useState(false);
   const videoRef = useRef(null);
   const videos = ["/video/1.mp4", "/video/2.mp4"];
 
@@ -50,8 +52,8 @@ export function Hero() {
     
     // Load and play current video
     video.load();
-    video.play().catch((error) => {
-      console.log("Video autoplay prevented:", error);
+    video.play().catch(() => {
+      // Video autoplay prevented - silent fail
     });
 
     return () => {
@@ -140,10 +142,15 @@ export function Hero() {
               </motion.div>
               
               <motion.div 
-                className="pt-2"
+                className="pt-2 flex justify-center md:justify-start"
                 variants={itemVariants}
               >
-                <Button variant="primary" title="Zamów darmową wycenę taniej i solidnej strony internetowej">
+                <Button 
+                  variant="primary"
+                  onClick={() => setIsSurveyOpen(true)}
+                  title="Zamów darmową wycenę taniej i solidnej strony internetowej"
+                  className="text-lg px-8 py-4 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                >
                   Darmowa Wycena
                 </Button>
               </motion.div>
@@ -178,6 +185,9 @@ export function Hero() {
           </BentoCard>
         </motion.div>
       </Container>
+      
+      {/* Company Survey Modal */}
+      <CompanySurvey isOpen={isSurveyOpen} onClose={() => setIsSurveyOpen(false)} />
     </div>
   );
 }

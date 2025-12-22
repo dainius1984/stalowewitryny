@@ -21,9 +21,9 @@ export function Navbar() {
           "px-4 md:px-6 py-3 md:py-4"
         )}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4 md:gap-8">
           {/* Left: Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center flex-shrink-0">
             <a href="#" className="text-xl md:text-2xl font-black tracking-tighter font-sans text-white" title="Stalowe Witryny - Tanie i solidne strony internetowe">
               STALOWEWITRYNY
               <span className="text-primary">.</span>
@@ -31,12 +31,12 @@ export function Navbar() {
           </div>
 
           {/* Center: Navigation Links (Desktop) */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-neutral-400 hover:text-white transition-colors font-sans"
+                className="text-sm font-medium text-neutral-400 hover:text-white transition-colors font-sans whitespace-nowrap"
                 title={link.title || `Przejdź do sekcji ${link.label}`}
               >
                 {link.label}
@@ -45,7 +45,7 @@ export function Navbar() {
           </div>
 
           {/* Right: CTA Button & Mobile Menu */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-shrink-0">
             {/* CTA Button (Desktop) */}
             <Button
               variant="primary"

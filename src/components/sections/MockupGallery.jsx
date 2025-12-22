@@ -28,7 +28,9 @@ export function MockupGallery() {
   return (
     <BentoCard className={cn(
       "md:col-span-1 flex items-center justify-center",
-      "p-4 md:p-6 overflow-visible relative"
+      "p-4 md:p-6 overflow-visible relative",
+      "transition-all duration-500 ease-out",
+      "hover:scale-105 hover:z-20"
     )}>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-950" />

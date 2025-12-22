@@ -7,15 +7,6 @@ export function MockupCard({ images, alt, delay, position }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Debug: Log image paths on mount
-  useEffect(() => {
-    console.log(`📱 MockupCard [${position}]:`, {
-      images,
-      currentImage: images[currentImageIndex],
-      alt
-    });
-  }, [images, currentImageIndex, position, alt]);
-
   // Auto-rotate between images every 3 seconds
   useEffect(() => {
     if (!isHovered && images.length > 1) {
@@ -108,7 +99,6 @@ export function MockupCard({ images, alt, delay, position }) {
                   left: 0
                 }}
                 onError={(e) => {
-                  console.error("❌ Image failed to load:", images[currentImageIndex], "Full path:", window.location.origin + images[currentImageIndex]);
                   e.target.style.display = "none";
                   const parent = e.target.parentElement;
                   if (parent) {
@@ -117,11 +107,6 @@ export function MockupCard({ images, alt, delay, position }) {
                     parent.style.alignItems = "center";
                     parent.style.justifyContent = "center";
                   }
-                }}
-                onLoad={(e) => {
-                  console.log("✅ Image loaded successfully:", images[currentImageIndex]);
-                  console.log("📏 Image dimensions:", e.target.naturalWidth, "x", e.target.naturalHeight);
-                  console.log("📐 Image display size:", e.target.offsetWidth, "x", e.target.offsetHeight);
                 }}
               />
             </motion.div>
