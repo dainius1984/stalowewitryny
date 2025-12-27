@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motio
 import ReactParallaxTilt from "react-parallax-tilt";
 import { cn } from "@/lib/utils";
 
-export function MockupCard({ images, alt, delay, position, onHover, onLeave }) {
+export function MockupCard({ images, alt, delay, position, onHover, onLeave, onClick, project, isLeft, className }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -77,55 +77,71 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave }) {
     }
   };
 
-  const handleImageSwitch = () => {
+  const handleImageSwitch = (e) => {
+    e.stopPropagation(); // Prevent triggering parent click
     if (images.length > 1) {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
       setScrollProgress(0);
     }
   };
 
+  const handleCardClick = () => {
+    if (onClick) {
+      // Pass the full project object if available, otherwise pass basic info
+      onClick(project || { images, alt, currentIndex: currentImageIndex });
+    }
+  };
+
   return (
     <ReactParallaxTilt
       className={cn(
-        "w-40 md:w-64 h-[400px] md:h-[600px]",
+        "w-40 md:w-56 h-[400px] md:h-[600px]",
+        position === "left" && "relative z-10",
+        position === "right" && "relative z-10",
+        // Old positions for backward compatibility
         position === "back" && "hidden md:block absolute",
         position === "middle" && "absolute md:relative z-10",
-        position === "front" && "hidden md:block relative z-20"
+        position === "front" && "hidden md:block relative z-20",
+        className
       )}
       style={{
-        transform: position === "back" 
+        transform: position === "left"
+          ? "translateX(0%) translateY(0%) rotate(-3deg)"
+          : position === "right"
+          ? "translateX(0%) translateY(0%) rotate(3deg)"
+          : position === "back" 
           ? "translateX(-25%) translateY(8%) rotate(-10deg)"
           : position === "front"
           ? "translateX(25%) translateY(3%) rotate(3deg)"
           : "md:translateX(0%) md:translateY(-8%) md:rotate(-5deg)",
-        zIndex: position === "back" ? 1 : position === "front" ? 3 : 2,
+        zIndex: position === "left" || position === "right" ? 10 : position === "back" ? 1 : position === "front" ? 3 : 2,
       }}
-      tiltMaxAngleX={isHovered ? 5 : 10}
-      tiltMaxAngleY={isHovered ? 5 : 10}
-      scale={isHovered ? 1.25 : 1.05}
-      transitionSpeed={1500}
+      tiltMaxAngleX={isHovered ? 8 : 5}
+      tiltMaxAngleY={isHovered ? 8 : 5}
+      scale={isHovered ? 1.15 : 1.0}
+      transitionSpeed={2000}
       glareEnable={true}
-      glareMaxOpacity={isHovered ? 0.5 : 0.3}
+      glareMaxOpacity={isHovered ? 0.6 : 0.2}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <motion.div
         className={cn(
           "relative w-full h-full rounded-[2rem] border-2 bg-black overflow-hidden",
-          "shadow-2xl transition-all duration-700 cursor-pointer",
+          "shadow-2xl transition-all duration-500 cursor-pointer",
           isHovered 
-            ? "border-[#CCFF00] shadow-[0_0_80px_rgba(204,255,0,0.8)] scale-110 z-[99]" 
-            : "border-white/10 shadow-lg"
+            ? "border-[#CCFF00] shadow-[0_0_60px_rgba(204,255,0,0.9)] z-[99]" 
+            : "border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
         )}
         style={{ width: '100%', height: '100%' }}
-        onClick={handleImageSwitch}
+        onClick={handleCardClick}
         initial={{ opacity: 0, y: 20 }}
         animate={{ 
           opacity: 1, 
-          y: isHovered && position === "middle" ? -30 : 0,
-          scale: isHovered ? 1.1 : 1
+          y: 0,
+          scale: 1
         }}
-        transition={{ delay, duration: 0.5, type: "spring", stiffness: 100 }}
+        transition={{ delay, duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       >
         {/* Phone/Tablet Frame with glow effect */}
         <div className={cn(
@@ -216,7 +232,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave }) {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  Kliknij, aby przełączyć
+                  Kliknij, aby otworzyć
                 </motion.div>
               )}
               {/* Scroll progress indicator */}

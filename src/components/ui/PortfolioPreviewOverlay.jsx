@@ -1,69 +1,26 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
 export function PortfolioPreviewOverlay({ 
   isOpen, 
   onClose, 
-  images, 
-  alt,
-  currentIndex: initialIndex = 0 
+  url,
+  title,
+  alt
 }) {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Reset index when overlay opens
+  // Reset loading state when overlay opens or URL changes
   useEffect(() => {
-    if (isOpen) {
-      setCurrentIndex(initialIndex);
-      setIsAutoScrolling(true);
+    if (isOpen && url) {
+      setIsLoading(true);
     }
-  }, [isOpen, initialIndex]);
+  }, [isOpen, url]);
 
-  // Auto-scroll effect
-  useEffect(() => {
-    if (isOpen && isAutoScrolling && images.length > 0) {
-      const container = document.getElementById('preview-image-container');
-      if (container) {
-        const img = container.querySelector('img');
-        if (img) {
-          const containerHeight = container.clientHeight;
-          const imgHeight = img.offsetHeight;
-          const maxScroll = Math.max(0, imgHeight - containerHeight);
-          
-          if (maxScroll > 0) {
-            const scrollInterval = setInterval(() => {
-              container.scrollTop = Math.min(
-                container.scrollTop + 2,
-                maxScroll
-              );
-              
-              if (container.scrollTop >= maxScroll) {
-                setIsAutoScrolling(false);
-                clearInterval(scrollInterval);
-              }
-            }, 30);
-
-            return () => clearInterval(scrollInterval);
-          }
-        }
-      }
-    }
-  }, [isOpen, isAutoScrolling, currentIndex, images.length]);
-
-  const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-    setIsAutoScrolling(true);
-  };
-
-  const prevImage = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    setIsAutoScrolling(true);
-  };
-
-  // Don't render if no images
-  if (!images || images.length === 0) {
+  // Don't render if no URL
+  if (!url) {
     return null;
   }
 
@@ -86,10 +43,10 @@ export function PortfolioPreviewOverlay({
           <div key="overlay-content" className="fixed inset-0 z-[201] flex items-center justify-center p-4 md:p-8 pointer-events-none">
             <motion.div
               className={cn(
-                "relative w-full max-w-6xl h-full max-h-[90vh]",
+                "relative w-full max-w-7xl h-full max-h-[95vh]",
                 "bg-neutral-900 rounded-[2rem] border-2 border-[#CCFF00]/30",
                 "shadow-[0_0_80px_rgba(204,255,0,0.4)]",
-                "pointer-events-auto overflow-hidden"
+                "pointer-events-auto overflow-hidden flex flex-col"
               )}
               initial={{ opacity: 0, scale: 0.8, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -97,80 +54,65 @@ export function PortfolioPreviewOverlay({
               transition={{ duration: 0.4, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 z-50 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/10 hover:bg-black/90 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
-                aria-label="Zamknij"
-              >
-                <X className="w-6 h-6" />
-              </button>
+              {/* Header Bar */}
+              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-neutral-900/80 backdrop-blur-md">
+                {/* Project Title */}
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-[#CCFF00] shadow-[0_0_10px_rgba(204,255,0,0.6)]"></div>
+                  <span className="text-sm md:text-base font-semibold text-white font-sans">
+                    {title || alt}
+                  </span>
+                </div>
 
-              {/* Navigation Arrows */}
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/10 hover:bg-black/90 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
-                    aria-label="Poprzedni obraz"
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2">
+                  {/* External Link Button */}
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/80 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
+                    aria-label="Otwórz w nowej karcie"
+                    title="Otwórz stronę w nowej karcie"
                   >
-                    <ChevronLeft className="w-6 h-6" />
-                  </button>
+                    <ExternalLink className="w-5 h-5" />
+                  </a>
+                  
+                  {/* Close Button */}
                   <button
-                    onClick={nextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/10 hover:bg-black/90 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
-                    aria-label="Następny obraz"
+                    onClick={onClose}
+                    className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/80 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
+                    aria-label="Zamknij"
+                    title="Zamknij podgląd"
                   >
-                    <ChevronRight className="w-6 h-6" />
+                    <X className="w-5 h-5" />
                   </button>
-                </>
-              )}
-
-              {/* Image Container */}
-              <div
-                id="preview-image-container"
-                className="w-full h-full overflow-y-auto scrollbar-hide"
-                style={{ scrollBehavior: 'smooth' }}
-              >
-                <motion.img
-                  key={currentIndex}
-                  src={images[currentIndex]}
-                  alt={`${alt} - Portfolio Preview ${currentIndex + 1}`}
-                  className="w-full h-auto object-contain"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3 }}
-                />
+                </div>
               </div>
 
-              {/* Image Indicators */}
-              {images.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setCurrentIndex(index);
-                        setIsAutoScrolling(true);
-                      }}
-                      className={cn(
-                        "rounded-full transition-all duration-300",
-                        index === currentIndex
-                          ? "bg-[#CCFF00] w-8 h-2 shadow-[0_0_10px_rgba(204,255,0,0.8)]"
-                          : "bg-white/40 hover:bg-white/60 w-2 h-2"
-                      )}
-                      aria-label={`Show image ${index + 1}`}
-                    />
-                  ))}
+              {/* Loading Indicator */}
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-neutral-900 z-10">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-[#CCFF00]/30 border-t-[#CCFF00] rounded-full animate-spin"></div>
+                    <span className="text-sm text-neutral-400 font-sans">Ładowanie strony...</span>
+                  </div>
                 </div>
               )}
 
-              {/* Project Title */}
-              <div className="absolute top-4 left-4 z-50 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                <span className="text-sm font-semibold text-white font-sans">
-                  {alt}
-                </span>
+              {/* Webview Container */}
+              <div className="flex-1 relative overflow-hidden">
+                <iframe
+                  src={url}
+                  className="w-full h-full border-0"
+                  title={title || alt}
+                  allow="fullscreen"
+                  allowFullScreen
+                  onLoad={() => setIsLoading(false)}
+                  style={{
+                    minHeight: '100%',
+                  }}
+                />
               </div>
             </motion.div>
           </div>
