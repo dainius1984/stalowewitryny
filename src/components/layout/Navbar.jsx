@@ -14,24 +14,24 @@ export function Navbar() {
   ];
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-2xl">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
       <nav
         className={cn(
           "rounded-full border border-white/10 bg-black/60 backdrop-blur-xl shadow-lg",
-          "px-4 md:px-6 py-3 md:py-4"
+          "px-4 md:px-8 py-3 md:py-4"
         )}
       >
-        <div className="flex items-center justify-between gap-4 md:gap-8">
+        <div className="flex items-center justify-between gap-2 md:gap-6">
           {/* Left: Logo */}
           <div className="flex items-center flex-shrink-0">
-            <a href="#" className="text-xl md:text-2xl font-black tracking-tighter font-sans text-white" title="Stalowe Witryny - Tanie i solidne strony internetowe">
+            <a href="#" className="text-lg md:text-xl font-black tracking-tighter font-sans text-white" title="Stalowe Witryny - Tanie i solidne strony internetowe">
               STALOWEWITRYNY
               <span className="text-primary">.</span>
             </a>
           </div>
 
           {/* Center: Navigation Links (Desktop) */}
-          <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
+          <div className="hidden md:flex items-center gap-6 flex-1 justify-center mx-4">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -45,11 +45,11 @@ export function Navbar() {
           </div>
 
           {/* Right: CTA Button & Mobile Menu */}
-          <div className="flex items-center gap-4 flex-shrink-0">
+          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* CTA Button (Desktop) */}
             <Button
               variant="primary"
-              className="hidden md:inline-flex px-4 py-2 text-sm"
+              className="hidden md:inline-flex px-5 py-2 text-sm whitespace-nowrap"
             >
               Wycena
             </Button>
