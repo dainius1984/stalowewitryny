@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 
 export function Navbar({ isModalOpen = false }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Close mobile menu when modal opens
   useEffect(() => {
@@ -13,6 +15,31 @@ export function Navbar({ isModalOpen = false }) {
       setIsMobileMenuOpen(false);
     }
   }, [isModalOpen]);
+
+  // Handle scroll to hide/show navbar
+  useEffect(() => {
+    if (isModalOpen) return; // Don't handle scroll when modal is open
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show navbar at the top of the page
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+      } 
+      // Hide navbar when scrolling down, show when scrolling up
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY, isModalOpen]);
 
   const navLinks = [
     { label: "Portfolio", href: "#portfolio", title: "Zobacz przykłady taniej i solidnej strony internetowej" },
@@ -26,12 +53,22 @@ export function Navbar({ isModalOpen = false }) {
       {!isModalOpen && (
         <motion.header
           key="navbar"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20, pointerEvents: "none" }}
-          transition={{ duration: 0.2 }}
-          className="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-4xl"
-          style={{ display: isModalOpen ? 'none' : 'block' }}
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ 
+            opacity: isVisible ? 1 : 0,
+            y: isVisible ? 0 : -100,
+            pointerEvents: isVisible ? 'auto' : 'none'
+          }}
+          exit={{ opacity: 0, y: -100, pointerEvents: "none" }}
+          transition={{ 
+            duration: 0.3,
+            ease: [0.4, 0, 0.2, 1]
+          }}
+          className="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-4xl mx-auto"
+          style={{ 
+            transform: 'translateX(-50%)',
+            display: isModalOpen ? 'none' : 'block'
+          }}
         >
           <nav
             className={cn(
