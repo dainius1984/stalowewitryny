@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function PortfolioPreviewOverlay({ 
   isOpen, 
@@ -11,6 +11,12 @@ export function PortfolioPreviewOverlay({
   alt
 }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const overlayRef = useRef(null);
+
+  // Minimum swipe distance to close (in pixels)
+  const minSwipeDistance = 100;
 
   // Reset loading state when overlay opens or URL changes
   useEffect(() => {
@@ -18,6 +24,44 @@ export function PortfolioPreviewOverlay({
       setIsLoading(true);
     }
   }, [isOpen, url]);
+
+  // Add parameter to disable subscription modal on whiteeffect.pl
+  const getIframeUrl = (originalUrl) => {
+    if (!originalUrl) return "";
+    try {
+      const urlObj = new URL(originalUrl);
+      // Add parameter to disable subscription modal
+      urlObj.searchParams.set('preview', 'true');
+      urlObj.searchParams.set('noSubscriptionModal', 'true');
+      return urlObj.toString();
+    } catch {
+      return originalUrl;
+    }
+  };
+
+  // Swipe down to close on mobile
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientY);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientY);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isDownSwipe = distance < -minSwipeDistance;
+    
+    if (isDownSwipe && overlayRef.current) {
+      // Check if swipe started from top area of overlay
+      const overlayTop = overlayRef.current.getBoundingClientRect().top;
+      if (touchStart < overlayTop + 100) {
+        onClose();
+      }
+    }
+  };
 
   // Don't render if no URL
   if (!url) {
@@ -40,11 +84,12 @@ export function PortfolioPreviewOverlay({
           />
           
           {/* Overlay Content */}
-          <div key="overlay-content" className="fixed inset-0 z-[201] flex items-center justify-center p-4 md:p-8 pointer-events-none">
+          <div key="overlay-content" className="fixed inset-0 z-[201] flex items-center justify-center p-2 md:p-8 pointer-events-none">
             <motion.div
+              ref={overlayRef}
               className={cn(
-                "relative w-full max-w-7xl h-full max-h-[95vh]",
-                "bg-neutral-900 rounded-[2rem] border-2 border-[#CCFF00]/30",
+                "relative w-full max-w-7xl h-full max-h-[98vh] md:max-h-[95vh]",
+                "bg-neutral-900 rounded-[2rem] md:rounded-[2rem] border-2 border-[#CCFF00]/30",
                 "shadow-[0_0_80px_rgba(204,255,0,0.4)]",
                 "pointer-events-auto overflow-hidden flex flex-col"
               )}
@@ -53,41 +98,52 @@ export function PortfolioPreviewOverlay({
               exit={{ opacity: 0, scale: 0.8, y: 50 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
             >
               {/* Header Bar */}
-              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-neutral-900/80 backdrop-blur-md">
+              <div className="flex items-center justify-between p-3 md:p-4 border-b border-white/10 bg-neutral-900/80 backdrop-blur-md relative">
+                {/* Swipe Indicator for Mobile */}
+                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-white/20 rounded-full md:hidden"></div>
+                
                 {/* Project Title */}
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-[#CCFF00] shadow-[0_0_10px_rgba(204,255,0,0.6)]"></div>
-                  <span className="text-sm md:text-base font-semibold text-white font-sans">
+                <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                  <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#CCFF00] shadow-[0_0_10px_rgba(204,255,0,0.6)] flex-shrink-0"></div>
+                  <span className="text-xs md:text-sm lg:text-base font-semibold text-white font-sans truncate">
                     {title || alt}
                   </span>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-shrink-0">
                   {/* External Link Button */}
                   <a
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/80 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
+                    className="p-2 md:p-2.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/80 hover:border-[#CCFF00]/50 active:scale-95 transition-all duration-300 text-white hover:text-[#CCFF00]"
                     aria-label="Otwórz w nowej karcie"
                     title="Otwórz stronę w nowej karcie"
                   >
-                    <ExternalLink className="w-5 h-5" />
+                    <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />
                   </a>
                   
-                  {/* Close Button */}
+                  {/* Close Button - Larger on mobile */}
                   <button
                     onClick={onClose}
-                    className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/80 hover:border-[#CCFF00]/50 transition-all duration-300 text-white hover:text-[#CCFF00]"
+                    className="p-2.5 md:p-2 rounded-full bg-[#CCFF00]/20 backdrop-blur-md border-2 border-[#CCFF00]/50 hover:bg-[#CCFF00]/30 active:scale-95 transition-all duration-300 text-[#CCFF00] hover:text-[#CCFF00] touch-manipulation"
                     aria-label="Zamknij"
                     title="Zamknij podgląd"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 md:w-5 md:h-5" />
                   </button>
                 </div>
+              </div>
+
+              {/* Mobile Close Hint */}
+              <div className="md:hidden text-center py-2 border-b border-white/5">
+                <span className="text-xs text-neutral-400 font-sans">Przesuń w dół, aby zamknąć</span>
               </div>
 
               {/* Loading Indicator */}
@@ -103,7 +159,7 @@ export function PortfolioPreviewOverlay({
               {/* Webview Container */}
               <div className="flex-1 relative overflow-hidden">
                 <iframe
-                  src={url}
+                  src={getIframeUrl(url)}
                   className="w-full h-full border-0"
                   title={title || alt}
                   allow="fullscreen"
@@ -113,6 +169,17 @@ export function PortfolioPreviewOverlay({
                     minHeight: '100%',
                   }}
                 />
+              </div>
+
+              {/* Mobile Bottom Close Button */}
+              <div className="md:hidden p-4 border-t border-white/10 bg-neutral-900/80 backdrop-blur-md">
+                <button
+                  onClick={onClose}
+                  className="w-full py-3 px-6 rounded-full bg-[#CCFF00] text-black font-semibold text-base active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(204,255,0,0.4)] hover:shadow-[0_0_30px_rgba(204,255,0,0.6)] touch-manipulation"
+                  aria-label="Zamknij"
+                >
+                  Zamknij
+                </button>
               </div>
             </motion.div>
           </div>

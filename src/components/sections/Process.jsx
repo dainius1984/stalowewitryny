@@ -7,25 +7,29 @@ const steps = [
     number: "01",
     title: "Analiza",
     description: "Poznaję Twój biznes i cele sprzedażowe. Bez strategii nie ma efektów.",
-    image: "/img/analiza.png",
+    image: "/img/Analysis.png",
+    alt: "Analiza biznesowa - proces tworzenia taniej i solidnej strony internetowej dla firm",
   },
   {
     number: "02",
     title: "Projekt",
     description: "Tworzę unikalny design UX/UI. Twoja strona nie będzie wyglądać jak tysiące innych.",
-    image: "/img/projekt.png",
+    image: "/img/Design Project.png",
+    alt: "Projektowanie UX/UI - proces tworzenia taniej i solidnej strony internetowej dla firm",
   },
   {
     number: "03",
     title: "Kodowanie",
     description: "Piszę czysty kod od zera. Żadnych ciężkich wtyczek, tylko czysta szybkość i bezpieczeństwo.",
-    image: "/img/kodowanie.png",
+    image: "/img/Coding.png",
+    alt: "Kodowanie strony internetowej - proces tworzenia taniej i solidnej strony internetowej dla firm",
   },
   {
     number: "04",
     title: "Wsparcie",
     description: "Opiekuję się Twoją stroną po wdrożeniu. Jestem Twoim partnerem technologicznym.",
-    image: "/img/wsparcie.png",
+    image: "/img/Security.png",
+    alt: "Wsparcie techniczne - proces tworzenia taniej i solidnej strony internetowej dla firm",
   },
 ];
 
@@ -64,10 +68,10 @@ export function Process() {
               {/* Content */}
               <div className="relative z-10 flex flex-col items-center text-center p-6 md:p-8">
                 {/* Image */}
-                <div className="mb-6 w-full h-48 md:h-56 flex items-center justify-center">
+                <div className="mb-6 w-full h-48 md:h-56 flex items-center justify-center bg-neutral-950/30 rounded-xl p-4">
                   <img
                     src={step.image}
-                    alt={`${step.title} - proces tworzenia taniej i solidnej strony internetowej dla firm`}
+                    alt={step.alt || `${step.title} - proces tworzenia taniej i solidnej strony internetowej dla firm`}
                     className="max-w-full max-h-full object-contain"
                     loading="lazy"
                     onError={(e) => {

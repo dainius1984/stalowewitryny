@@ -9,21 +9,21 @@ const projects = [
     title: "White Effect",
     category: "Medycyna Estetyczna",
     url: "https://www.whiteeffect.pl/",
-    image: "/projects/whiteeffect.jpg",
+    image: "/img/projects/white1.png",
     colSpan: "md:col-span-2",
   },
   {
     title: "Autyzm od Kuchni",
     category: "Blog / Edukacja",
     url: "https://www.autyzmodkuchni.pl/",
-    image: "/projects/autyzm.jpg",
+    image: "/img/projects/autyzm1.png",
     colSpan: "md:col-span-1",
   },
   {
     title: "Fryzjerka Małgosia",
     category: "Usługi Lokalne",
     url: "https://www.fryzjerkamalgosia.pl/",
-    image: "/projects/fryzjer.jpg",
+    image: "/img/projects/fryzjer1.png",
     colSpan: "md:col-span-1",
   },
   {
@@ -84,7 +84,7 @@ export function Portfolio() {
                   "hover:border-primary/30 hover:backdrop-blur-md hover:bg-neutral-900/80 transition-all duration-300"
                 )}>
                   {/* Image Container */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-64 md:h-72 overflow-hidden bg-neutral-950">
                     <img
                       src={project.image}
                       alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
