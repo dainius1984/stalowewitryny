@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
-export function Navbar() {
+export function Navbar({ isModalOpen = false }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when modal opens
+  useEffect(() => {
+    if (isModalOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [isModalOpen]);
 
   const navLinks = [
     { label: "Portfolio", href: "#portfolio", title: "Zobacz przykłady taniej i solidnej strony internetowej" },
@@ -14,13 +22,23 @@ export function Navbar() {
   ];
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
-      <nav
-        className={cn(
-          "rounded-full border border-white/10 bg-black/60 backdrop-blur-xl shadow-lg",
-          "px-4 md:px-8 py-3 md:py-4"
-        )}
-      >
+    <AnimatePresence mode="wait">
+      {!isModalOpen && (
+        <motion.header
+          key="navbar"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20, pointerEvents: "none" }}
+          transition={{ duration: 0.2 }}
+          className="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-4xl"
+          style={{ display: isModalOpen ? 'none' : 'block' }}
+        >
+          <nav
+            className={cn(
+              "rounded-full border border-white/10 bg-black/60 backdrop-blur-xl shadow-lg",
+               "px-4 md:px-8 py-3 md:py-4"
+            )}
+          >
         <div className="flex items-center justify-between gap-2 md:gap-6">
           {/* Left: Logo */}
           <div className="flex items-center flex-shrink-0">
@@ -95,6 +113,8 @@ export function Navbar() {
           </div>
         )}
       </nav>
-    </header>
+    </motion.header>
+      )}
+    </AnimatePresence>
   );
 }

@@ -33,7 +33,7 @@ const itemVariants = {
 };
 
 
-export function Hero() {
+export function Hero({ onModalStateChange }) {
   const [currentVideo, setCurrentVideo] = useState(0);
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
   const videoRef = useRef(null);
@@ -158,7 +158,7 @@ export function Hero() {
           </BentoCard>
 
           {/* Right Card - Span 1 column - Interactive Mockup Gallery */}
-          <MockupGallery />
+          <MockupGallery onModalStateChange={onModalStateChange} />
 
           {/* Bottom Card - Span 3 columns */}
           <BentoCard className={cn(

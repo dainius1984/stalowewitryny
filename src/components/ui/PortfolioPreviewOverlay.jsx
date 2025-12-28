@@ -75,7 +75,7 @@ export function PortfolioPreviewOverlay({
           {/* Backdrop */}
           <motion.div
             key="backdrop"
-            className="fixed inset-0 bg-black/95 backdrop-blur-md z-[200]"
+            className="fixed inset-0 bg-black/95 backdrop-blur-md z-[300]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -84,7 +84,7 @@ export function PortfolioPreviewOverlay({
           />
           
           {/* Overlay Content */}
-          <div key="overlay-content" className="fixed inset-0 z-[201] flex items-center justify-center p-2 md:p-8 pointer-events-none">
+          <div key="overlay-content" className="fixed inset-0 z-[301] flex items-center justify-center p-2 md:p-8 pointer-events-none">
             <motion.div
               ref={overlayRef}
               className={cn(

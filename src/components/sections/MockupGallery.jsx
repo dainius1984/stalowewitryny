@@ -33,7 +33,7 @@ const mockupProjects = [
   },
 ];
 
-export function MockupGallery() {
+export function MockupGallery({ onModalStateChange }) {
   const [hoveredProject, setHoveredProject] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -42,6 +42,13 @@ export function MockupGallery() {
   const leaveTimeoutRef = useRef(null);
   const currentProjectRef = useRef(null);
   const rotationIntervalRef = useRef(null);
+
+  // Notify parent when modal state changes
+  useEffect(() => {
+    if (onModalStateChange) {
+      onModalStateChange(previewOpen && hoveredProject !== null);
+    }
+  }, [previewOpen, hoveredProject, onModalStateChange]);
 
   useEffect(() => {
     const checkDesktop = () => {
@@ -81,6 +88,17 @@ export function MockupGallery() {
     currentProjectRef.current = project;
     setHoveredProject(project);
     setPreviewOpen(true);
+  };
+
+  const handleClose = () => {
+    setPreviewOpen(false);
+    if (leaveTimeoutRef.current) {
+      clearTimeout(leaveTimeoutRef.current);
+    }
+    leaveTimeoutRef.current = setTimeout(() => {
+      setHoveredProject(null);
+      leaveTimeoutRef.current = null;
+    }, 400);
   };
 
   const handleHover = (project) => {
@@ -190,16 +208,7 @@ export function MockupGallery() {
       {/* Portfolio Preview Overlay - Always render for AnimatePresence */}
       <PortfolioPreviewOverlay
         isOpen={previewOpen && hoveredProject !== null}
-        onClose={() => {
-          setPreviewOpen(false);
-          if (leaveTimeoutRef.current) {
-            clearTimeout(leaveTimeoutRef.current);
-          }
-          leaveTimeoutRef.current = setTimeout(() => {
-            setHoveredProject(null);
-            leaveTimeoutRef.current = null;
-          }, 400);
-        }}
+        onClose={handleClose}
         url={hoveredProject?.url || ""}
         title={hoveredProject?.title || hoveredProject?.alt || ""}
         alt={hoveredProject?.alt || ""}
