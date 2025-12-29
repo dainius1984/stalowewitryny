@@ -16,7 +16,7 @@ function App() {
       
       <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
         <Navbar isModalOpen={isModalOpen} />
-        <main className="pt-32 md:pt-28 flex-grow">
+        <main className="pt-24 md:pt-28 flex-grow">
           <Hero onModalStateChange={setIsModalOpen} />
           <Comparison />
           <Portfolio />

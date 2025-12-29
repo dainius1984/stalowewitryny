@@ -61,7 +61,7 @@ export function Hero({ onModalStateChange }) {
   }, [currentVideo, videos.length]);
 
   return (
-    <div className="relative overflow-hidden h-[calc(100vh-7rem)] md:h-[calc(100vh-6rem)] flex items-center">
+    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center py-4 md:py-0">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -87,8 +87,81 @@ export function Hero({ onModalStateChange }) {
       />
 
       <Container className="relative z-10">
+        {/* Mobile Layout: Portfolio Slider First, Then Banner */}
+        <div className="md:hidden flex flex-col gap-4">
+          {/* Portfolio Slider First on Mobile */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <MockupGallery onModalStateChange={onModalStateChange} />
+          </motion.div>
+
+          {/* Banner Below on Mobile */}
+          <BentoCard className="flex flex-col justify-center p-6">
+            <motion.div className="space-y-3" variants={containerVariants}>
+              <motion.h1 
+                className="text-3xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
+                variants={itemVariants}
+              >
+                Tanie i solidne strony internetowe dla firm –{" "}
+                <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Stalowe Witryny</span>
+              </motion.h1>
+              
+              <motion.h2 
+                className="text-lg font-bold text-neutral-300 mt-2 font-sans text-center"
+                variants={itemVariants}
+              >
+                Szybkie strony www bez abonamentu i WordPressa
+              </motion.h2>
+              
+              <motion.p 
+                className="text-sm text-neutral-400 mt-1 font-sans text-center"
+                variants={itemVariants}
+              >
+                Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
+              </motion.p>
+              
+              {/* Trust Bar - USP Highlights */}
+              <motion.div 
+                className="flex flex-wrap items-center justify-center gap-3 pt-1"
+                variants={itemVariants}
+              >
+                <div className="flex items-center gap-2 text-xs text-neutral-300 font-sans">
+                  <Zap className="w-4 h-4 text-primary" />
+                  <span className="font-medium">Szybkość 100/100</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-neutral-300 font-sans">
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span className="font-medium">Bez WordPressa</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-neutral-300 font-sans">
+                  <Search className="w-4 h-4 text-primary" />
+                  <span className="font-medium">SEO Friendly</span>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="pt-1 flex justify-center"
+                variants={itemVariants}
+              >
+                <Button 
+                  variant="primary"
+                  onClick={() => setIsSurveyOpen(true)}
+                  title="Zamów darmową wycenę taniej i solidnej strony internetowej"
+                  className="text-sm px-6 py-3 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                >
+                  Darmowa Wycena
+                </Button>
+              </motion.div>
+            </motion.div>
+          </BentoCard>
+        </div>
+
+        {/* Desktop Layout: Original Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6"
+          className="hidden md:grid grid-cols-3 gap-4 md:gap-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

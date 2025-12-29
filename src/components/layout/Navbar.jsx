@@ -7,26 +7,50 @@ import { NavbarMobile } from "./NavbarMobile";
 export function Navbar({ isModalOpen = false }) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
 
-  // Handle scroll to hide/show navbar
+  // Handle scroll to hide/show navbar with throttling for better performance
   useEffect(() => {
-    if (isModalOpen) return; // Don't handle scroll when modal is open
+    if (isModalOpen) {
+      setIsVisible(true); // Always show when modal is open
+      return;
+    }
+
+    let ticking = false;
 
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show navbar at the top of the page
-      if (currentScrollY < 50) {
-        setIsVisible(true);
-      } 
-      // Hide navbar when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else if (currentScrollY < lastScrollY) {
-        setIsVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+          
+          // Only trigger if scroll difference is significant (prevents jitter)
+          if (scrollDifference < 5) {
+            ticking = false;
+            return;
+          }
+          
+          setIsScrolling(true);
+          
+          // Show navbar at the top of the page
+          if (currentScrollY < 30) {
+            setIsVisible(true);
+          } 
+          // Hide navbar when scrolling down, show when scrolling up
+          else if (currentScrollY > lastScrollY && currentScrollY > 80) {
+            setIsVisible(false);
+          } else if (currentScrollY < lastScrollY) {
+            setIsVisible(true);
+          }
+          
+          setLastScrollY(currentScrollY);
+          ticking = false;
+          
+          // Reset scrolling state after a delay
+          setTimeout(() => setIsScrolling(false), 150);
+        });
+        ticking = true;
       }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -45,31 +69,37 @@ export function Navbar({ isModalOpen = false }) {
       {!isModalOpen && (
         <motion.header
           key="navbar"
-          initial={{ opacity: 0, y: -100, x: "-50%" }}
+          initial={{ opacity: 0, y: -120, x: "-50%", scale: 0.95 }}
           animate={{ 
             opacity: isVisible ? 1 : 0,
-            y: isVisible ? 0 : -100,
+            y: isVisible ? 0 : -120,
             x: "-50%",
+            scale: isVisible ? 1 : 0.95,
             pointerEvents: isVisible ? 'auto' : 'none'
           }}
-          exit={{ opacity: 0, y: -100, x: "-50%", pointerEvents: "none" }}
+          exit={{ opacity: 0, y: -120, x: "-50%", scale: 0.95, pointerEvents: "none" }}
           transition={{ 
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1]
+            duration: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94], // Smooth ease-in-out
+            opacity: { duration: 0.3 },
+            scale: { duration: 0.35 }
           }}
-          className="fixed top-6 left-1/2 z-40 w-[90%] max-w-4xl"
+          className="fixed top-4 md:top-6 left-1/2 z-40 w-[95%] md:w-[90%] max-w-4xl"
           style={{ 
             display: isModalOpen ? 'none' : 'block'
           }}
         >
           <nav
             className={cn(
-              "rounded-full border border-white/10 bg-black/60 backdrop-blur-xl shadow-lg",
+              "border border-white/10 bg-black/60 backdrop-blur-xl shadow-lg",
               "px-4 md:px-8 py-3 md:py-4",
-              "relative"
+              "relative transition-all duration-300",
+              "rounded-lg md:rounded-full", // Traditional shape on mobile, pill on desktop
+              isVisible ? "shadow-lg" : "shadow-none"
             )}
           >
-            <div className="flex items-center justify-between gap-2 md:gap-6 relative">
+            {/* Desktop Layout */}
+            <div className="hidden md:flex items-center justify-between gap-2 md:gap-6 relative">
               {/* Left: Logo */}
               <div className="flex items-center flex-shrink-0 relative z-10">
                 <a 
@@ -84,11 +114,24 @@ export function Navbar({ isModalOpen = false }) {
 
               {/* Desktop Navigation */}
               <NavbarDesktop navLinks={navLinks} />
+            </div>
 
-              {/* Mobile Navigation */}
-              <div className="md:hidden flex items-center flex-shrink-0 relative z-[60]">
-                <NavbarMobile navLinks={navLinks} isModalOpen={isModalOpen} />
+            {/* Mobile Layout - Always Open, Traditional Shape */}
+            <div className="md:hidden flex flex-col gap-3">
+              {/* Logo on top */}
+              <div className="flex items-center justify-center">
+                <a 
+                  href="#" 
+                  className="text-xl font-black tracking-tighter font-sans text-white touch-manipulation" 
+                  title="Stalowe Witryny - Tanie i solidne strony internetowe"
+                >
+                  STALOWEWITRYNY
+                  <span className="text-primary">.</span>
+                </a>
               </div>
+
+              {/* Navigation Links */}
+              <NavbarMobile navLinks={navLinks} isModalOpen={isModalOpen} />
             </div>
           </nav>
     </motion.header>
