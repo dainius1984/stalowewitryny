@@ -116,13 +116,13 @@ export function Navbar({ isModalOpen = false }) {
               <NavbarDesktop navLinks={navLinks} />
             </div>
 
-            {/* Mobile Layout - Always Open, Traditional Shape */}
-            <div className="md:hidden flex flex-col gap-3">
-              {/* Logo on top */}
-              <div className="flex items-center justify-center">
+            {/* Mobile Layout - Hamburger Menu */}
+            <div className="md:hidden flex items-center justify-between gap-2 relative">
+              {/* Left: Logo */}
+              <div className="flex items-center flex-shrink-0 relative z-10">
                 <a 
                   href="#" 
-                  className="text-xl font-black tracking-tighter font-sans text-white touch-manipulation" 
+                  className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation relative z-10" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
                   STALOWEWITRYNY
@@ -130,7 +130,7 @@ export function Navbar({ isModalOpen = false }) {
                 </a>
               </div>
 
-              {/* Navigation Links */}
+              {/* Right: Hamburger Menu */}
               <NavbarMobile navLinks={navLinks} isModalOpen={isModalOpen} />
             </div>
           </nav>
