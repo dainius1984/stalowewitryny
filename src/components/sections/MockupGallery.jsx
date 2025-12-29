@@ -118,12 +118,12 @@ export function MockupGallery({ onModalStateChange }) {
     <>
       <div className={cn(
         "md:col-span-1 flex items-center justify-center",
-        "p-2 md:p-4 overflow-visible relative",
+        "p-2 md:p-2 overflow-visible relative",
         "transition-all duration-700 ease-out"
       )}>
         
         {/* Mockup Gallery Container - Shows 2 cards side by side (image 1 left, image 2 right) */}
-        <div className="relative w-full h-full min-h-[280px] md:min-h-[600px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full h-full min-h-[280px] md:min-h-[550px] flex items-center justify-center overflow-visible">
           {/* Current Project Pair */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {

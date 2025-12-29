@@ -161,42 +161,44 @@ export function Hero({ onModalStateChange }) {
 
         {/* Desktop Layout: Original Grid */}
         <motion.div
-          className="hidden md:grid grid-cols-3 gap-6 md:gap-8"
+          className="hidden md:grid grid-cols-3 gap-8 md:gap-12"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Left Card - Span 2 columns */}
           <BentoCard className={cn(
-            "md:col-span-2 flex flex-col justify-center",
-            "p-6 md:p-10"
+            "md:col-span-2 flex flex-col justify-between",
+            "p-8 md:p-12"
           )}>
-            <motion.div className="space-y-3 md:space-y-4" variants={containerVariants}>
-              <motion.h1 
-                className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white"
-                variants={itemVariants}
-              >
-                Tanie i solidne strony internetowe dla firm –{" "}
-                <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Stalowe Witryny</span>
-              </motion.h1>
-              
-              <motion.h2 
-                className="text-xl md:text-2xl font-bold text-neutral-300 mt-1 md:mt-2 font-sans"
-                variants={itemVariants}
-              >
-                Szybkie strony www bez abonamentu i WordPressa
-              </motion.h2>
-              
-              <motion.p 
-                className="text-base md:text-lg text-neutral-400 mt-1 font-sans leading-relaxed"
-                variants={itemVariants}
-              >
-                Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
-              </motion.p>
+            <motion.div className="flex flex-col justify-between h-full space-y-4 md:space-y-6" variants={containerVariants}>
+              <div className="flex-1 flex flex-col justify-start">
+                <motion.h1 
+                  className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white max-w-full"
+                  variants={itemVariants}
+                >
+                  Tanie i solidne strony internetowe dla firm –{" "}
+                  <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Stalowe Witryny</span>
+                </motion.h1>
+                
+                <motion.h2 
+                  className="text-xl md:text-2xl font-bold text-neutral-300 mt-3 md:mt-4 font-sans"
+                  variants={itemVariants}
+                >
+                  Szybkie strony www bez abonamentu i WordPressa
+                </motion.h2>
+                
+                <motion.p 
+                  className="text-base md:text-lg text-neutral-400 mt-3 md:mt-4 font-sans leading-relaxed max-w-[90%]"
+                  variants={itemVariants}
+                >
+                  Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
+                </motion.p>
+              </div>
               
               {/* Trust Bar - USP Highlights */}
               <motion.div 
-                className="flex flex-wrap items-center gap-4 md:gap-6 mt-2"
+                className="flex flex-wrap items-center gap-4 md:gap-6 mt-4"
                 variants={itemVariants}
               >
                 <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
@@ -214,7 +216,7 @@ export function Hero({ onModalStateChange }) {
               </motion.div>
               
               <motion.div 
-                className="mt-4 flex justify-center"
+                className="mt-6 flex justify-start"
                 variants={itemVariants}
               >
                 <Button 
