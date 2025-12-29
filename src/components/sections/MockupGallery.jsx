@@ -184,8 +184,14 @@ export function MockupGallery({ onModalStateChange }) {
                       key={`left-${index}-${currentProjectIndex}`}
                       initial={{ opacity: 0, x: -50, rotate: -5 }}
                       animate={{ opacity: 1, x: 0, rotate: -3 }}
-                      exit={{ opacity: 0, x: -150, rotate: -15, scale: 0.7 }}
-                      transition={{ delay: 0.2, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+                      exit={{ 
+                        opacity: 0, 
+                        x: -200, 
+                        rotate: -20, 
+                        scale: 0.6,
+                        y: -30
+                      }}
+                      transition={{ delay: 0.2, duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
                       className="hidden md:block"
                     >
                       <MockupCard
@@ -209,8 +215,14 @@ export function MockupGallery({ onModalStateChange }) {
                       key={`right-${index}-${currentProjectIndex}`}
                       initial={{ opacity: 0, x: 50, rotate: 5 }}
                       animate={{ opacity: 1, x: 0, rotate: 3 }}
-                      exit={{ opacity: 0, x: 150, rotate: 15, scale: 0.7 }}
-                      transition={{ delay: 0.3, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+                      exit={{ 
+                        opacity: 0, 
+                        x: 200, 
+                        rotate: 20, 
+                        scale: 0.6,
+                        y: 30
+                      }}
+                      transition={{ delay: 0.3, duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
                     >
                       <MockupCard
                         key={`${project.alt}-right-${index}`}
@@ -233,33 +245,6 @@ export function MockupGallery({ onModalStateChange }) {
               );
             })}
           </AnimatePresence>
-
-          {/* Project Indicator Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-            {mockupProjects.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  if (rotationIntervalRef.current) {
-                    clearInterval(rotationIntervalRef.current);
-                  }
-                  setCurrentProjectIndex(index);
-                  // Restart rotation
-                  rotationIntervalRef.current = setInterval(() => {
-                    setCurrentProjectIndex((prev) => (prev + 1) % mockupProjects.length);
-                  }, 5000);
-                }}
-                className={cn(
-                  "rounded-full transition-all duration-300",
-                  index === currentProjectIndex
-                    ? "bg-[#CCFF00] w-8 h-2 shadow-[0_0_10px_rgba(204,255,0,0.8)]"
-                    : "bg-white/40 hover:bg-white/60 w-2 h-2"
-                )}
-                aria-label={`Pokaż projekt ${index + 1}`}
-                title={mockupProjects[index].title}
-              />
-            ))}
-          </div>
         </div>
       </div>
 

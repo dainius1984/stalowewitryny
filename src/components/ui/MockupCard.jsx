@@ -177,11 +177,11 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
                   className="w-full h-full object-cover"
                   style={{ 
                     width: '100%',
-                    height: '200%', // Double height to show only top half when cropped
+                    height: '300%', // Triple height to show only top third when cropped
                     display: 'block',
                     objectFit: 'cover',
-                    objectPosition: 'top', // Show top half of image
-                    transform: 'scale(1.2)', // Zoom in for better quality
+                    objectPosition: 'top', // Show top of image
+                    transform: 'scale(1.5)', // Better zoom in for top of page
                     transformOrigin: 'top center',
                   }}
                   onError={(e) => {
