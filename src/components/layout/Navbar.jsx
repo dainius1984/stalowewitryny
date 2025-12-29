@@ -45,20 +45,20 @@ export function Navbar({ isModalOpen = false }) {
       {!isModalOpen && (
         <motion.header
           key="navbar"
-          initial={{ opacity: 0, y: -100 }}
+          initial={{ opacity: 0, y: -100, x: "-50%" }}
           animate={{ 
             opacity: isVisible ? 1 : 0,
             y: isVisible ? 0 : -100,
+            x: "-50%",
             pointerEvents: isVisible ? 'auto' : 'none'
           }}
-          exit={{ opacity: 0, y: -100, pointerEvents: "none" }}
+          exit={{ opacity: 0, y: -100, x: "-50%", pointerEvents: "none" }}
           transition={{ 
             duration: 0.3,
             ease: [0.4, 0, 0.2, 1]
           }}
           className="fixed top-6 left-1/2 z-40 w-[90%] max-w-4xl"
           style={{ 
-            transform: 'translateX(-50%)',
             display: isModalOpen ? 'none' : 'block'
           }}
         >

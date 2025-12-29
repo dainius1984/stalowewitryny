@@ -127,8 +127,9 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
     >
       <motion.div
         className={cn(
-          "relative w-full h-full rounded-[2rem] border-2 bg-black overflow-hidden",
+          "relative w-full h-full rounded-[2rem] border-2 overflow-hidden",
           "shadow-2xl transition-all duration-500 cursor-pointer",
+          "bg-gradient-to-br from-neutral-950/90 via-neutral-900/80 to-neutral-950/90",
           isHovered 
             ? "border-[#CCFF00] shadow-[0_0_60px_rgba(204,255,0,0.9)] z-[99]" 
             : "border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
@@ -143,6 +144,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
         }}
         transition={{ delay, duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       >
+        {/* Subtle gradient overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-30 pointer-events-none z-0"></div>
         {/* Phone/Tablet Frame with glow effect */}
         <div className={cn(
           "absolute inset-0 rounded-[2rem] border-2 pointer-events-none z-10 transition-all duration-700",
@@ -150,7 +153,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
         )} />
         
         {/* Screen Content with Image Carousel */}
-        <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] rounded-[1.5rem] overflow-hidden bg-neutral-900">
+        <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}

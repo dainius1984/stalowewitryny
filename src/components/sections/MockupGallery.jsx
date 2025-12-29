@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MockupCard } from "@/components/ui/MockupCard";
 import { PortfolioPreviewOverlay } from "@/components/ui/PortfolioPreviewOverlay";
-import { BentoCard } from "@/components/ui/BentoCard";
 import { cn } from "@/lib/utils";
 
 // Project data with URLs for webview
@@ -117,15 +116,11 @@ export function MockupGallery({ onModalStateChange }) {
 
   return (
     <>
-      <BentoCard className={cn(
+      <div className={cn(
         "md:col-span-1 flex items-center justify-center",
         "p-6 md:p-8 overflow-visible relative",
-        "transition-all duration-700 ease-out",
-        "bg-gradient-to-br from-neutral-900/80 to-neutral-950/80"
+        "transition-all duration-700 ease-out"
       )}>
-        {/* Background gradient with subtle pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-neutral-900/90 to-neutral-950/90" />
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(204,255,0,0.1),transparent_70%)]" />
         
         {/* Mockup Gallery Container - Shows 2 cards side by side (image 1 left, image 2 right) */}
         <div className="relative w-full h-full min-h-[400px] md:min-h-[650px] flex items-center justify-center overflow-visible">
@@ -138,10 +133,15 @@ export function MockupGallery({ onModalStateChange }) {
                 <motion.div
                   key={`project-${index}-${currentProjectIndex}`}
                   className="flex items-center justify-center gap-4 md:gap-8 w-full"
-                  initial={{ opacity: 0, scale: 0.9, x: 50 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, x: -50 }}
-                  transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                  initial={{ opacity: 0, scale: 0.85, x: 100, rotateY: -15 }}
+                  animate={{ opacity: 1, scale: 1, x: 0, rotateY: 0 }}
+                  exit={{ opacity: 0, scale: 0.85, x: -100, rotateY: 15 }}
+                  transition={{ 
+                    duration: 0.8, 
+                    ease: [0.4, 0, 0.2, 1],
+                    scale: { duration: 0.6 },
+                    opacity: { duration: 0.4 }
+                  }}
                 >
                   {/* Left Card - Image 1 (hidden on mobile) */}
                   <MockupCard
@@ -203,7 +203,7 @@ export function MockupGallery({ onModalStateChange }) {
             ))}
           </div>
         </div>
-      </BentoCard>
+      </div>
 
       {/* Portfolio Preview Overlay - Always render for AnimatePresence */}
       <PortfolioPreviewOverlay
