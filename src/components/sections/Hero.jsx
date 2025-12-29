@@ -4,7 +4,6 @@ import { Zap, Shield, Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { MockupGallery } from "@/components/sections/MockupGallery";
 import { CompanySurvey } from "@/components/sections/CompanySurvey";
 import { cn } from "@/lib/utils";
@@ -62,7 +61,7 @@ export function Hero({ onModalStateChange }) {
   }, [currentVideo, videos.length]);
 
   return (
-    <div className="relative py-12 md:py-20 overflow-hidden">
+    <div className="relative overflow-hidden h-[calc(100vh-7rem)] md:h-[calc(100vh-6rem)] flex items-center">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -89,7 +88,7 @@ export function Hero({ onModalStateChange }) {
 
       <Container className="relative z-10">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -97,11 +96,11 @@ export function Hero({ onModalStateChange }) {
           {/* Left Card - Span 2 columns */}
           <BentoCard className={cn(
             "md:col-span-2 flex flex-col justify-center",
-            "p-8 md:p-10"
+            "p-6 md:p-8"
           )}>
-            <motion.div className="space-y-6" variants={containerVariants}>
+            <motion.div className="space-y-4 md:space-y-5" variants={containerVariants}>
               <motion.h1 
-                className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] font-sans text-white"
+                className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white"
                 variants={itemVariants}
               >
                 Tanie i solidne strony internetowe dla firm –{" "}
@@ -109,14 +108,14 @@ export function Hero({ onModalStateChange }) {
               </motion.h1>
               
               <motion.h2 
-                className="text-2xl md:text-3xl font-bold text-neutral-300 mt-4 font-sans"
+                className="text-xl md:text-2xl font-bold text-neutral-300 mt-2 md:mt-3 font-sans"
                 variants={itemVariants}
               >
                 Szybkie strony www bez abonamentu i WordPressa
               </motion.h2>
               
               <motion.p 
-                className="text-lg text-neutral-400 mt-2 font-sans"
+                className="text-base md:text-lg text-neutral-400 mt-1 md:mt-2 font-sans"
                 variants={itemVariants}
               >
                 Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
@@ -124,7 +123,7 @@ export function Hero({ onModalStateChange }) {
               
               {/* Trust Bar - USP Highlights */}
               <motion.div 
-                className="flex flex-wrap items-center gap-6 md:gap-8 pt-2"
+                className="flex flex-wrap items-center gap-4 md:gap-6 pt-1"
                 variants={itemVariants}
               >
                 <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
@@ -142,14 +141,14 @@ export function Hero({ onModalStateChange }) {
               </motion.div>
               
               <motion.div 
-                className="pt-2 flex justify-center md:justify-start"
+                className="pt-1 flex justify-center md:justify-start"
                 variants={itemVariants}
               >
                 <Button 
                   variant="primary"
                   onClick={() => setIsSurveyOpen(true)}
                   title="Zamów darmową wycenę taniej i solidnej strony internetowej"
-                  className="text-lg px-8 py-4 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                  className="text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
                 >
                   Darmowa Wycena
                 </Button>
@@ -159,30 +158,6 @@ export function Hero({ onModalStateChange }) {
 
           {/* Right Card - Span 1 column - Interactive Mockup Gallery */}
           <MockupGallery onModalStateChange={onModalStateChange} />
-
-          {/* Bottom Card - Span 3 columns */}
-          <BentoCard className={cn(
-            "md:col-span-3",
-            "p-8 md:p-10",
-            "bg-neutral-900/70 backdrop-blur-md"
-          )}>
-            <motion.div 
-              className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-4"
-              variants={itemVariants}
-            >
-              <div className="flex items-center gap-3">
-                <Badge variant="accent">Dostępny od zaraz</Badge>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_hsl(var(--primary)/0.6)]"></div>
-                  <span className="text-xs text-neutral-400 uppercase tracking-wider font-sans">Online</span>
-                </div>
-              </div>
-              <div className="hidden md:flex items-center gap-2 text-sm text-neutral-400 font-sans">
-                <span>Status</span>
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_hsl(var(--primary)/0.6)]"></div>
-              </div>
-            </motion.div>
-          </BentoCard>
         </motion.div>
       </Container>
       

@@ -95,7 +95,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
   return (
     <ReactParallaxTilt
       className={cn(
-        "w-40 md:w-56 h-[400px] md:h-[600px]",
+        "w-48 md:w-72 h-[480px] md:h-[720px]",
         position === "left" && "relative z-10",
         position === "right" && "relative z-10",
         // Old positions for backward compatibility
@@ -116,10 +116,10 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
           : "md:translateX(0%) md:translateY(-8%) md:rotate(-5deg)",
         zIndex: position === "left" || position === "right" ? 10 : position === "back" ? 1 : position === "front" ? 3 : 2,
       }}
-      tiltMaxAngleX={isHovered ? 8 : 5}
-      tiltMaxAngleY={isHovered ? 8 : 5}
-      scale={isHovered ? 1.15 : 1.0}
-      transitionSpeed={2000}
+      tiltMaxAngleX={isHovered ? 12 : 6}
+      tiltMaxAngleY={isHovered ? 12 : 6}
+      scale={isHovered ? 1.12 : 1.0}
+      transitionSpeed={1500}
       glareEnable={true}
       glareMaxOpacity={isHovered ? 0.6 : 0.2}
       onMouseEnter={handleMouseEnter}
@@ -127,12 +127,12 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
     >
       <motion.div
         className={cn(
-          "relative w-full h-full rounded-[2rem] border-2 overflow-hidden",
+          "relative w-full h-full rounded-[2rem] border-[3px] overflow-hidden",
           "shadow-2xl transition-all duration-500 cursor-pointer",
           "bg-gradient-to-br from-neutral-950/90 via-neutral-900/80 to-neutral-950/90",
           isHovered 
-            ? "border-[#CCFF00] shadow-[0_0_60px_rgba(204,255,0,0.9)] z-[99]" 
-            : "border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+            ? "border-[#CCFF00] shadow-[0_0_80px_rgba(204,255,0,1)] z-[99]" 
+            : "border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]"
         )}
         style={{ width: '100%', height: '100%' }}
         onClick={handleCardClick}
@@ -148,8 +148,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-30 pointer-events-none z-0"></div>
         {/* Phone/Tablet Frame with glow effect */}
         <div className={cn(
-          "absolute inset-0 rounded-[2rem] border-2 pointer-events-none z-10 transition-all duration-700",
-          isHovered ? "border-[#CCFF00]/30" : "border-neutral-800"
+          "absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none z-10 transition-all duration-700",
+          isHovered ? "border-[#CCFF00]/40 shadow-[0_0_40px_rgba(204,255,0,0.6)]" : "border-neutral-700"
         )} />
         
         {/* Screen Content with Image Carousel */}

@@ -118,12 +118,12 @@ export function MockupGallery({ onModalStateChange }) {
     <>
       <div className={cn(
         "md:col-span-1 flex items-center justify-center",
-        "p-6 md:p-8 overflow-visible relative",
+        "p-4 md:p-6 overflow-visible relative",
         "transition-all duration-700 ease-out"
       )}>
         
         {/* Mockup Gallery Container - Shows 2 cards side by side (image 1 left, image 2 right) */}
-        <div className="relative w-full h-full min-h-[400px] md:min-h-[650px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full h-full min-h-[400px] md:min-h-[600px] flex items-center justify-center overflow-visible">
           {/* Current Project Pair */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {
@@ -132,45 +132,89 @@ export function MockupGallery({ onModalStateChange }) {
               return (
                 <motion.div
                   key={`project-${index}-${currentProjectIndex}`}
-                  className="flex items-center justify-center gap-4 md:gap-8 w-full"
-                  initial={{ opacity: 0, scale: 0.85, x: 100, rotateY: -15 }}
-                  animate={{ opacity: 1, scale: 1, x: 0, rotateY: 0 }}
-                  exit={{ opacity: 0, scale: 0.85, x: -100, rotateY: 15 }}
+                  className="flex items-center justify-center gap-6 md:gap-12 w-full"
+                  initial={{ 
+                    opacity: 0, 
+                    scale: 0.75, 
+                    x: 150,
+                    rotateY: -25,
+                    filter: "blur(10px)"
+                  }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1, 
+                    x: 0, 
+                    rotateY: 0,
+                    filter: "blur(0px)"
+                  }}
+                  exit={{ 
+                    opacity: 0, 
+                    scale: 0.75, 
+                    x: -150, 
+                    rotateY: 25,
+                    filter: "blur(10px)"
+                  }}
                   transition={{ 
-                    duration: 0.8, 
-                    ease: [0.4, 0, 0.2, 1],
-                    scale: { duration: 0.6 },
-                    opacity: { duration: 0.4 }
+                    duration: 1.0,
+                    ease: [0.34, 1.56, 0.64, 1], // Custom spring-like easing
+                    scale: { 
+                      duration: 0.8,
+                      ease: [0.34, 1.56, 0.64, 1]
+                    },
+                    opacity: { 
+                      duration: 0.6,
+                      ease: "easeInOut"
+                    },
+                    filter: {
+                      duration: 0.8,
+                      ease: "easeOut"
+                    },
+                    rotateY: {
+                      duration: 0.9,
+                      ease: [0.34, 1.56, 0.64, 1]
+                    }
                   }}
                 >
                   {/* Left Card - Image 1 (hidden on mobile) */}
-                  <MockupCard
-                    key={`${project.alt}-left-${index}`}
-                    images={[project.images[0]]} // Only first image
-                    alt={`${project.alt} - Widok 1`}
-                    delay={0}
-                    position="left"
-                    project={project}
-                    onHover={handleHover}
-                    onLeave={handleLeave}
-                    onClick={handleClick}
-                    isLeft={true}
+                  <motion.div
+                    initial={{ opacity: 0, x: -50, rotate: -5 }}
+                    animate={{ opacity: 1, x: 0, rotate: -3 }}
+                    transition={{ delay: 0.2, duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
                     className="hidden md:block"
-                  />
+                  >
+                    <MockupCard
+                      key={`${project.alt}-left-${index}`}
+                      images={[project.images[0]]} // Only first image
+                      alt={`${project.alt} - Widok 1`}
+                      delay={0}
+                      position="left"
+                      project={project}
+                      onHover={handleHover}
+                      onLeave={handleLeave}
+                      onClick={handleClick}
+                      isLeft={true}
+                    />
+                  </motion.div>
                   
                   {/* Mobile/Right Card - Shows Image 1 on mobile, Image 2 on desktop */}
-                  <MockupCard
-                    key={`${project.alt}-right-${index}`}
-                    images={isDesktop ? [project.images[1]] : [project.images[0]]} // Second image on desktop, first on mobile
-                    alt={`${project.alt} - Widok ${isDesktop ? '2' : '1'}`}
-                    delay={0.1}
-                    position="right"
-                    project={project}
-                    onHover={handleHover}
-                    onLeave={handleLeave}
-                    onClick={handleClick}
-                    isLeft={false}
-                  />
+                  <motion.div
+                    initial={{ opacity: 0, x: 50, rotate: 5 }}
+                    animate={{ opacity: 1, x: 0, rotate: 3 }}
+                    transition={{ delay: 0.3, duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
+                  >
+                    <MockupCard
+                      key={`${project.alt}-right-${index}`}
+                      images={isDesktop ? [project.images[1]] : [project.images[0]]} // Second image on desktop, first on mobile
+                      alt={`${project.alt} - Widok ${isDesktop ? '2' : '1'}`}
+                      delay={0.1}
+                      position="right"
+                      project={project}
+                      onHover={handleHover}
+                      onLeave={handleLeave}
+                      onClick={handleClick}
+                      isLeft={false}
+                    />
+                  </motion.div>
                 </motion.div>
               );
             })}
