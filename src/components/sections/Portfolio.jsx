@@ -83,12 +83,18 @@ export function Portfolio() {
                   "h-full flex flex-col overflow-hidden p-0",
                   "hover:border-primary/30 hover:backdrop-blur-md hover:bg-neutral-900/80 transition-all duration-300"
                 )}>
-                  {/* Image Container */}
-                  <div className="relative h-64 md:h-72 overflow-hidden bg-neutral-950">
+                  {/* Image Container - Improved shape and visual appeal */}
+                  <div className="relative h-64 md:h-72 overflow-hidden rounded-t-[2rem]">
+                    {/* Gradient background instead of solid black - subtle and elegant */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-neutral-950/80 via-neutral-900/60 to-neutral-950/80"></div>
+                    
+                    {/* Decorative accent gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-40"></div>
+                    
                     <img
                       src={project.image}
                       alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="relative z-10 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
                       onError={(e) => {
                         // Fallback to a placeholder if image doesn't exist
@@ -96,20 +102,23 @@ export function Portfolio() {
                       }}
                     />
                     
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4 z-20">
+                      <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-black/70 backdrop-blur-md text-white border border-white/20 rounded-full font-sans shadow-lg">
+                        {project.category}
+                      </span>
+                    </div>
+
                     {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <div className="flex items-center gap-2 text-white font-sans font-medium">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-30">
+                      <div className="flex items-center gap-2 text-white font-sans font-semibold text-lg">
                         <span>Odwiedź stronę</span>
                         <ExternalLink className="w-5 h-5" />
                       </div>
                     </div>
-
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-black/60 backdrop-blur-md text-white border border-white/10 rounded-full font-sans">
-                        {project.category}
-                      </span>
-                    </div>
+                    
+                    {/* Subtle border glow on hover */}
+                    <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/30 transition-all duration-300 pointer-events-none z-40 rounded-t-[2rem]"></div>
                   </div>
 
                   {/* Content Below Image */}
