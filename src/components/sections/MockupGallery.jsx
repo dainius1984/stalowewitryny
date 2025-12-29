@@ -10,6 +10,7 @@ const mockupProjects = [
     images: ["/img/projects/white1.png", "/img/projects/white2.png"],
     alt: "White Effect - Portfolio Project",
     url: "https://www.whiteeffect.pl/",
+    url2: "https://www.whiteeffect.pl/oferta", // Second image links to /oferta
     title: "White Effect",
     position: "back",
     delay: 0,
@@ -18,6 +19,7 @@ const mockupProjects = [
     images: ["/img/projects/autyzm1.png", "/img/projects/autyzm2.png"],
     alt: "Autyzm od Kuchni - Portfolio Project",
     url: "https://www.autyzmodkuchni.pl/",
+    url2: "https://www.autyzmodkuchni.pl/kuchnia", // Second image links to /kuchnia
     title: "Autyzm od Kuchni",
     position: "middle",
     delay: 0.2,
@@ -26,6 +28,7 @@ const mockupProjects = [
     images: ["/img/projects/fryzjer1.png", "/img/projects/fryzjer2.png"],
     alt: "Fryzjerka Małgosia - Portfolio Project",
     url: "https://www.fryzjerkamalgosia.pl/",
+    url2: "https://www.fryzjerkamalgosia.pl/uslugi", // Second image links to /uslugi
     title: "Fryzjerka Małgosia",
     position: "front",
     delay: 0.4,
@@ -176,45 +179,56 @@ export function MockupGallery({ onModalStateChange }) {
                   }}
                 >
                   {/* Left Card - Image 1 (hidden on mobile) */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -50, rotate: -5 }}
-                    animate={{ opacity: 1, x: 0, rotate: -3 }}
-                    transition={{ delay: 0.2, duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
-                    className="hidden md:block"
-                  >
-                    <MockupCard
-                      key={`${project.alt}-left-${index}`}
-                      images={[project.images[0]]} // Only first image
-                      alt={`${project.alt} - Widok 1`}
-                      delay={0}
-                      position="left"
-                      project={project}
-                      onHover={handleHover}
-                      onLeave={handleLeave}
-                      onClick={handleClick}
-                      isLeft={true}
-                    />
-                  </motion.div>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`left-${index}-${currentProjectIndex}`}
+                      initial={{ opacity: 0, x: -50, rotate: -5 }}
+                      animate={{ opacity: 1, x: 0, rotate: -3 }}
+                      exit={{ opacity: 0, x: -150, rotate: -15, scale: 0.7 }}
+                      transition={{ delay: 0.2, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+                      className="hidden md:block"
+                    >
+                      <MockupCard
+                        key={`${project.alt}-left-${index}`}
+                        images={[project.images[0]]} // Only first image
+                        alt={`${project.alt} - Widok 1`}
+                        delay={0}
+                        position="left"
+                        project={{ ...project, url: project.url }} // Use first URL
+                        onHover={handleHover}
+                        onLeave={handleLeave}
+                        onClick={handleClick}
+                        isLeft={true}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
                   
                   {/* Mobile/Right Card - Shows Image 1 on mobile, Image 2 on desktop */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 50, rotate: 5 }}
-                    animate={{ opacity: 1, x: 0, rotate: 3 }}
-                    transition={{ delay: 0.3, duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
-                  >
-                    <MockupCard
-                      key={`${project.alt}-right-${index}`}
-                      images={isDesktop ? [project.images[1]] : [project.images[0]]} // Second image on desktop, first on mobile
-                      alt={`${project.alt} - Widok ${isDesktop ? '2' : '1'}`}
-                      delay={0.1}
-                      position="right"
-                      project={project}
-                      onHover={handleHover}
-                      onLeave={handleLeave}
-                      onClick={handleClick}
-                      isLeft={false}
-                    />
-                  </motion.div>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`right-${index}-${currentProjectIndex}`}
+                      initial={{ opacity: 0, x: 50, rotate: 5 }}
+                      animate={{ opacity: 1, x: 0, rotate: 3 }}
+                      exit={{ opacity: 0, x: 150, rotate: 15, scale: 0.7 }}
+                      transition={{ delay: 0.3, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+                    >
+                      <MockupCard
+                        key={`${project.alt}-right-${index}`}
+                        images={isDesktop ? [project.images[1]] : [project.images[0]]} // Second image on desktop, first on mobile
+                        alt={`${project.alt} - Widok ${isDesktop ? '2' : '1'}`}
+                        delay={0.1}
+                        position="right"
+                        project={{ 
+                          ...project, 
+                          url: isDesktop && project.url2 ? project.url2 : project.url // Use url2 for second image on desktop
+                        }}
+                        onHover={handleHover}
+                        onLeave={handleLeave}
+                        onClick={handleClick}
+                        isLeft={false}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
                 </motion.div>
               );
             })}

@@ -55,80 +55,103 @@ export function NavbarMobile({ navLinks, isModalOpen }) {
         </AnimatePresence>
       </motion.button>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown - Right Side Panel */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0, y: -10 }}
-            animate={{ opacity: 1, height: "auto", y: 0 }}
-            exit={{ opacity: 0, height: 0, y: -10 }}
-            transition={{ 
-              duration: 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              height: { duration: 0.3 },
-              opacity: { duration: 0.2 }
-            }}
-            className="md:hidden mt-4 pt-4 border-t border-white/10 overflow-hidden"
-          >
-            {/* Logo "Stalowe Witryny" when menu is open */}
-            <div className="flex items-center justify-center mb-4">
-              <a 
-                href="#" 
-                className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation" 
-                title="Stalowe Witryny - Tanie i solidne strony internetowe"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                STALOWEWITRYNY
-                <span className="text-primary">.</span>
-              </a>
-            </div>
-
-            <motion.div 
-              className="flex flex-col gap-3 pb-2"
-              initial="closed"
-              animate="open"
-              variants={{
-                open: {
-                  transition: { staggerChildren: 0.05, delayChildren: 0.1 }
-                },
-                closed: {
-                  transition: { staggerChildren: 0.03, staggerDirection: -1 }
-                }
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[50] md:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            
+            {/* Side Panel */}
+            <motion.div
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ 
+                duration: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
+              className="fixed top-0 right-0 h-full w-[280px] bg-black/95 backdrop-blur-xl border-l border-white/10 z-[60] md:hidden overflow-y-auto shadow-2xl"
             >
-              {navLinks.map((link, index) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
+              {/* Header with Logo and Close Button */}
+              <div className="flex items-center justify-between p-4 border-b border-white/10">
+                <a 
+                  href="#" 
+                  className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation" 
+                  title="Stalowe Witryny - Tanie i solidne strony internetowe"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-sm font-medium text-neutral-400 hover:text-white transition-colors py-2 px-2 rounded-lg hover:bg-white/5 font-sans touch-manipulation"
-                  title={link.title || `Przejdź do sekcji ${link.label}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.2, delay: index * 0.05 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  {link.label}
-                </motion.a>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.2, delay: navLinks.length * 0.05 }}
+                  STALOWEWITRYNY
+                  <span className="text-primary">.</span>
+                </a>
+                <motion.button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-white hover:text-primary transition-colors touch-manipulation"
+                  aria-label="Close menu"
+                  title="Zamknij menu"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X className="w-6 h-6" />
+                </motion.button>
+              </div>
+
+              {/* Menu Content */}
+              <motion.div 
+                className="flex flex-col gap-3 p-4"
+                initial="closed"
+                animate="open"
+                variants={{
+                  open: {
+                    transition: { staggerChildren: 0.05, delayChildren: 0.1 }
+                  },
+                  closed: {
+                    transition: { staggerChildren: 0.03, staggerDirection: -1 }
+                  }
+                }}
               >
-                <Button
-                  variant="primary"
-                  className="w-full mt-2 touch-manipulation"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  title="Zamów darmową wycenę strony internetowej"
+                {navLinks.map((link, index) => (
+                  <motion.a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-sm font-medium text-neutral-400 hover:text-white transition-colors py-3 px-3 rounded-lg hover:bg-white/5 font-sans touch-manipulation"
+                    title={link.title || `Przejdź do sekcji ${link.label}`}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {link.label}
+                  </motion.a>
+                ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2, delay: navLinks.length * 0.05 }}
+                  className="mt-4"
                 >
-                  Wycena
-                </Button>
+                  <Button
+                    variant="primary"
+                    className="w-full touch-manipulation"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    title="Zamów darmową wycenę strony internetowej"
+                  >
+                    Wycena
+                  </Button>
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

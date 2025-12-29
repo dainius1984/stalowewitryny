@@ -158,7 +158,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
             <motion.div
               key={currentImageIndex}
               ref={imageRef}
-              className="absolute inset-0 w-full h-full z-0 overflow-y-auto scrollbar-hide"
+              className="absolute inset-0 w-full h-full z-0 overflow-hidden scrollbar-hide"
               style={{
                 scrollBehavior: 'smooth',
               }}
@@ -170,17 +170,19 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
             >
-              <div className="w-full h-full">
+              <div className="w-full h-full overflow-hidden">
                 <img
                   src={images[currentImageIndex]}
                   alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-full object-cover"
                   style={{ 
                     width: '100%',
-                    height: 'auto',
+                    height: '200%', // Double height to show only top half when cropped
                     display: 'block',
-                    minHeight: '100%',
                     objectFit: 'cover',
+                    objectPosition: 'top', // Show top half of image
+                    transform: 'scale(1.2)', // Zoom in for better quality
+                    transformOrigin: 'top center',
                   }}
                   onError={(e) => {
                     e.target.style.display = "none";

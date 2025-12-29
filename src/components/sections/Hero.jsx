@@ -216,7 +216,7 @@ export function Hero({ onModalStateChange }) {
               </motion.div>
               
               <motion.div 
-                className="mt-6 flex justify-start"
+                className="mt-6 flex justify-center"
                 variants={itemVariants}
               >
                 <Button 
