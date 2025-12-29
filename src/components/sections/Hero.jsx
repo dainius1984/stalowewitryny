@@ -61,7 +61,7 @@ export function Hero({ onModalStateChange }) {
   }, [currentVideo, videos.length]);
 
   return (
-    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center py-4 md:py-0">
+    <div className="relative overflow-hidden md:h-[calc(100vh-6rem)] md:flex md:items-center py-2 md:py-0">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -88,7 +88,7 @@ export function Hero({ onModalStateChange }) {
 
       <Container className="relative z-10">
         {/* Mobile Layout: Portfolio Slider First, Then Banner */}
-        <div className="md:hidden flex flex-col gap-4">
+        <div className="md:hidden flex flex-col gap-3">
           {/* Portfolio Slider First on Mobile */}
           <motion.div
             variants={containerVariants}
@@ -99,10 +99,10 @@ export function Hero({ onModalStateChange }) {
           </motion.div>
 
           {/* Banner Below on Mobile */}
-          <BentoCard className="flex flex-col justify-center p-6">
-            <motion.div className="space-y-3" variants={containerVariants}>
+          <BentoCard className="flex flex-col justify-center p-4">
+            <motion.div className="space-y-2" variants={containerVariants}>
               <motion.h1 
-                className="text-3xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
+                className="text-2xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
                 variants={itemVariants}
               >
                 Tanie i solidne strony internetowe dla firm –{" "}
@@ -110,14 +110,14 @@ export function Hero({ onModalStateChange }) {
               </motion.h1>
               
               <motion.h2 
-                className="text-lg font-bold text-neutral-300 mt-2 font-sans text-center"
+                className="text-base font-bold text-neutral-300 mt-1 font-sans text-center"
                 variants={itemVariants}
               >
                 Szybkie strony www bez abonamentu i WordPressa
               </motion.h2>
               
               <motion.p 
-                className="text-sm text-neutral-400 mt-1 font-sans text-center"
+                className="text-xs text-neutral-400 mt-0.5 font-sans text-center leading-relaxed"
                 variants={itemVariants}
               >
                 Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
@@ -125,32 +125,32 @@ export function Hero({ onModalStateChange }) {
               
               {/* Trust Bar - USP Highlights */}
               <motion.div 
-                className="flex flex-wrap items-center justify-center gap-3 pt-1"
+                className="flex flex-wrap items-center justify-center gap-2 pt-0.5"
                 variants={itemVariants}
               >
-                <div className="flex items-center gap-2 text-xs text-neutral-300 font-sans">
-                  <Zap className="w-4 h-4 text-primary" />
+                <div className="flex items-center gap-1.5 text-[10px] text-neutral-300 font-sans">
+                  <Zap className="w-3 h-3 text-primary" />
                   <span className="font-medium">Szybkość 100/100</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-neutral-300 font-sans">
-                  <Shield className="w-4 h-4 text-primary" />
+                <div className="flex items-center gap-1.5 text-[10px] text-neutral-300 font-sans">
+                  <Shield className="w-3 h-3 text-primary" />
                   <span className="font-medium">Bez WordPressa</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-neutral-300 font-sans">
-                  <Search className="w-4 h-4 text-primary" />
+                <div className="flex items-center gap-1.5 text-[10px] text-neutral-300 font-sans">
+                  <Search className="w-3 h-3 text-primary" />
                   <span className="font-medium">SEO Friendly</span>
                 </div>
               </motion.div>
               
               <motion.div 
-                className="pt-1 flex justify-center"
+                className="pt-0.5 flex justify-center"
                 variants={itemVariants}
               >
                 <Button 
                   variant="primary"
                   onClick={() => setIsSurveyOpen(true)}
                   title="Zamów darmową wycenę taniej i solidnej strony internetowej"
-                  className="text-sm px-6 py-3 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                  className="text-xs px-5 py-2 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
                 >
                   Darmowa Wycena
                 </Button>
@@ -161,7 +161,7 @@ export function Hero({ onModalStateChange }) {
 
         {/* Desktop Layout: Original Grid */}
         <motion.div
-          className="hidden md:grid grid-cols-3 gap-4 md:gap-6"
+          className="hidden md:grid grid-cols-3 gap-6 md:gap-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -169,9 +169,9 @@ export function Hero({ onModalStateChange }) {
           {/* Left Card - Span 2 columns */}
           <BentoCard className={cn(
             "md:col-span-2 flex flex-col justify-center",
-            "p-6 md:p-8"
+            "p-6 md:p-10"
           )}>
-            <motion.div className="space-y-4 md:space-y-5" variants={containerVariants}>
+            <motion.div className="space-y-3 md:space-y-4" variants={containerVariants}>
               <motion.h1 
                 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white"
                 variants={itemVariants}
@@ -181,14 +181,14 @@ export function Hero({ onModalStateChange }) {
               </motion.h1>
               
               <motion.h2 
-                className="text-xl md:text-2xl font-bold text-neutral-300 mt-2 md:mt-3 font-sans"
+                className="text-xl md:text-2xl font-bold text-neutral-300 mt-1 md:mt-2 font-sans"
                 variants={itemVariants}
               >
                 Szybkie strony www bez abonamentu i WordPressa
               </motion.h2>
               
               <motion.p 
-                className="text-base md:text-lg text-neutral-400 mt-1 md:mt-2 font-sans"
+                className="text-base md:text-lg text-neutral-400 mt-1 font-sans leading-relaxed"
                 variants={itemVariants}
               >
                 Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100.
@@ -196,7 +196,7 @@ export function Hero({ onModalStateChange }) {
               
               {/* Trust Bar - USP Highlights */}
               <motion.div 
-                className="flex flex-wrap items-center gap-4 md:gap-6 pt-1"
+                className="flex flex-wrap items-center gap-4 md:gap-6 mt-2"
                 variants={itemVariants}
               >
                 <div className="flex items-center gap-2 text-sm text-neutral-300 font-sans">
@@ -214,14 +214,14 @@ export function Hero({ onModalStateChange }) {
               </motion.div>
               
               <motion.div 
-                className="pt-1 flex justify-center md:justify-start"
+                className="mt-4 flex justify-center"
                 variants={itemVariants}
               >
                 <Button 
                   variant="primary"
                   onClick={() => setIsSurveyOpen(true)}
                   title="Zamów darmową wycenę taniej i solidnej strony internetowej"
-                  className="text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                  className="text-base md:text-lg px-8 md:px-10 py-3 md:py-4 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
                 >
                   Darmowa Wycena
                 </Button>

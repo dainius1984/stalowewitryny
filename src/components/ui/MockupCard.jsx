@@ -95,7 +95,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
   return (
     <ReactParallaxTilt
       className={cn(
-        "w-48 md:w-72 h-[480px] md:h-[720px]",
+        "w-32 md:w-72 h-[320px] md:h-[720px]",
         position === "left" && "relative z-10",
         position === "right" && "relative z-10",
         // Old positions for backward compatibility
