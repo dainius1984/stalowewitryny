@@ -5,9 +5,11 @@ import { PortfolioPreviewOverlay } from "@/components/ui/PortfolioPreviewOverlay
 import { cn } from "@/lib/utils";
 
 // Project data with URLs for webview
+// Structure: mobileHero (for mobile view), desktopHero (for desktop view)
 const mockupProjects = [
   {
-    images: ["/img/projects/white1.png", "/img/projects/white2.png"],
+    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section
+    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section
     alt: "White Effect - Portfolio Project",
     url: "https://www.whiteeffect.pl/",
     url2: "https://www.whiteeffect.pl/oferta", // Second image links to /oferta
@@ -16,7 +18,8 @@ const mockupProjects = [
     delay: 0,
   },
   {
-    images: ["/img/projects/autyzm1.png", "/img/projects/autyzm2.png"],
+    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section
+    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section
     alt: "Autyzm od Kuchni - Portfolio Project",
     url: "https://www.autyzmodkuchni.pl/",
     url2: "https://www.autyzmodkuchni.pl/kuchnia", // Second image links to /kuchnia
@@ -25,13 +28,24 @@ const mockupProjects = [
     delay: 0.2,
   },
   {
-    images: ["/img/projects/fryzjer1.png", "/img/projects/fryzjer2.png"],
+    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section
+    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section
     alt: "Fryzjerka Małgosia - Portfolio Project",
     url: "https://www.fryzjerkamalgosia.pl/",
     url2: "https://www.fryzjerkamalgosia.pl/uslugi", // Second image links to /uslugi
     title: "Fryzjerka Małgosia",
     position: "front",
     delay: 0.4,
+  },
+  {
+    mobileHero: "/img/projects/oranzeriamobile.png", // Mobile hero section
+    desktopHero: "/img/projects/oranzeria1.png", // Desktop hero section
+    alt: "Oranzeria - Portfolio Project",
+    url: "https://oraneria.vercel.app/",
+    url2: "https://oraneria.vercel.app/", // Same URL for both
+    title: "Oranzeria",
+    position: "back",
+    delay: 0.6,
   },
 ];
 
@@ -121,12 +135,13 @@ export function MockupGallery({ onModalStateChange }) {
     <>
       <div className={cn(
         "md:col-span-1 flex items-center justify-center",
-        "p-2 md:p-2 overflow-visible relative",
-        "transition-all duration-700 ease-out"
+        "p-0 md:p-2 overflow-visible relative",
+        "transition-all duration-700 ease-out",
+        "max-w-full md:max-w-none"
       )}>
         
-        {/* Mockup Gallery Container - Shows 2 cards side by side (image 1 left, image 2 right) */}
-        <div className="relative w-full h-full min-h-[280px] md:min-h-[550px] flex items-center justify-center overflow-visible">
+        {/* Mockup Gallery Container - Shows 2 cards side by side (mobile hero left, desktop hero right) */}
+        <div className="relative w-full h-full min-h-[280px] md:min-h-[400px] flex items-center justify-center overflow-visible md:pl-8">
           {/* Current Project Pair */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {
@@ -135,69 +150,95 @@ export function MockupGallery({ onModalStateChange }) {
               return (
                 <motion.div
                   key={`project-${index}-${currentProjectIndex}`}
-                  className="flex items-center justify-center gap-6 md:gap-12 w-full"
+                  className="flex items-center justify-center gap-4 md:gap-32 w-full"
                   initial={{ 
                     opacity: 0, 
-                    scale: 0.75, 
-                    x: 150,
-                    rotateY: -25,
-                    filter: "blur(10px)"
+                    scale: 0.6, 
+                    x: 200,
+                    rotateY: -30,
+                    rotateX: 10,
+                    filter: "blur(15px) brightness(0.5)"
                   }}
                   animate={{ 
                     opacity: 1, 
                     scale: 1, 
                     x: 0, 
                     rotateY: 0,
-                    filter: "blur(0px)"
+                    rotateX: 0,
+                    filter: "blur(0px) brightness(1)"
                   }}
                   exit={{ 
                     opacity: 0, 
-                    scale: 0.75, 
-                    x: -150, 
-                    rotateY: 25,
-                    filter: "blur(10px)"
+                    scale: 0.6, 
+                    x: -200, 
+                    rotateY: 30,
+                    rotateX: -10,
+                    filter: "blur(15px) brightness(0.5)"
                   }}
                   transition={{ 
-                    duration: 1.0,
+                    duration: 1.2,
                     ease: [0.34, 1.56, 0.64, 1], // Custom spring-like easing
                     scale: { 
-                      duration: 0.8,
+                      duration: 1.0,
                       ease: [0.34, 1.56, 0.64, 1]
                     },
                     opacity: { 
-                      duration: 0.6,
+                      duration: 0.7,
                       ease: "easeInOut"
                     },
                     filter: {
-                      duration: 0.8,
+                      duration: 0.9,
                       ease: "easeOut"
                     },
                     rotateY: {
-                      duration: 0.9,
+                      duration: 1.1,
+                      ease: [0.34, 1.56, 0.64, 1]
+                    },
+                    rotateX: {
+                      duration: 1.0,
                       ease: [0.34, 1.56, 0.64, 1]
                     }
                   }}
                 >
-                  {/* Left Card - Image 1 (hidden on mobile) */}
+                  {/* Left Card - Mobile View (hidden on mobile) */}
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`left-${index}-${currentProjectIndex}`}
-                      initial={{ opacity: 0, x: -50, rotate: -5 }}
-                      animate={{ opacity: 1, x: 0, rotate: -3 }}
+                      initial={{ 
+                        opacity: 0, 
+                        x: -50, // Adjusted for 50px right offset
+                        rotate: -15,
+                        scale: 0.7,
+                        filter: "blur(10px)"
+                      }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 50, // Move mobile container 50px to the right
+                        rotate: -3,
+                        scale: 1,
+                        filter: "blur(0px)"
+                      }}
                       exit={{ 
                         opacity: 0, 
-                        x: -200, 
-                        rotate: -20, 
-                        scale: 0.6,
-                        y: -30
+                        x: -200, // Adjusted for 50px right offset
+                        rotate: -25, 
+                        scale: 0.5,
+                        y: -50,
+                        filter: "blur(15px)"
                       }}
-                      transition={{ delay: 0.2, duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
+                      transition={{ 
+                        delay: 0.2, 
+                        duration: 0.8, 
+                        ease: [0.34, 1.56, 0.64, 1],
+                        opacity: { duration: 0.5 },
+                        filter: { duration: 0.6 }
+                      }}
                       className="hidden md:block"
                     >
                       <MockupCard
                         key={`${project.alt}-left-${index}`}
-                        images={[project.images[0]]} // Only first image
-                        alt={`${project.alt} - Widok 1`}
+                        images={[project.mobileHero]} // Mobile hero section (left side)
+                        alt={`${project.alt} - Mobile Hero`}
                         delay={0}
                         position="left"
                         project={{ ...project, url: project.url }} // Use first URL
@@ -205,39 +246,60 @@ export function MockupGallery({ onModalStateChange }) {
                         onLeave={handleLeave}
                         onClick={handleClick}
                         isLeft={true}
+                        isDesktopView={false} // Mobile view on left
                       />
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* Mobile/Right Card - Shows Image 1 on mobile, Image 2 on desktop */}
+                  {/* Right Card - Desktop View */}
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`right-${index}-${currentProjectIndex}`}
-                      initial={{ opacity: 0, x: 50, rotate: 5 }}
-                      animate={{ opacity: 1, x: 0, rotate: 3 }}
+                      initial={{ 
+                        opacity: 0, 
+                        x: 100, 
+                        rotate: 15,
+                        scale: 0.7,
+                        filter: "blur(10px)"
+                      }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 0, 
+                        rotate: 3,
+                        scale: 1,
+                        filter: "blur(0px)"
+                      }}
                       exit={{ 
                         opacity: 0, 
-                        x: 200, 
-                        rotate: 20, 
-                        scale: 0.6,
-                        y: 30
+                        x: 250, 
+                        rotate: 25, 
+                        scale: 0.5,
+                        y: 50,
+                        filter: "blur(15px)"
                       }}
-                      transition={{ delay: 0.3, duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
+                      transition={{ 
+                        delay: 0.3, 
+                        duration: 0.8, 
+                        ease: [0.34, 1.56, 0.64, 1],
+                        opacity: { duration: 0.5 },
+                        filter: { duration: 0.6 }
+                      }}
                     >
                       <MockupCard
                         key={`${project.alt}-right-${index}`}
-                        images={isDesktop ? [project.images[1]] : [project.images[0]]} // Second image on desktop, first on mobile
-                        alt={`${project.alt} - Widok ${isDesktop ? '2' : '1'}`}
+                        images={[project.desktopHero]} // Desktop hero section (right side)
+                        alt={`${project.alt} - Desktop Hero`}
                         delay={0.1}
                         position="right"
                         project={{ 
                           ...project, 
-                          url: isDesktop && project.url2 ? project.url2 : project.url // Use url2 for second image on desktop
+                          url: isDesktop && project.url2 ? project.url2 : project.url // Use url2 for desktop hero
                         }}
                         onHover={handleHover}
                         onLeave={handleLeave}
                         onClick={handleClick}
                         isLeft={false}
+                        isDesktopView={true} // Desktop view on right
                       />
                     </motion.div>
                   </AnimatePresence>

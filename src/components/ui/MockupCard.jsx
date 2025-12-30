@@ -3,12 +3,44 @@ import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motio
 import ReactParallaxTilt from "react-parallax-tilt";
 import { cn } from "@/lib/utils";
 
-export function MockupCard({ images, alt, delay, position, onHover, onLeave, onClick, project, isLeft, className }) {
+export function MockupCard({ images, alt, delay, position, onHover, onLeave, onClick, project, isLeft, className, isDesktopView = false }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const imageRef = useRef(null);
   const scrollIntervalRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Log container and image sizes for mobile optimization
+  useEffect(() => {
+    if (!isDesktopView && containerRef.current) {
+      const container = containerRef.current;
+      const img = container.querySelector('img');
+      if (img && img.complete) {
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+        const imgWidth = img.naturalWidth;
+        const imgHeight = img.naturalHeight;
+        
+        // Calculate recommended size to show first 2 sections nicely
+        // Container is 320px height, we want to show ~2 sections = ~640-800px
+        const recommendedWidth = 375; // Standard mobile width (iPhone SE/12/13)
+        const recommendedHeight = 700; // ~2.2x container height for 2 sections with good visibility
+        
+        console.log('📱 Mobile MockupCard - Image Size Recommendations:');
+        console.log(`Current Container Size: ${Math.round(containerWidth)}px × ${Math.round(containerHeight)}px`);
+        console.log(`Current Image Size: ${imgWidth}px × ${imgHeight}px`);
+        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        console.log(`✅ RECOMMENDED Image Size for Mobile (first 2 sections):`);
+        console.log(`   Width: ${recommendedWidth}px (standard mobile width)`);
+        console.log(`   Height: ${recommendedHeight}px (shows ~2 sections)`);
+        console.log(`   Aspect Ratio: ${recommendedWidth}:${recommendedHeight} (${(recommendedWidth/recommendedHeight).toFixed(3)})`);
+        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        console.log(`💡 Crop your image to: ${recommendedWidth}px × ${recommendedHeight}px`);
+        console.log(`   Start from top (Y: 0) to capture hero + first section`);
+      }
+    }
+  }, [isDesktopView, currentImageIndex, images]);
 
   // Auto-rotate between images every 4 seconds
   useEffect(() => {
@@ -95,7 +127,10 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
   return (
     <ReactParallaxTilt
       className={cn(
-        "w-32 md:w-64 h-[320px] md:h-[600px]",
+        // Mobile view: full width on mobile, narrow phone-like on desktop
+        !isDesktopView && "w-full md:w-56 h-[320px] md:h-[500px]",
+        // Desktop view: wider desktop-like (hero section proportions)
+        isDesktopView && "w-40 md:w-[480px] h-[240px] md:h-[360px]",
         position === "left" && "relative z-10",
         position === "right" && "relative z-10",
         // Old positions for backward compatibility
@@ -127,7 +162,11 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
     >
       <motion.div
         className={cn(
-          "relative w-full h-full rounded-[2rem] border-[3px] overflow-hidden",
+          "relative w-full h-full border-[3px] overflow-hidden",
+          // Mobile: rounded phone-like
+          !isDesktopView && "rounded-[2rem]",
+          // Desktop: less rounded, more desktop-like
+          isDesktopView && "rounded-xl",
           "shadow-2xl transition-all duration-500 cursor-pointer",
           "bg-gradient-to-br from-neutral-950/90 via-neutral-900/80 to-neutral-950/90",
           isHovered 
@@ -146,19 +185,28 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
       >
         {/* Subtle gradient overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-30 pointer-events-none z-0"></div>
-        {/* Phone/Tablet Frame with glow effect */}
+        {/* Phone/Desktop Frame with glow effect */}
         <div className={cn(
-          "absolute inset-0 rounded-[2rem] border-[3px] pointer-events-none z-10 transition-all duration-700",
+          "absolute inset-0 border-[3px] pointer-events-none z-10 transition-all duration-700",
+          !isDesktopView && "rounded-[2rem]",
+          isDesktopView && "rounded-xl",
           isHovered ? "border-[#CCFF00]/40 shadow-[0_0_40px_rgba(204,255,0,0.6)]" : "border-neutral-700"
         )} />
         
         {/* Screen Content with Image Carousel */}
-        <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950">
+        <div className={cn(
+          "absolute top-[6px] left-[6px] right-[6px] bottom-[6px] overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950",
+          !isDesktopView && "rounded-[1.5rem]",
+          isDesktopView && "rounded-lg"
+        )}>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
               ref={imageRef}
-              className="absolute inset-0 w-full h-full z-0 overflow-hidden scrollbar-hide"
+              className={cn(
+                "absolute inset-0 w-full h-full z-0 scrollbar-hide",
+                !isDesktopView ? "overflow-y-auto" : "overflow-hidden"
+              )}
               style={{
                 scrollBehavior: 'smooth',
               }}
@@ -170,18 +218,24 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
             >
-              <div className="w-full h-full overflow-hidden">
+              <div ref={containerRef} className={cn(
+                "w-full",
+                !isDesktopView ? "h-full overflow-y-auto scrollbar-hide" : "h-full overflow-hidden"
+              )}>
                 <img
                   src={images[currentImageIndex]}
                   alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover"
+                  className={cn(
+                    !isDesktopView ? "w-full h-auto" : "w-full h-full"
+                  )}
                   style={{ 
-                    width: '100%',
-                    height: '300%', // Triple height to show only top third when cropped
                     display: 'block',
-                    objectFit: 'cover',
-                    objectPosition: 'top', // Show top of image
-                    transform: 'scale(1.5)', // Better zoom in for top of page
+                    // Mobile: fit full width (375px), auto height to show full 1500px image, scrollable
+                    // Desktop: fill container
+                    objectFit: !isDesktopView ? 'none' : 'cover',
+                    objectPosition: !isDesktopView ? 'top center' : 'top center',
+                    // Mobile: no scale, show full image
+                    transform: 'none',
                     transformOrigin: 'top center',
                   }}
                   onError={(e) => {

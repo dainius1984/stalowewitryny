@@ -161,7 +161,7 @@ export function Hero({ onModalStateChange }) {
 
         {/* Desktop Layout: Original Grid */}
         <motion.div
-          className="hidden md:grid grid-cols-3 gap-8 md:gap-12"
+          className="hidden md:grid grid-cols-3 gap-8 md:gap-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -169,7 +169,7 @@ export function Hero({ onModalStateChange }) {
           {/* Left Card - Span 2 columns */}
           <BentoCard className={cn(
             "md:col-span-2 flex flex-col justify-between",
-            "p-8 md:p-12"
+            "p-8 md:p-12 md:pr-16"
           )}>
             <motion.div className="flex flex-col justify-between h-full space-y-4 md:space-y-6" variants={containerVariants}>
               <div className="flex-1 flex flex-col justify-start">
