@@ -37,6 +37,16 @@ const mockupProjects = [
     position: "front",
     delay: 0.4,
   },
+  {
+    mobileHero: "/img/projects/fryzjerkamobile.png", // Mobile hero section
+    desktopHero: "/img/projects/fryzjerka1.png", // Desktop hero section
+    alt: "Fryzjerka Małgosia - Portfolio Project",
+    url: "https://www.fryzjerkamalgosia.pl/",
+    url2: "https://www.fryzjerkamalgosia.pl/", // Both mobile and desktop link to fryzjerkamalgosia.pl
+    title: "Fryzjerka Małgosia",
+    position: "back",
+    delay: 0.6,
+  },
 ];
 
 export function MockupGallery({ onModalStateChange }) {
