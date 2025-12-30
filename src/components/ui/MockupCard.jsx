@@ -129,8 +129,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
       className={cn(
         // Mobile view: full width on mobile, phone-like size on desktop (240px width, 500px height)
         !isDesktopView && "w-full md:w-[240px] h-[320px] md:h-[500px]",
-        // Desktop view: wider desktop-like (hero section proportions)
-        isDesktopView && "w-40 md:w-[480px] h-[240px] md:h-[360px]",
+        // Desktop view: full width on mobile, wider on desktop (hero section proportions)
+        isDesktopView && "w-full md:w-[480px] h-[240px] md:h-[360px]",
         position === "left" && "relative z-10",
         position === "right" && "relative z-10",
         // Old positions for backward compatibility

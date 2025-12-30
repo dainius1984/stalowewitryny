@@ -128,11 +128,11 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         "flex items-center justify-center",
         "p-0 overflow-visible relative",
         "transition-all duration-700 ease-out",
-        "w-full"
+        "w-full -mx-6" // Negative margin to extend beyond container, centered
       )}>
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
-        <div className="relative w-[150%] h-full min-h-[280px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full max-w-[200%] h-full min-h-[280px] flex items-center justify-center overflow-visible">
           {/* Current Project */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {
