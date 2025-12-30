@@ -1,11 +1,31 @@
+/**
+ * MockupGalleryMobile Component (Mobile Version)
+ * 
+ * Displays an interactive portfolio gallery in the Hero section on mobile devices.
+ * Shows only desktop mockup visuals (single card) with wider container for better visibility.
+ * 
+ * Features:
+ * - Auto-rotates through all projects every 5 seconds
+ * - Click on mockup to open full-screen webview overlay
+ * - Smooth 3D animations and transitions
+ * - Hides navbar when overlay is open
+ * - Wider container (200% max-width) to show more of desktop images
+ * 
+ * Used in:
+ * - Hero.jsx (mobile layout only, hidden on desktop)
+ * 
+ * Components used:
+ * - MockupCardMobileOnly: Desktop mockup frame optimized for mobile view
+ * - PortfolioPreviewOverlay: Full-screen webview overlay
+ */
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MockupCard } from "@/components/ui/MockupCard";
+import { MockupCardMobileOnly } from "@/components/ui/MockupCardMobileOnly";
 import { PortfolioPreviewOverlay } from "@/components/ui/PortfolioPreviewOverlay";
 import { cn } from "@/lib/utils";
 
 // Project data with URLs for webview
-// Mobile shows only desktop visuals
+// Mobile shows only desktop visuals (no mobile mockups)
 const mockupProjects = [
   {
     desktopHero: "/img/projects/white1.png", // Desktop hero section
@@ -140,7 +160,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
       )}>
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
-        <div className="relative w-full max-w-[200%] min-h-[420px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full max-w-[200%] min-h-[420px] flex items-center justify-center overflow-visible" style={{ width: '100%', minWidth: '100%' }}>
           {/* Current Project */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {
@@ -203,6 +223,8 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`mobile-${index}-${currentProjectIndex}`}
+                      className="w-full"
+                      style={{ width: '100%', minWidth: '100%', display: 'flex', justifyContent: 'center' }}
                       initial={{ 
                         opacity: 0, 
                         x: 100, 
@@ -233,12 +255,11 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         filter: { duration: 0.6 }
                       }}
                     >
-                      <MockupCard
+                      <MockupCardMobileOnly
                         key={`${project.alt}-mobile-${index}`}
                         images={[project.desktopHero]} // Desktop hero section for mobile view
                         alt={`${project.alt} - Desktop Hero`}
                         delay={0.1}
-                        position="right" // Use right position instead of middle to avoid absolute positioning issues
                         project={{ 
                           ...project, 
                           url: project.url
@@ -246,8 +267,6 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         onHover={handleHover}
                         onLeave={handleLeave}
                         onClick={handleClick}
-                        isLeft={false}
-                        isDesktopView={true} // Desktop view on mobile
                       />
                     </motion.div>
                   </AnimatePresence>

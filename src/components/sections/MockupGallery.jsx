@@ -1,6 +1,27 @@
+/**
+ * MockupGallery Component (Desktop Version)
+ * 
+ * Displays an interactive portfolio gallery in the Hero section on desktop.
+ * Shows two mockup cards side by side: mobile view (left) and desktop view (right).
+ * 
+ * Features:
+ * - Auto-rotates through all projects every 5 seconds
+ * - Click on any mockup to open full-screen webview overlay
+ * - Smooth 3D animations and transitions
+ * - Hides navbar when overlay is open
+ * 
+ * Used in:
+ * - Hero.jsx (desktop layout only, hidden on mobile)
+ * 
+ * Components used:
+ * - MockupCardMobile: Mobile phone mockup frame (left side)
+ * - MockupCardDesktop: Desktop mockup frame (right side)
+ * - PortfolioPreviewOverlay: Full-screen webview overlay
+ */
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MockupCard } from "@/components/ui/MockupCard";
+import { MockupCardMobile } from "@/components/ui/MockupCardMobile";
+import { MockupCardDesktop } from "@/components/ui/MockupCardDesktop";
 import { PortfolioPreviewOverlay } from "@/components/ui/PortfolioPreviewOverlay";
 import { cn } from "@/lib/utils";
 
@@ -266,18 +287,15 @@ export function MockupGallery({ onModalStateChange }) {
                       }}
                       className="hidden md:block"
                     >
-                      <MockupCard
+                      <MockupCardMobile
                         key={`${project.alt}-left-${index}`}
                         images={[project.mobileHero]} // Mobile hero section (left side)
                         alt={`${project.alt} - Mobile Hero`}
                         delay={0}
-                        position="left"
                         project={{ ...project, url: project.url }} // Use url for mobile (same as desktop)
                         onHover={handleHover}
                         onLeave={handleLeave}
                         onClick={handleClick}
-                        isLeft={true}
-                        isDesktopView={false} // Mobile view on left
                       />
                     </motion.div>
                   </AnimatePresence>
@@ -316,12 +334,11 @@ export function MockupGallery({ onModalStateChange }) {
                         filter: { duration: 0.6 }
                       }}
                     >
-                      <MockupCard
+                      <MockupCardDesktop
                         key={`${project.alt}-right-${index}`}
                         images={[project.desktopHero]} // Desktop hero section (right side)
                         alt={`${project.alt} - Desktop Hero`}
                         delay={0.1}
-                        position="right"
                         project={{ 
                           ...project, 
                           url: project.url // Use same url for desktop (both mobile and desktop use same URL)
@@ -329,8 +346,6 @@ export function MockupGallery({ onModalStateChange }) {
                         onHover={handleHover}
                         onLeave={handleLeave}
                         onClick={handleClick}
-                        isLeft={false}
-                        isDesktopView={true} // Desktop view on right
                       />
                     </motion.div>
                   </AnimatePresence>

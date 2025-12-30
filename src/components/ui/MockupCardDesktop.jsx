@@ -1,46 +1,41 @@
+/**
+ * MockupCardDesktop Component
+ * 
+ * Displays a desktop mockup frame for desktop view.
+ * Used on the right side of MockupGallery (desktop) to show desktop hero sections.
+ * 
+ * @component
+ * @param {string[]} images - Array of image URLs to display (supports multiple images for carousel)
+ * @param {string} alt - Alt text for the image
+ * @param {number} delay - Animation delay in seconds
+ * @param {function} onHover - Callback when card is hovered
+ * @param {function} onLeave - Callback when mouse leaves card
+ * @param {function} onClick - Callback when card is clicked (opens PortfolioPreviewOverlay)
+ * @param {object} project - Project data object with url, title, etc.
+ * @param {string} className - Additional CSS classes
+ * 
+ * Features:
+ * - Desktop-like frame (480px × 360px on desktop)
+ * - 3D tilt effect on hover
+ * - Auto-scroll on hover (for long images)
+ * - Auto-rotate between multiple images
+ * - Click to open full-screen webview overlay
+ * 
+ * Used in:
+ * - MockupGallery.jsx (desktop, right side)
+ */
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ReactParallaxTilt from "react-parallax-tilt";
 import { cn } from "@/lib/utils";
 
-export function MockupCard({ images, alt, delay, position, onHover, onLeave, onClick, project, isLeft, className, isDesktopView = false }) {
+export function MockupCardDesktop({ images, alt, delay, onHover, onLeave, onClick, project, className }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const imageRef = useRef(null);
   const scrollIntervalRef = useRef(null);
   const containerRef = useRef(null);
-
-  // Log container and image sizes for mobile optimization
-  useEffect(() => {
-    if (!isDesktopView && containerRef.current) {
-      const container = containerRef.current;
-      const img = container.querySelector('img');
-      if (img && img.complete) {
-        const containerWidth = container.clientWidth;
-        const containerHeight = container.clientHeight;
-        const imgWidth = img.naturalWidth;
-        const imgHeight = img.naturalHeight;
-        
-        // Calculate recommended size to show first 2 sections nicely
-        // Container is 320px height, we want to show ~2 sections = ~640-800px
-        const recommendedWidth = 375; // Standard mobile width (iPhone SE/12/13)
-        const recommendedHeight = 700; // ~2.2x container height for 2 sections with good visibility
-        
-        console.log('📱 Mobile MockupCard - Image Size Recommendations:');
-        console.log(`Current Container Size: ${Math.round(containerWidth)}px × ${Math.round(containerHeight)}px`);
-        console.log(`Current Image Size: ${imgWidth}px × ${imgHeight}px`);
-        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-        console.log(`✅ RECOMMENDED Image Size for Mobile (first 2 sections):`);
-        console.log(`   Width: ${recommendedWidth}px (standard mobile width)`);
-        console.log(`   Height: ${recommendedHeight}px (shows ~2 sections)`);
-        console.log(`   Aspect Ratio: ${recommendedWidth}:${recommendedHeight} (${(recommendedWidth/recommendedHeight).toFixed(3)})`);
-        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-        console.log(`💡 Crop your image to: ${recommendedWidth}px × ${recommendedHeight}px`);
-        console.log(`   Start from top (Y: 0) to capture hero + first section`);
-      }
-    }
-  }, [isDesktopView, currentImageIndex, images]);
 
   // Auto-rotate between images every 4 seconds
   useEffect(() => {
@@ -97,7 +92,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (onHover) {
-      onHover({ images, alt, currentIndex: currentImageIndex });
+      onHover(project || { images, alt, currentIndex: currentImageIndex });
     }
   };
 
@@ -109,17 +104,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
     }
   };
 
-  const handleImageSwitch = (e) => {
-    e.stopPropagation(); // Prevent triggering parent click
-    if (images.length > 1) {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-      setScrollProgress(0);
-    }
-  };
-
   const handleCardClick = () => {
     if (onClick) {
-      // Pass the full project object if available, otherwise pass basic info
       onClick(project || { images, alt, currentIndex: currentImageIndex });
     }
   };
@@ -127,29 +113,12 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
   return (
     <ReactParallaxTilt
       className={cn(
-        // Mobile view: full width on mobile, phone-like size on desktop (240px width, 500px height)
-        !isDesktopView && "w-full md:w-[240px] h-[320px] md:h-[500px]",
-        // Desktop view: full width and taller height on mobile to show full desktop image, wider on desktop
-        isDesktopView && "w-full md:w-[480px] h-[400px] md:h-[360px]",
-        position === "left" && "relative z-10",
-        position === "right" && "relative z-10",
-        // Old positions for backward compatibility
-        position === "back" && "hidden md:block absolute",
-        position === "middle" && "absolute md:relative z-10",
-        position === "front" && "hidden md:block relative z-20",
+        "w-full md:w-[480px] h-[400px] md:h-[360px] relative z-10",
         className
       )}
       style={{
-        transform: position === "left"
-          ? "translateX(0%) translateY(0%) rotate(-3deg)"
-          : position === "right"
-          ? "translateX(0%) translateY(0%) rotate(3deg)"
-          : position === "back" 
-          ? "translateX(-25%) translateY(8%) rotate(-10deg)"
-          : position === "front"
-          ? "translateX(25%) translateY(3%) rotate(3deg)"
-          : "md:translateX(0%) md:translateY(-8%) md:rotate(-5deg)",
-        zIndex: position === "left" || position === "right" ? 10 : position === "back" ? 1 : position === "front" ? 3 : 2,
+        transform: "translateX(0%) translateY(0%) rotate(3deg)",
+        zIndex: 10,
       }}
       tiltMaxAngleX={isHovered ? 12 : 6}
       tiltMaxAngleY={isHovered ? 12 : 6}
@@ -162,18 +131,14 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
     >
       <motion.div
         className={cn(
-          "relative w-full h-full border-[3px]",
-          // Mobile: rounded phone-like
-          !isDesktopView && "rounded-[2rem]",
-          // Desktop: less rounded, more desktop-like
-          isDesktopView && "rounded-xl",
+          "relative w-full h-full border-[3px] rounded-xl",
           "shadow-2xl transition-all duration-500 cursor-pointer",
           "bg-gradient-to-br from-neutral-950/90 via-neutral-900/80 to-neutral-950/90",
           isHovered 
             ? "border-[#CCFF00] shadow-[0_0_80px_rgba(204,255,0,1)] z-[99]" 
             : "border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]"
         )}
-        style={{ width: '100%', height: '100%', minHeight: isDesktopView ? '400px' : '320px' }}
+        style={{ width: '100%', height: '100%', minHeight: '400px' }}
         onClick={handleCardClick}
         initial={{ opacity: 0, y: 20 }}
         animate={{ 
@@ -185,28 +150,20 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
       >
         {/* Subtle gradient overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-30 pointer-events-none z-0"></div>
-        {/* Phone/Desktop Frame with glow effect */}
+        
+        {/* Desktop Frame with glow effect */}
         <div className={cn(
-          "absolute inset-0 border-[3px] pointer-events-none z-10 transition-all duration-700",
-          !isDesktopView && "rounded-[2rem]",
-          isDesktopView && "rounded-xl",
+          "absolute inset-0 border-[3px] pointer-events-none z-10 transition-all duration-700 rounded-xl",
           isHovered ? "border-[#CCFF00]/40 shadow-[0_0_40px_rgba(204,255,0,0.6)]" : "border-neutral-700"
         )} />
         
         {/* Screen Content with Image Carousel */}
-        <div className={cn(
-          "absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950",
-          !isDesktopView && "rounded-[1.5rem]",
-          isDesktopView && "rounded-lg"
-        )}>
+        <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 rounded-lg overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
               ref={imageRef}
-              className={cn(
-                "absolute inset-0 w-full h-full z-0 scrollbar-hide",
-                !isDesktopView ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"
-              )}
+              className="absolute inset-0 w-full h-full z-0 scrollbar-hide overflow-hidden"
               style={{
                 scrollBehavior: 'smooth',
               }}
@@ -225,7 +182,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
                     display: 'block',
                     width: '100%',
                     height: '100%',
-                    objectFit: !isDesktopView ? 'contain' : 'cover',
+                    objectFit: 'cover',
                     objectPosition: 'top center',
                     transform: 'none',
                     transformOrigin: 'top center',
@@ -314,7 +271,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
         {/* Glow effect on hover */}
         {isHovered && (
           <motion.div
-            className="absolute -inset-1 bg-[#CCFF00]/20 blur-xl rounded-[2rem] z-0"
+            className="absolute -inset-1 bg-[#CCFF00]/20 blur-xl rounded-xl z-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}

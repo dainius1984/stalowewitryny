@@ -1,3 +1,27 @@
+/**
+ * Hero Section Component
+ * 
+ * Main hero section of the website with video background, animated text, and portfolio gallery.
+ * 
+ * Layout:
+ * - Mobile: MockupGalleryMobile (portfolio slider) → Text banner with CTA
+ * - Desktop: Text content (left, 2 cols) → MockupGallery (portfolio, right, 1 col)
+ * 
+ * Components used:
+ * - Container: Wrapper for centered content
+ * - BentoCard: Dark card container for text content
+ * - Button: CTA button ("Darmowa Wycena")
+ * - MockupGallery: Desktop portfolio gallery (hidden on mobile)
+ * - MockupGalleryMobile: Mobile portfolio gallery (hidden on desktop)
+ * - CompanySurvey: Modal form for quote requests
+ * 
+ * Features:
+ * - Looping video background (2 videos)
+ * - Dark gradient overlay for text readability
+ * - Animated grid background
+ * - Staggered text animations
+ * - Responsive layout (different on mobile vs desktop)
+ */
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Zap, Shield, Search } from "lucide-react";

@@ -1,3 +1,34 @@
+/**
+ * PortfolioPreviewOverlay Component
+ * 
+ * Full-screen modal overlay that displays a live website preview in an iframe.
+ * Opens when user clicks on a MockupCard (MockupCardMobile, MockupCardDesktop, or MockupCardMobileOnly).
+ * 
+ * @component
+ * @param {boolean} isOpen - Whether the overlay is visible
+ * @param {function} onClose - Callback to close the overlay
+ * @param {string} url - URL of the website to display in iframe
+ * @param {string} title - Project title to display in header
+ * @param {string} alt - Alternative text/description
+ * 
+ * Features:
+ * - Full-screen overlay with backdrop
+ * - Live website preview in iframe
+ * - Swipe down to close on mobile
+ * - External link button to open site in new tab
+ * - Loading indicator while iframe loads
+ * - Responsive design (mobile and desktop)
+ * 
+ * Used in:
+ * - MockupGallery.jsx: Opens when clicking mobile/desktop mockup cards
+ * - MockupGalleryMobile.jsx: Opens when clicking mobile-only mockup card
+ * 
+ * Flow:
+ * 1. User clicks MockupCard → onClick callback triggers
+ * 2. MockupGallery sets previewOpen=true and hoveredProject
+ * 3. PortfolioPreviewOverlay receives isOpen=true and displays iframe
+ * 4. User can close via X button, swipe down (mobile), or click backdrop
+ */
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
