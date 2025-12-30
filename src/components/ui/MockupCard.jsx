@@ -127,8 +127,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
   return (
     <ReactParallaxTilt
       className={cn(
-        // Mobile view: full width on mobile, narrow phone-like on desktop
-        !isDesktopView && "w-full md:w-56 h-[320px] md:h-[500px]",
+        // Mobile view: full width on mobile, phone-like size on desktop (240px width, 500px height)
+        !isDesktopView && "w-full md:w-[240px] h-[320px] md:h-[500px]",
         // Desktop view: wider desktop-like (hero section proportions)
         isDesktopView && "w-40 md:w-[480px] h-[240px] md:h-[360px]",
         position === "left" && "relative z-10",
@@ -195,9 +195,9 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
         
         {/* Screen Content with Image Carousel */}
         <div className={cn(
-          "absolute top-[6px] left-[6px] right-[6px] bottom-[6px] overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950",
-          !isDesktopView && "rounded-[1.5rem]",
-          isDesktopView && "rounded-lg"
+          "absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950",
+          !isDesktopView && "rounded-[1.5rem] overflow-hidden", // Only overflow-hidden for rounded corners
+          isDesktopView && "rounded-lg overflow-hidden"
         )}>
           <AnimatePresence mode="wait">
             <motion.div
@@ -205,36 +205,34 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
               ref={imageRef}
               className={cn(
                 "absolute inset-0 w-full h-full z-0 scrollbar-hide",
-                !isDesktopView ? "overflow-y-auto" : "overflow-hidden"
+                !isDesktopView ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"
               )}
               style={{
                 scrollBehavior: 'smooth',
               }}
-              initial={{ opacity: 0, scale: 1.1 }}
+              initial={{ opacity: 0 }}
               animate={{ 
-                opacity: 1, 
-                scale: isHovered ? 1.05 : 1,
+                opacity: 1,
               }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               <div ref={containerRef} className={cn(
                 "w-full",
-                !isDesktopView ? "h-full overflow-y-auto scrollbar-hide" : "h-full overflow-hidden"
+                !isDesktopView ? "min-h-full" : "h-full"
               )}>
                 <img
                   src={images[currentImageIndex]}
                   alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
-                  className={cn(
-                    !isDesktopView ? "w-full h-auto" : "w-full h-full"
-                  )}
                   style={{ 
                     display: 'block',
-                    // Mobile: fit full width (375px), auto height to show full 1500px image, scrollable
-                    // Desktop: fill container
-                    objectFit: !isDesktopView ? 'none' : 'cover',
+                    // Mobile: fit full image 375x1495px proportionally in phone container
+                    width: !isDesktopView ? '100%' : '100%',
+                    height: !isDesktopView ? 'auto' : '100%',
+                    // Mobile: use contain to show full image without cropping, Desktop: cover to fill
+                    objectFit: !isDesktopView ? 'contain' : 'cover',
                     objectPosition: !isDesktopView ? 'top center' : 'top center',
-                    // Mobile: no scale, show full image
+                    // No transform/scale - let objectFit handle scaling
                     transform: 'none',
                     transformOrigin: 'top center',
                   }}

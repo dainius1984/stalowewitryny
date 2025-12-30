@@ -8,44 +8,34 @@ import { cn } from "@/lib/utils";
 // Structure: mobileHero (for mobile view), desktopHero (for desktop view)
 const mockupProjects = [
   {
-    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section
-    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section
+    mobileHero: "/img/projects/whitemobile.png", // Mobile hero section
+    desktopHero: "/img/projects/white1.png", // Desktop hero section
     alt: "White Effect - Portfolio Project",
     url: "https://www.whiteeffect.pl/",
-    url2: "https://www.whiteeffect.pl/oferta", // Second image links to /oferta
+    url2: "https://www.whiteeffect.pl/", // Both mobile and desktop link to whiteeffect.pl
     title: "White Effect",
     position: "back",
     delay: 0,
   },
   {
-    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section
-    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section
-    alt: "Autyzm od Kuchni - Portfolio Project",
-    url: "https://www.autyzmodkuchni.pl/",
-    url2: "https://www.autyzmodkuchni.pl/kuchnia", // Second image links to /kuchnia
-    title: "Autyzm od Kuchni",
+    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section - Zielone Mile
+    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section - Zielone Mile
+    alt: "Zielone Mile - Portfolio Project",
+    url: "https://zielonemile.pl/",
+    url2: "https://zielonemile.pl/", // Both mobile and desktop link to zielonemile.pl
+    title: "Zielone Mile",
     position: "middle",
     delay: 0.2,
-  },
-  {
-    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section
-    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section
-    alt: "Fryzjerka Małgosia - Portfolio Project",
-    url: "https://www.fryzjerkamalgosia.pl/",
-    url2: "https://www.fryzjerkamalgosia.pl/uslugi", // Second image links to /uslugi
-    title: "Fryzjerka Małgosia",
-    position: "front",
-    delay: 0.4,
   },
   {
     mobileHero: "/img/projects/oranzeriamobile.png", // Mobile hero section
     desktopHero: "/img/projects/oranzeria1.png", // Desktop hero section
     alt: "Oranzeria - Portfolio Project",
     url: "https://oraneria.vercel.app/",
-    url2: "https://oraneria.vercel.app/", // Same URL for both
+    url2: "https://oraneria.vercel.app/", // Both mobile and desktop link to oraneria.vercel.app
     title: "Oranzeria",
-    position: "back",
-    delay: 0.6,
+    position: "front",
+    delay: 0.4,
   },
 ];
 
@@ -206,21 +196,22 @@ export function MockupGallery({ onModalStateChange }) {
                       key={`left-${index}-${currentProjectIndex}`}
                       initial={{ 
                         opacity: 0, 
-                        x: -50, // Adjusted for 50px right offset
+                        x: 0, // Start from center, then move right
                         rotate: -15,
                         scale: 0.7,
                         filter: "blur(10px)"
                       }}
                       animate={{ 
                         opacity: 1, 
-                        x: 50, // Move mobile container 50px to the right
+                        x: 100, // Move mobile container 100px to the right (more space from text)
+                        y: -10, // Move mobile container 10px up to shorten bottom frame
                         rotate: -3,
                         scale: 1,
                         filter: "blur(0px)"
                       }}
                       exit={{ 
                         opacity: 0, 
-                        x: -200, // Adjusted for 50px right offset
+                        x: -150, // Exit to the left
                         rotate: -25, 
                         scale: 0.5,
                         y: -50,
@@ -241,7 +232,7 @@ export function MockupGallery({ onModalStateChange }) {
                         alt={`${project.alt} - Mobile Hero`}
                         delay={0}
                         position="left"
-                        project={{ ...project, url: project.url }} // Use first URL
+                        project={{ ...project, url: project.url }} // Use url for mobile (same as desktop)
                         onHover={handleHover}
                         onLeave={handleLeave}
                         onClick={handleClick}
@@ -293,7 +284,7 @@ export function MockupGallery({ onModalStateChange }) {
                         position="right"
                         project={{ 
                           ...project, 
-                          url: isDesktop && project.url2 ? project.url2 : project.url // Use url2 for desktop hero
+                          url: project.url // Use same url for desktop (both mobile and desktop use same URL)
                         }}
                         onHover={handleHover}
                         onLeave={handleLeave}
