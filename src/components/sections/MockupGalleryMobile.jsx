@@ -135,11 +135,12 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         "flex items-center justify-center",
         "p-0 overflow-visible relative",
         "transition-all duration-700 ease-out",
-        "w-full -mx-6" // Negative margin to extend beyond container, centered
+        "w-full -mx-6", // Negative margin to extend beyond container, centered
+        "min-h-[300px]" // Ensure minimum height for images
       )}>
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
-        <div className="relative w-full max-w-[200%] h-full min-h-[280px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full max-w-[200%] min-h-[300px] flex items-center justify-center overflow-visible">
           {/* Current Project */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {
