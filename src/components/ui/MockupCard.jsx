@@ -162,7 +162,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
     >
       <motion.div
         className={cn(
-          "relative w-full h-full border-[3px] overflow-hidden",
+          "relative w-full h-full border-[3px]",
           // Mobile: rounded phone-like
           !isDesktopView && "rounded-[2rem]",
           // Desktop: less rounded, more desktop-like
@@ -173,7 +173,7 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
             ? "border-[#CCFF00] shadow-[0_0_80px_rgba(204,255,0,1)] z-[99]" 
             : "border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]"
         )}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', minHeight: isDesktopView ? '400px' : '320px' }}
         onClick={handleCardClick}
         initial={{ opacity: 0, y: 20 }}
         animate={{ 
@@ -196,8 +196,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
         {/* Screen Content with Image Carousel */}
         <div className={cn(
           "absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950",
-          !isDesktopView && "rounded-[1.5rem] overflow-hidden", // Only overflow-hidden for rounded corners
-          isDesktopView && "rounded-lg overflow-hidden"
+          !isDesktopView && "rounded-[1.5rem]",
+          isDesktopView && "rounded-lg"
         )}>
           <AnimatePresence mode="wait">
             <motion.div
@@ -225,14 +225,13 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
                     display: 'block',
                     width: '100%',
                     height: '100%',
-                    // Mobile: contain to show full image, Desktop: cover to fill container
                     objectFit: !isDesktopView ? 'contain' : 'cover',
                     objectPosition: 'top center',
-                    // No transform/scale
                     transform: 'none',
                     transformOrigin: 'top center',
                   }}
                   onError={(e) => {
+                    console.error('Image failed to load:', images[currentImageIndex]);
                     e.target.style.display = "none";
                     const parent = e.target.parentElement?.parentElement;
                     if (parent) {
@@ -241,6 +240,9 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
                       parent.style.alignItems = "center";
                       parent.style.justifyContent = "center";
                     }
+                  }}
+                  onLoad={() => {
+                    console.log('Image loaded successfully:', images[currentImageIndex]);
                   }}
                 />
               </div>

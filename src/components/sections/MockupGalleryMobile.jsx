@@ -238,7 +238,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         images={[project.desktopHero]} // Desktop hero section for mobile view
                         alt={`${project.alt} - Desktop Hero`}
                         delay={0.1}
-                        position="middle"
+                        position="right" // Use right position instead of middle to avoid absolute positioning issues
                         project={{ 
                           ...project, 
                           url: project.url
