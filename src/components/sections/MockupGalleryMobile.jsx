@@ -140,7 +140,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
       )}>
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
-        <div className="relative w-full max-w-[200%] min-h-[300px] flex items-center justify-center overflow-visible">
+        <div className="relative w-full max-w-[200%] min-h-[420px] flex items-center justify-center overflow-visible">
           {/* Current Project */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {

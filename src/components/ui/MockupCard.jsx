@@ -129,8 +129,8 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
       className={cn(
         // Mobile view: full width on mobile, phone-like size on desktop (240px width, 500px height)
         !isDesktopView && "w-full md:w-[240px] h-[320px] md:h-[500px]",
-        // Desktop view: full width and proper height on mobile, wider on desktop (hero section proportions)
-        isDesktopView && "w-full md:w-[480px] h-[280px] md:h-[360px]",
+        // Desktop view: full width and taller height on mobile to show full desktop image, wider on desktop
+        isDesktopView && "w-full md:w-[480px] h-[400px] md:h-[360px]",
         position === "left" && "relative z-10",
         position === "right" && "relative z-10",
         // Old positions for backward compatibility
@@ -217,22 +217,18 @@ export function MockupCard({ images, alt, delay, position, onHover, onLeave, onC
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             >
-              <div ref={containerRef} className={cn(
-                "w-full",
-                !isDesktopView ? "min-h-full" : "h-full"
-              )}>
+              <div ref={containerRef} className="absolute inset-0 w-full h-full">
                 <img
                   src={images[currentImageIndex]}
                   alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
                   style={{ 
                     display: 'block',
-                    // Mobile: fit full image 375x1495px proportionally in phone container
-                    width: !isDesktopView ? '100%' : '100%',
-                    height: !isDesktopView ? 'auto' : '100%',
-                    // Mobile: use contain to show full image without cropping, Desktop: cover to fill
+                    width: '100%',
+                    height: '100%',
+                    // Mobile: contain to show full image, Desktop: cover to fill container
                     objectFit: !isDesktopView ? 'contain' : 'cover',
-                    objectPosition: !isDesktopView ? 'top center' : 'top center',
-                    // No transform/scale - let objectFit handle scaling
+                    objectPosition: 'top center',
+                    // No transform/scale
                     transform: 'none',
                     transformOrigin: 'top center',
                   }}
