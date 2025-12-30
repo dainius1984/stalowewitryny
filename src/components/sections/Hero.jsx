@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { Button } from "@/components/ui/Button";
 import { MockupGallery } from "@/components/sections/MockupGallery";
+import { MockupGalleryMobile } from "@/components/sections/MockupGalleryMobile";
 import { CompanySurvey } from "@/components/sections/CompanySurvey";
 import { cn } from "@/lib/utils";
 
@@ -95,7 +96,7 @@ export function Hero({ onModalStateChange }) {
             initial="hidden"
             animate="visible"
           >
-            <MockupGallery onModalStateChange={onModalStateChange} />
+            <MockupGalleryMobile onModalStateChange={onModalStateChange} />
           </motion.div>
 
           {/* Banner Below on Mobile */}
