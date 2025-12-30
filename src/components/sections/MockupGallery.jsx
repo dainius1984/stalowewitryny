@@ -67,6 +67,16 @@ const mockupProjects = [
     position: "front",
     delay: 1.0,
   },
+  {
+    mobileHero: "/img/projects/openmobile.png", // Mobile hero section
+    desktopHero: "/img/projects/open1.png", // Desktop hero section
+    alt: "OpenPol - Portfolio Project",
+    url: "https://openpol.pl/",
+    url2: "https://openpol.pl/", // Both mobile and desktop link to openpol.pl
+    title: "OpenPol",
+    position: "back",
+    delay: 1.2,
+  },
 ];
 
 export function MockupGallery({ onModalStateChange }) {

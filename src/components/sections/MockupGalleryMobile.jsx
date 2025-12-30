@@ -49,6 +49,13 @@ const mockupProjects = [
     title: "Autyzm od Kuchni",
     delay: 1.0,
   },
+  {
+    desktopHero: "/img/projects/open1.png", // Desktop hero section
+    alt: "OpenPol - Portfolio Project",
+    url: "https://openpol.pl/",
+    title: "OpenPol",
+    delay: 1.2,
+  },
 ];
 
 export function MockupGalleryMobile({ onModalStateChange }) {
