@@ -183,50 +183,61 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                   className="flex items-center justify-center w-full"
                   initial={{ 
                     opacity: 0, 
-                    scale: 0.6, 
-                    x: 200,
-                    rotateY: -30,
-                    rotateX: 10,
-                    filter: "blur(15px) brightness(0.5)"
+                    scale: 0.8, 
+                    x: 100,
+                    y: 50,
+                    rotateY: -15,
+                    rotateX: 5,
+                    filter: "blur(20px) brightness(0.3)",
                   }}
                   animate={{ 
                     opacity: 1, 
                     scale: 1, 
-                    x: 0, 
+                    x: 0,
+                    y: 0,
                     rotateY: 0,
                     rotateX: 0,
-                    filter: "blur(0px) brightness(1)"
+                    filter: "blur(0px) brightness(1)",
                   }}
                   exit={{ 
                     opacity: 0, 
-                    scale: 0.6, 
-                    x: -200, 
-                    rotateY: 30,
-                    rotateX: -10,
-                    filter: "blur(15px) brightness(0.5)"
+                    scale: 0.7, 
+                    x: -100,
+                    y: -30,
+                    rotateY: 15,
+                    rotateX: -5,
+                    filter: "blur(20px) brightness(0.3)",
                   }}
                   transition={{ 
-                    duration: 1.2,
-                    ease: [0.34, 1.56, 0.64, 1], // Custom spring-like easing
+                    duration: 0.8,
+                    ease: [0.4, 0, 0.2, 1], // Smooth ease-in-out
                     scale: { 
-                      duration: 1.0,
-                      ease: [0.34, 1.56, 0.64, 1]
+                      duration: 0.7,
+                      ease: [0.34, 1.56, 0.64, 1] // Spring bounce
                     },
                     opacity: { 
-                      duration: 0.7,
-                      ease: "easeInOut"
+                      duration: 0.5,
+                      ease: "easeOut"
                     },
                     filter: {
-                      duration: 0.9,
+                      duration: 0.6,
                       ease: "easeOut"
                     },
                     rotateY: {
-                      duration: 1.1,
-                      ease: [0.34, 1.56, 0.64, 1]
+                      duration: 0.7,
+                      ease: [0.4, 0, 0.2, 1]
                     },
                     rotateX: {
-                      duration: 1.0,
-                      ease: [0.34, 1.56, 0.64, 1]
+                      duration: 0.7,
+                      ease: [0.4, 0, 0.2, 1]
+                    },
+                    x: {
+                      duration: 0.8,
+                      ease: [0.4, 0, 0.2, 1]
+                    },
+                    y: {
+                      duration: 0.8,
+                      ease: [0.4, 0, 0.2, 1]
                     }
                   }}
                 >
@@ -238,32 +249,38 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                       style={{ width: '100%', minWidth: '100%', display: 'flex', justifyContent: 'center' }}
                       initial={{ 
                         opacity: 0, 
-                        x: 100, 
-                        rotate: 15,
-                        scale: 0.7,
-                        filter: "blur(10px)"
+                        x: 50, 
+                        y: 20,
+                        rotate: 5,
+                        scale: 0.9,
+                        filter: "blur(8px) brightness(0.7)",
                       }}
                       animate={{ 
                         opacity: 1, 
-                        x: 0, 
+                        x: 0,
+                        y: 0,
                         rotate: 0,
                         scale: 1,
-                        filter: "blur(0px)"
+                        filter: "blur(0px) brightness(1)",
                       }}
                       exit={{ 
                         opacity: 0, 
-                        x: -250, 
-                        rotate: -25, 
-                        scale: 0.5,
-                        y: 50,
-                        filter: "blur(15px)"
+                        x: -50,
+                        y: -20,
+                        rotate: -5, 
+                        scale: 0.9,
+                        filter: "blur(8px) brightness(0.7)",
                       }}
                       transition={{ 
-                        delay: 0.2, 
-                        duration: 0.8, 
-                        ease: [0.34, 1.56, 0.64, 1],
-                        opacity: { duration: 0.5 },
-                        filter: { duration: 0.6 }
+                        delay: 0.1, 
+                        duration: 0.6, 
+                        ease: [0.4, 0, 0.2, 1],
+                        opacity: { duration: 0.4 },
+                        filter: { duration: 0.5 },
+                        scale: {
+                          duration: 0.6,
+                          ease: [0.34, 1.56, 0.64, 1] // Spring bounce
+                        }
                       }}
                     >
                       <MockupCardMobileOnly
