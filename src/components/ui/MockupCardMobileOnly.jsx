@@ -207,7 +207,7 @@ export function MockupCardMobileOnly({ images, alt, delay, onHover, onLeave, onC
         
         {/* Screen Content with Image Carousel */}
         <div 
-          className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 rounded-lg overflow-hidden"
+          className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 rounded-lg overflow-hidden flex items-center justify-center"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -243,7 +243,7 @@ export function MockupCardMobileOnly({ images, alt, delay, onHover, onLeave, onC
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    objectPosition: 'top center',
+                    objectPosition: 'center center',
                   }}
                   onError={(e) => {
                     console.error('❌ Image failed to load:', images[currentImageIndex]);
@@ -277,7 +277,7 @@ export function MockupCardMobileOnly({ images, alt, delay, onHover, onLeave, onC
                         img.style.width = '100%';
                         img.style.height = '100%';
                         img.style.objectFit = 'cover';
-                        img.style.objectPosition = 'top center';
+                        img.style.objectPosition = 'center center';
                       }
                     }
                     

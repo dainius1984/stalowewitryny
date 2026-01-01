@@ -87,6 +87,17 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const currentProjectRef = useRef(null);
   const rotationIntervalRef = useRef(null);
 
+  // Preload all images when component mounts
+  useEffect(() => {
+    mockupProjects.forEach((project) => {
+      if (project.desktopHero) {
+        const img = new Image();
+        img.src = project.desktopHero;
+        console.log('🖼️ Preloading image:', project.desktopHero);
+      }
+    });
+  }, []);
+
   // Notify parent when modal state changes
   useEffect(() => {
     if (onModalStateChange) {
