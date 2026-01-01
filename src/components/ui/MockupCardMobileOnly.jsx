@@ -31,11 +31,11 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
 
   return (
     <div
-      className={cn("w-full h-[50vh] relative", className)}
+              className={cn("w-full h-[35vh] md:h-[50vh] relative", className)}
       style={{
         width: '100%',
-        height: '50vh',
-        minHeight: '350px',
+        height: '35vh',
+        minHeight: '250px',
         backgroundColor: '#18181b',
       }}
       onMouseEnter={() => {
@@ -53,7 +53,6 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         style={{ 
           width: '100%', 
           height: '100%',
-          minHeight: '400px',
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
