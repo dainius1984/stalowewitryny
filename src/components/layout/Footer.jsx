@@ -18,7 +18,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
+    <footer id="kontakt" className="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
       <Container className="py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Brand */}

@@ -171,7 +171,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
       )}>
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
-        <div className="relative w-full max-w-[120%] min-h-[35vh] flex items-center justify-center overflow-visible mx-auto" style={{ width: '100%', minWidth: '100%' }}>
+        <div className="relative w-full max-w-[120%] min-h-[38vh] flex items-center justify-center overflow-visible mx-auto" style={{ width: '100%', minWidth: '100%' }}>
           {/* Current Project */}
           <AnimatePresence mode="wait">
             {mockupProjects.map((project, index) => {

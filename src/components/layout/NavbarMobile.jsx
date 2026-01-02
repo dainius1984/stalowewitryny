@@ -59,13 +59,13 @@ export function NavbarMobile({ navLinks, isModalOpen }) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop - Darker to hide background */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[50] md:hidden"
+              className="fixed inset-0 bg-black/95 backdrop-blur-md z-[50] md:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             
@@ -78,7 +78,7 @@ export function NavbarMobile({ navLinks, isModalOpen }) {
                 duration: 0.3,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
-              className="fixed top-0 right-0 h-full w-[280px] bg-black/95 backdrop-blur-xl border-l border-white/10 z-[60] md:hidden overflow-y-auto shadow-2xl"
+              className="fixed top-0 right-0 h-full w-[280px] bg-black border-l border-white/10 z-[60] md:hidden overflow-y-auto shadow-2xl"
             >
               {/* Header with Logo and Close Button */}
               <div className="flex items-center justify-between p-4 border-b border-white/10">
