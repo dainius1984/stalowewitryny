@@ -30,7 +30,7 @@ const projects = [
   {
     title: "Zielone Mile",
     category: "Usługi Lokalne",
-    url: "https://zielonemile.pl/",
+    url: "https://www.zielonemile.pl/",
     image: "/img/projects/tarasyportfolio.png",
     colSpan: "md:col-span-1",
   },
@@ -51,7 +51,7 @@ const projects = [
   {
     title: "Oranzeria",
     category: "Gastro / Koncept",
-    url: "https://oraneria.vercel.app/",
+    url: "https://www.oraneria.vercel.app/",
     image: "/img/projects/oranzeri aportfolio.png",
     colSpan: "md:col-span-1",
   }
