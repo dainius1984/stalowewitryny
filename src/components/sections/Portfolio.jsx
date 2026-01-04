@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import ReactParallaxTilt from "react-parallax-tilt";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { cn } from "@/lib/utils";
@@ -43,14 +44,14 @@ const projects = [
     category: "Fitness, Wellness",
     description: "Studio fitness i wellness - treningi personalne",
     url: "https://www.studiofigurastablowice.pl/",
-    image: "/img/projects/studi aportfolio.png",
+    image: "/img/projects/figuraportfolio.png",
     colSpan: "md:col-span-1",
   },
   {
     title: "Oranzeria",
     category: "Usługi Kosmetyczne, Kosmetologia",
     description: "Salon kosmetyczny - zabiegi pielęgnacyjne",
-    url: "https://www.oraneria.vercel.app/",
+    url: "https://oraneria.vercel.app/",
     image: "/img/projects/oranzeriaportfolio.png",
     colSpan: "md:col-span-1",
   },
@@ -65,7 +66,7 @@ const projects = [
 ];
 
 // Portfolio Card Component with Auto-Scroll Effect
-function PortfolioCard({ project, colSpan }) {
+function PortfolioCard({ project, colSpan, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const imageContainerRef = useRef(null);
@@ -112,134 +113,253 @@ function PortfolioCard({ project, colSpan }) {
     };
   }, [isHovered]);
 
+  // Determine card height based on colSpan
+  const isLarge = colSpan === "md:col-span-2";
+  const cardHeight = isLarge ? "md:h-[500px]" : "md:h-[450px]";
+
   return (
-    <ReactParallaxTilt
+    <motion.div
       className={cn("group", colSpan)}
-      glareEnable={true}
-      glareMaxOpacity={0.45}
-      scale={1.02}
-      perspective={2000}
-      transitionSpeed={1500}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.4, 0, 0.2, 1]
+      }}
     >
-      <a
-        href={project.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block h-full"
-        title={`Zobacz przykład szybkiej strony internetowej - ${project.title}`}
+      <ReactParallaxTilt
+        glareEnable={true}
+        glareMaxOpacity={0.2}
+        scale={isHovered ? 1.03 : 1.0}
+        perspective={2000}
+        transitionSpeed={1500}
+        tiltMaxAngleX={8}
+        tiltMaxAngleY={8}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        <BentoCard className={cn(
-          "h-full flex flex-col overflow-hidden p-0",
-          "hover:border-primary/30 hover:backdrop-blur-md hover:bg-neutral-900/80 transition-all duration-300"
-        )}>
-          {/* Image Container with Auto-Scroll */}
-          <div 
-            ref={imageContainerRef}
-            className="relative h-64 md:h-72 overflow-hidden rounded-t-[2rem] scrollbar-hide"
-            style={{
-              scrollBehavior: 'smooth',
-            }}
-          >
-            {/* Gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-neutral-950/80 via-neutral-900/60 to-neutral-950/80 z-0"></div>
-            
-            {/* Decorative accent gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-40 z-0"></div>
-            
-            {/* Scrollable Image Container */}
-            <div className="absolute inset-0 w-full h-full overflow-y-auto scrollbar-hide">
-              <img
-                src={project.image}
-                alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
-                className="relative z-10 w-full h-auto min-h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                style={{
-                  objectPosition: 'top center',
-                }}
-                loading="lazy"
-                onError={(e) => {
-                  e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
-                }}
+        <a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full"
+          title={`Zobacz przykład szybkiej strony internetowej - ${project.title}`}
+        >
+          <BentoCard className={cn(
+            "h-full flex flex-col overflow-hidden p-0 relative",
+            "hover:border-primary/40 hover:backdrop-blur-xl hover:bg-neutral-900/90",
+            "transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10",
+            cardHeight
+          )}>
+            {/* Animated background gradient */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"
+              animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
+            />
+
+            {/* Image Container with Auto-Scroll */}
+            <div 
+              ref={imageContainerRef}
+              className={cn(
+                "relative overflow-hidden scrollbar-hide",
+                isLarge ? "h-72 md:h-[320px]" : "h-64 md:h-[280px]"
+              )}
+              style={{
+                scrollBehavior: 'smooth',
+              }}
+            >
+              {/* Gradient overlay for depth */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10 pointer-events-none"></div>
+              
+              {/* Scrollable Image Container */}
+              <div className="absolute inset-0 w-full h-full overflow-y-auto scrollbar-hide">
+                <motion.img
+                  src={project.image}
+                  alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
+                  className="relative z-0 w-full h-auto min-h-full object-cover"
+                  style={{
+                    objectPosition: 'top center',
+                  }}
+                  loading="lazy"
+                  animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  onError={(e) => {
+                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
+                  }}
+                />
+              </div>
+              
+              {/* Category Badge with animation */}
+              <motion.div
+                className="absolute top-4 left-4 z-20 pointer-events-none"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 + 0.3 }}
+              >
+                <span className="inline-block px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-black/80 backdrop-blur-md text-primary border border-primary/30 rounded-full font-sans shadow-lg">
+                  {project.category}
+                </span>
+              </motion.div>
+
+              {/* Scroll Progress Indicator */}
+              {isHovered && scrollProgress > 0 && (
+                <motion.div
+                  className="absolute bottom-4 right-4 z-20 pointer-events-none"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="w-1.5 h-20 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm border border-white/10">
+                    <motion.div
+                      className="w-full bg-gradient-to-t from-primary to-primary/60 rounded-full"
+                      initial={{ height: 0 }}
+                      animate={{ height: `${scrollProgress}%` }}
+                      transition={{ duration: 0.1 }}
+                    />
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Hover Overlay with better animation */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/40 z-30 pointer-events-none flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className="flex items-center gap-3 text-white font-sans font-semibold text-lg px-6 py-3 bg-black/60 backdrop-blur-md rounded-full border border-primary/30"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: isHovered ? 0 : 10, opacity: isHovered ? 1 : 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <span>Odwiedź stronę</span>
+                  <ArrowRight className="w-5 h-5" />
+                </motion.div>
+              </motion.div>
+              
+              {/* Animated border glow */}
+              <motion.div
+                className="absolute inset-0 border-2 border-primary/0 rounded-t-[2rem] pointer-events-none z-40"
+                animate={{ borderColor: isHovered ? "rgba(204,255,0,0.4)" : "rgba(204,255,0,0)" }}
+                transition={{ duration: 0.3 }}
               />
             </div>
-            
-            {/* Category Badge */}
-            <div className="absolute top-4 left-4 z-20 pointer-events-none">
-              <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-black/70 backdrop-blur-md text-white border border-white/20 rounded-full font-sans shadow-lg">
+
+            {/* Content Below Image with better styling */}
+            <div className="relative p-6 md:p-8 flex-grow flex flex-col bg-gradient-to-b from-neutral-900/50 to-neutral-950/50 z-10">
+              <motion.h3
+                className="text-2xl md:text-3xl font-bold text-white font-sans mb-3 group-hover:text-primary transition-colors duration-300"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 + 0.4 }}
+              >
+                {project.title}
+              </motion.h3>
+              
+              <motion.p
+                className="text-sm font-semibold text-primary/90 font-sans mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 + 0.5 }}
+              >
                 {project.category}
-              </span>
+              </motion.p>
+              
+              {project.description && (
+                <motion.p
+                  className="text-sm text-neutral-400 font-sans leading-relaxed"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 + 0.6 }}
+                >
+                  {project.description}
+                </motion.p>
+              )}
+
+              {/* CTA hint on hover */}
+              <motion.div
+                className="mt-auto pt-4 flex items-center gap-2 text-primary/60 text-sm font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <span>Kliknij, aby zobaczyć</span>
+                <ArrowRight className="w-4 h-4" />
+              </motion.div>
             </div>
 
-            {/* Scroll Progress Indicator */}
-            {isHovered && scrollProgress > 0 && (
-              <div className="absolute bottom-4 right-4 z-20 pointer-events-none">
-                <div className="w-1 h-16 bg-white/20 rounded-full overflow-hidden">
-                  <div 
-                    className="w-full bg-primary rounded-full transition-all duration-100"
-                    style={{ height: `${scrollProgress}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Hover Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-30 pointer-events-none">
-              <div className="flex items-center gap-2 text-white font-sans font-semibold text-lg">
-                <span>Odwiedź stronę</span>
-                <ExternalLink className="w-5 h-5" />
-              </div>
-            </div>
-            
-            {/* Subtle border glow on hover */}
-            <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/30 transition-all duration-300 pointer-events-none z-40 rounded-t-[2rem]"></div>
-          </div>
-
-          {/* Content Below Image */}
-          <div className="p-6 flex-grow flex flex-col">
-            <h3 className="text-xl md:text-2xl font-bold text-white font-sans mb-2">
-              {project.title}
-            </h3>
-            <p className="text-sm font-semibold text-primary font-sans mb-1">
-              {project.category}
-            </p>
-            {project.description && (
-              <p className="text-sm text-neutral-400 font-sans mt-1">
-                {project.description}
-              </p>
-            )}
-          </div>
-        </BentoCard>
-      </a>
-    </ReactParallaxTilt>
+            {/* Decorative corner accent */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+          </BentoCard>
+        </a>
+      </ReactParallaxTilt>
+    </motion.div>
   );
 }
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="py-12 md:py-20 relative">
-      <Container>
-        {/* Section Header */}
-        <div className="mb-12 md:mb-16 text-center">
-          <p className="text-sm uppercase tracking-widest text-muted font-sans mb-4">
-            Wybrane Realizacje
-          </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white font-sans">
-            Przykłady taniej i solidnej strony internetowej
-          </h2>
-          <p className="text-base text-neutral-400 mt-4 font-sans max-w-2xl mx-auto">
-            Zobacz realizacje <strong className="text-white">szybkich witryn dla biznesu</strong> – 
-            każda to <strong className="text-white">strona na własność</strong>, bez abonamentu.
-          </p>
-        </div>
+    <section id="portfolio" className="py-16 md:py-24 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+      </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Container className="relative z-10">
+        {/* Section Header with animation */}
+        <motion.div
+          className="mb-16 md:mb-20 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.p
+            className="text-sm uppercase tracking-widest text-primary/80 font-sans mb-4 font-semibold"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Wybrane Realizacje
+          </motion.p>
+          <motion.h2
+            className="text-4xl md:text-6xl font-bold text-white font-sans mb-6 bg-gradient-to-r from-white via-white to-primary/80 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Przykłady taniej i solidnej strony internetowej
+          </motion.h2>
+          <motion.p
+            className="text-lg text-neutral-400 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            Zobacz realizacje <strong className="text-white">szybkich witryn dla biznesu</strong> – 
+            każda to <strong className="text-primary">strona na własność</strong>, bez abonamentu.
+          </motion.p>
+        </motion.div>
+
+        {/* Portfolio Grid with improved spacing */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project, index) => (
             <PortfolioCard
               key={project.url}
               project={project}
               colSpan={project.colSpan}
+              index={index}
             />
           ))}
         </div>
