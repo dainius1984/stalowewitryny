@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
-export function NavbarDesktop({ navLinks }) {
+export function NavbarDesktop({ navLinks, onSurveyClick }) {
   return (
     <>
       {/* Center: Navigation Links */}
@@ -24,6 +24,7 @@ export function NavbarDesktop({ navLinks }) {
           variant="primary"
           className="px-5 py-2 text-sm whitespace-nowrap"
           title="Zamów darmową wycenę strony internetowej"
+          onClick={onSurveyClick}
         >
           Wycena
         </Button>

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-export function NavbarMobile({ navLinks, isModalOpen }) {
+export function NavbarMobile({ navLinks, isModalOpen, onSurveyClick }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Close mobile menu when modal opens
@@ -143,7 +143,12 @@ export function NavbarMobile({ navLinks, isModalOpen }) {
                   <Button
                     variant="primary"
                     className="w-full touch-manipulation"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      if (onSurveyClick) {
+                        onSurveyClick();
+                      }
+                    }}
                     title="Zamów darmową wycenę strony internetowej"
                   >
                     Wycena

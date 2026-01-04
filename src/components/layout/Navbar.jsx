@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { NavbarDesktop } from "./NavbarDesktop";
 import { NavbarMobile } from "./NavbarMobile";
+import { CompanySurvey } from "@/components/sections/CompanySurvey";
 
 export function Navbar({ isModalOpen = false }) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isSurveyOpen, setIsSurveyOpen] = useState(false);
 
   // Handle scroll to hide/show navbar with throttling for better performance
   useEffect(() => {
@@ -65,9 +67,10 @@ export function Navbar({ isModalOpen = false }) {
   ];
 
   return (
-    <AnimatePresence mode="wait">
-      {!isModalOpen && (
-        <motion.header
+    <>
+      <AnimatePresence mode="wait">
+        {!isModalOpen && (
+          <motion.header
           key="navbar"
           initial={{ opacity: 0, y: -120, x: "-50%", scale: 0.95 }}
           animate={{ 
@@ -113,7 +116,7 @@ export function Navbar({ isModalOpen = false }) {
               </div>
 
               {/* Desktop Navigation */}
-              <NavbarDesktop navLinks={navLinks} />
+              <NavbarDesktop navLinks={navLinks} onSurveyClick={() => setIsSurveyOpen(true)} />
             </div>
 
             {/* Mobile Layout - Hamburger Menu */}
@@ -131,11 +134,15 @@ export function Navbar({ isModalOpen = false }) {
               </div>
 
               {/* Right: Hamburger Menu */}
-              <NavbarMobile navLinks={navLinks} isModalOpen={isModalOpen} />
+              <NavbarMobile navLinks={navLinks} isModalOpen={isModalOpen} onSurveyClick={() => setIsSurveyOpen(true)} />
             </div>
           </nav>
-    </motion.header>
-      )}
-    </AnimatePresence>
+          </motion.header>
+        )}
+      </AnimatePresence>
+      
+      {/* Company Survey Modal */}
+      <CompanySurvey isOpen={isSurveyOpen} onClose={() => setIsSurveyOpen(false)} />
+    </>
   );
 }
