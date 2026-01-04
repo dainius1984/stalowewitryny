@@ -93,20 +93,30 @@ function PortfolioCard({ project, colSpan, index }) {
       const img = container.querySelector('img');
       
       if (img) {
-        const containerHeight = container.clientHeight;
-        const imgHeight = img.naturalHeight || img.offsetHeight;
-        const maxScroll = Math.max(0, imgHeight - containerHeight);
-        
-        if (maxScroll > 0) {
-          scrollIntervalRef.current = setInterval(() => {
-            setScrollProgress((prev) => {
-              const newProgress = Math.min(prev + 0.6, 100);
-              if (container) {
-                container.scrollTop = (newProgress / 100) * maxScroll;
-              }
-              return newProgress;
-            });
-          }, 40);
+        // Wait for image to load to get accurate dimensions
+        const checkScroll = () => {
+          const containerHeight = container.clientHeight;
+          const imgHeight = img.naturalHeight || img.offsetHeight || img.scrollHeight;
+          const maxScroll = Math.max(0, imgHeight - containerHeight);
+          
+          if (maxScroll > 0) {
+            scrollIntervalRef.current = setInterval(() => {
+              setScrollProgress((prev) => {
+                const newProgress = Math.min(prev + 0.5, 100);
+                if (container) {
+                  container.scrollTop = (newProgress / 100) * maxScroll;
+                }
+                return newProgress;
+              });
+            }, 50);
+          }
+        };
+
+        // Check immediately and after image loads
+        if (img.complete) {
+          checkScroll();
+        } else {
+          img.onload = checkScroll;
         }
       }
     } else {
@@ -220,7 +230,7 @@ function PortfolioCard({ project, colSpan, index }) {
             <motion.div 
               ref={imageContainerRef}
               className={cn(
-                "relative overflow-hidden scrollbar-hide transition-all duration-500",
+                "relative overflow-y-auto scrollbar-hide transition-all duration-500",
                 isHovered 
                   ? "flex-1" 
                   : isTall 
@@ -237,22 +247,26 @@ function PortfolioCard({ project, colSpan, index }) {
                 scrollBehavior: 'smooth',
               }}
             >
-              {/* Gradient overlay for depth */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-5 pointer-events-none"></div>
+              {/* Subtle gradient overlay for depth - very light */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 z-15 pointer-events-none"></div>
               
-              {/* Scrollable Image Container */}
-              <div className="absolute inset-0 w-full h-full overflow-y-auto scrollbar-hide z-0">
+              {/* Scrollable Image Container - preserves full image structure */}
+              <div 
+                className="relative w-full z-10"
+              >
                 <motion.img
                   src={project.image}
                   alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
-                  className="relative w-full h-auto min-h-full object-cover"
+                  className="relative w-full h-auto block"
                   style={{
+                    objectFit: 'contain',
                     objectPosition: 'top center',
-                    zIndex: 0,
+                    display: 'block',
+                    minHeight: '100%',
                   }}
                   loading="lazy"
-                  animate={isHovered ? { scale: 1.05, opacity: 1 } : { scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  animate={isHovered ? { opacity: 1 } : { opacity: 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   onError={(e) => {
                     e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
                   }}
@@ -300,37 +314,21 @@ function PortfolioCard({ project, colSpan, index }) {
                 </motion.div>
               )}
 
-              {/* Hover Overlay with enhanced animation - only bottom part */}
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-25 pointer-events-none flex items-end justify-center pb-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
+              {/* Subtle CTA hint - minimal overlay, doesn't cover image */}
+              {isHovered && (
                 <motion.div
-                  className="flex items-center gap-3 text-white font-sans font-semibold text-lg px-8 py-4 bg-black/80 backdrop-blur-xl rounded-full border-2 border-primary/50 shadow-2xl shadow-primary/30"
-                  initial={{ y: 20, opacity: 0, scale: 0.9 }}
-                  animate={{ 
-                    y: isHovered ? 0 : 20, 
-                    opacity: isHovered ? 1 : 0,
-                    scale: isHovered ? 1 : 0.9
-                  }}
-                  transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                  className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 20, opacity: 0 }}
+                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                 >
-                  <span>Odwiedź stronę</span>
-                  <motion.div
-                    animate={isHovered ? { x: [0, 5, 0] } : { x: 0 }}
-                    transition={{ 
-                      duration: 1.5, 
-                      repeat: Infinity, 
-                      repeatDelay: 0.5,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.div>
+                  <div className="flex items-center gap-2 text-white font-sans font-medium text-sm px-4 py-2 bg-black/70 backdrop-blur-md rounded-full border border-primary/40 shadow-lg">
+                    <span>Kliknij, aby otworzyć</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
                 </motion.div>
-              </motion.div>
+              )}
               
               {/* Animated border glow */}
               <motion.div
