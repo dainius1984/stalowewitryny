@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ReactParallaxTilt from "react-parallax-tilt";
 import { ExternalLink, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -15,6 +15,7 @@ const projects = [
     image: "/img/projects/whiteportfolio.png",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-2",
+    size: "large",
   },
   {
     title: "Autyzm od Kuchni",
@@ -24,24 +25,7 @@ const projects = [
     image: "/img/projects/autyzmportfolio.png",
     colSpan: "md:col-span-1",
     rowSpan: "md:row-span-1",
-  },
-  {
-    title: "Fryzjerka Małgosia",
-    category: "Usługi Lokalne, Fryzjer",
-    description: "Salon fryzjerski - profesjonalne usługi",
-    url: "https://www.fryzjerkamalgosia.pl/",
-    image: "/img/projects/fryzjerkaportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
-  },
-  {
-    title: "Zielone Mile",
-    category: "Usługi Lokalne (Ogrody, Tarasy)",
-    description: "Projektowanie i wykonawstwo ogrodów i tarasów",
-    url: "https://zielonemile.pl/",
-    image: "/img/projects/zieloneportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
+    size: "medium",
   },
   {
     title: "Studio Figura",
@@ -51,6 +35,27 @@ const projects = [
     image: "/img/projects/figuraportfolio.png",
     colSpan: "md:col-span-1",
     rowSpan: "md:row-span-1",
+    size: "medium",
+  },
+  {
+    title: "Zielone Mile",
+    category: "Usługi Lokalne (Ogrody, Tarasy)",
+    description: "Projektowanie i wykonawstwo ogrodów i tarasów",
+    url: "https://zielonemile.pl/",
+    image: "/img/projects/zieloneportfolio.png",
+    colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
+    size: "medium",
+  },
+  {
+    title: "Fryzjerka Małgosia",
+    category: "Usługi Lokalne, Fryzjer",
+    description: "Salon fryzjerski - profesjonalne usługi",
+    url: "https://www.fryzjerkamalgosia.pl/",
+    image: "/img/projects/fryzjerkaportfolio.png",
+    colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
+    size: "small",
   },
   {
     title: "Oranzeria",
@@ -60,6 +65,7 @@ const projects = [
     image: "/img/projects/oranzeriaportfolio.png",
     colSpan: "md:col-span-1",
     rowSpan: "md:row-span-1",
+    size: "small",
   },
   {
     title: "OpenPol",
@@ -69,6 +75,7 @@ const projects = [
     image: "/img/projects/openpolportfolio.png",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-1",
+    size: "wide",
   }
 ];
 
@@ -120,31 +127,51 @@ function PortfolioCard({ project, colSpan, index }) {
     };
   }, [isHovered]);
 
-  // Determine card height based on colSpan and rowSpan
-  const isLarge = colSpan === "md:col-span-2";
+  // Determine card height and styling based on size
+  const isLarge = project.size === "large";
+  const isWide = project.size === "wide";
+  const isMedium = project.size === "medium";
+  const isSmall = project.size === "small";
   const isTall = project.rowSpan === "md:row-span-2";
-  const cardHeight = isTall ? "md:h-[600px]" : isLarge ? "md:h-[500px]" : "md:h-[450px]";
+  
+  const cardHeight = isTall 
+    ? "md:h-[650px]" 
+    : isLarge 
+    ? "md:h-[550px]" 
+    : isWide
+    ? "md:h-[480px]"
+    : isMedium
+    ? "md:h-[500px]"
+    : "md:h-[460px]";
 
   return (
     <motion.div
       className={cn("group", colSpan, project.rowSpan)}
-      initial={{ opacity: 0, y: 50, scale: 0.9 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 60, scale: 0.85, rotateX: -10 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.4, 0, 0.2, 1]
+        duration: 0.7,
+        delay: index * 0.08,
+        ease: [0.34, 1.56, 0.64, 1],
+        scale: {
+          duration: 0.6,
+          ease: [0.34, 1.56, 0.64, 1]
+        }
+      }}
+      whileHover={{ 
+        y: -5,
+        transition: { duration: 0.3 }
       }}
     >
       <ReactParallaxTilt
         glareEnable={true}
-        glareMaxOpacity={0.2}
-        scale={isHovered ? 1.03 : 1.0}
+        glareMaxOpacity={isHovered ? 0.3 : 0.15}
+        scale={isHovered ? (isLarge ? 1.02 : 1.04) : 1.0}
         perspective={2000}
         transitionSpeed={1500}
-        tiltMaxAngleX={8}
-        tiltMaxAngleY={8}
+        tiltMaxAngleX={isHovered ? 10 : 5}
+        tiltMaxAngleY={isHovered ? 10 : 5}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -154,25 +181,57 @@ function PortfolioCard({ project, colSpan, index }) {
           rel="noopener noreferrer"
           className="block h-full"
           title={`Zobacz przykład szybkiej strony internetowej - ${project.title}`}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <BentoCard className={cn(
             "h-full flex flex-col overflow-hidden p-0 relative",
-            "hover:border-primary/40 hover:backdrop-blur-xl hover:bg-neutral-900/90",
-            "transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10",
+            "hover:border-primary/50 hover:backdrop-blur-xl hover:bg-neutral-900/95",
+            "transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20",
+            "group/card",
+            isLarge && "hover:scale-[1.02]",
+            isWide && "hover:scale-[1.01]",
             cardHeight
           )}>
-            {/* Animated background gradient */}
+            {/* Animated background gradient with multiple layers */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"
+              className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 z-0"
               animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.5 }}
             />
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-tl from-primary/3 via-transparent to-transparent z-0"
+              animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            />
+            
+            {/* Animated glow effect on hover */}
+            {isHovered && (
+              <motion.div
+                className="absolute inset-0 bg-primary/5 blur-3xl z-0"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1.2 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+              />
+            )}
 
             {/* Image Container with Auto-Scroll - expands on hover */}
             <motion.div 
               ref={imageContainerRef}
               className={cn(
-                "relative overflow-hidden scrollbar-hide",
-                isHovered ? "flex-1" : (isTall ? "h-[60%]" : isLarge ? "h-[55%]" : "h-[50%]")
+                "relative overflow-hidden scrollbar-hide transition-all duration-500",
+                isHovered 
+                  ? "flex-1" 
+                  : isTall 
+                    ? "h-[65%]" 
+                    : isLarge 
+                      ? "h-[60%]" 
+                      : isWide
+                        ? "h-[55%]"
+                        : isMedium
+                          ? "h-[55%]"
+                          : "h-[50%]"
               )}
               style={{
                 scrollBehavior: 'smooth',
@@ -199,17 +258,26 @@ function PortfolioCard({ project, colSpan, index }) {
                 />
               </div>
               
-              {/* Category Badge with animation */}
+              {/* Category Badge with enhanced animation */}
               <motion.div
                 className="absolute top-4 left-4 z-20 pointer-events-none"
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: -10, scale: 0.9 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 + 0.3 }}
+                transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
+                animate={isHovered ? { scale: 1.05, y: -2 } : { scale: 1, y: 0 }}
               >
-                <span className="inline-block px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-black/80 backdrop-blur-md text-primary border border-primary/30 rounded-full font-sans shadow-lg">
+                <motion.span 
+                  className="inline-block px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-black/90 backdrop-blur-md text-primary border border-primary/40 rounded-full font-sans shadow-lg shadow-primary/20"
+                  animate={isHovered ? { 
+                    backgroundColor: "rgba(0, 0, 0, 0.95)",
+                    borderColor: "rgba(204, 255, 0, 0.6)",
+                    boxShadow: "0 0 20px rgba(204, 255, 0, 0.3)"
+                  } : {}}
+                  transition={{ duration: 0.3 }}
+                >
                   {project.category}
-                </span>
+                </motion.span>
               </motion.div>
 
               {/* Scroll Progress Indicator */}
@@ -231,7 +299,7 @@ function PortfolioCard({ project, colSpan, index }) {
                 </motion.div>
               )}
 
-              {/* Hover Overlay with better animation */}
+              {/* Hover Overlay with enhanced animation */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/40 z-30 pointer-events-none flex items-center justify-center"
                 initial={{ opacity: 0 }}
@@ -239,13 +307,27 @@ function PortfolioCard({ project, colSpan, index }) {
                 transition={{ duration: 0.3 }}
               >
                 <motion.div
-                  className="flex items-center gap-3 text-white font-sans font-semibold text-lg px-6 py-3 bg-black/60 backdrop-blur-md rounded-full border border-primary/30"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: isHovered ? 0 : 10, opacity: isHovered ? 1 : 0 }}
-                  transition={{ delay: 0.1 }}
+                  className="flex items-center gap-3 text-white font-sans font-semibold text-lg px-8 py-4 bg-black/70 backdrop-blur-xl rounded-full border-2 border-primary/50 shadow-2xl shadow-primary/30"
+                  initial={{ y: 20, opacity: 0, scale: 0.9 }}
+                  animate={{ 
+                    y: isHovered ? 0 : 20, 
+                    opacity: isHovered ? 1 : 0,
+                    scale: isHovered ? 1 : 0.9
+                  }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
                 >
                   <span>Odwiedź stronę</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <motion.div
+                    animate={isHovered ? { x: [0, 5, 0] } : { x: 0 }}
+                    transition={{ 
+                      duration: 1.5, 
+                      repeat: Infinity, 
+                      repeatDelay: 0.5,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.div>
                 </motion.div>
               </motion.div>
               
@@ -258,50 +340,57 @@ function PortfolioCard({ project, colSpan, index }) {
             </motion.div>
 
             {/* Content Below Image - hides on hover */}
-            <motion.div
-              className="relative p-6 md:p-8 flex flex-col bg-gradient-to-b from-neutral-900/50 to-neutral-950/50 z-10 overflow-hidden"
-              initial={{ opacity: 1, height: "auto" }}
-              animate={{
-                opacity: isHovered ? 0 : 1,
-                height: isHovered ? 0 : "auto",
-                marginTop: isHovered ? 0 : undefined,
-                paddingTop: isHovered ? 0 : undefined,
-                paddingBottom: isHovered ? 0 : undefined,
-              }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-            >
-              <motion.h3
-                className="text-2xl md:text-3xl font-bold text-white font-sans mb-3 group-hover:text-primary transition-colors duration-300"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 + 0.4 }}
-              >
-                {project.title}
-              </motion.h3>
-              
-              <motion.p
-                className="text-sm font-semibold text-primary/90 font-sans mb-2"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 + 0.5 }}
-              >
-                {project.category}
-              </motion.p>
-              
-              {project.description && (
-                <motion.p
-                  className="text-sm text-neutral-400 font-sans leading-relaxed"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 + 0.6 }}
+            <AnimatePresence mode="wait">
+              {!isHovered && (
+                <motion.div
+                  key="content"
+                  className="relative p-6 md:p-8 flex flex-col bg-gradient-to-b from-neutral-900/50 to-neutral-950/50 z-10 overflow-hidden"
+                  initial={{ opacity: 1, height: "auto", maxHeight: 300 }}
+                  animate={{ opacity: 1, height: "auto", maxHeight: 300 }}
+                  exit={{ 
+                    opacity: 0, 
+                    height: 0, 
+                    maxHeight: 0,
+                    paddingTop: 0, 
+                    paddingBottom: 0,
+                    marginTop: 0,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
-                  {project.description}
-                </motion.p>
+                  <motion.h3
+                    className="text-2xl md:text-3xl font-bold text-white font-sans mb-3 group-hover:text-primary transition-colors duration-300"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 + 0.4 }}
+                  >
+                    {project.title}
+                  </motion.h3>
+                  
+                  <motion.p
+                    className="text-sm font-semibold text-primary/90 font-sans mb-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 + 0.5 }}
+                  >
+                    {project.category}
+                  </motion.p>
+                  
+                  {project.description && (
+                    <motion.p
+                      className="text-sm text-neutral-400 font-sans leading-relaxed"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 + 0.6 }}
+                    >
+                      {project.description}
+                    </motion.p>
+                  )}
+                </motion.div>
               )}
-            </motion.div>
+            </AnimatePresence>
 
             {/* Decorative corner accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
@@ -360,8 +449,8 @@ export function Portfolio() {
           </motion.p>
         </motion.div>
 
-        {/* Portfolio Grid with improved masonry-style layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-fr">
+        {/* Portfolio Grid with improved dynamic layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
           {projects.map((project, index) => (
             <PortfolioCard
               key={project.url}
