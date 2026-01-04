@@ -111,34 +111,40 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
   };
 
   return (
-    <ReactParallaxTilt
-      className={cn(
-        "w-full md:w-[240px] h-[320px] md:h-[500px] relative z-10 overflow-hidden",
-        className
-      )}
-      style={{
-        transform: "translateX(0%) translateY(0%) rotate(-3deg)",
-        zIndex: 10,
-      }}
-      tiltMaxAngleX={isHovered ? 12 : 6}
-      tiltMaxAngleY={isHovered ? 12 : 6}
-      scale={isHovered ? 1.12 : 1.0}
-      transitionSpeed={1500}
-      glareEnable={true}
-      glareMaxOpacity={isHovered ? 0.6 : 0.2}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className="overflow-hidden rounded-[2rem]" style={{ clipPath: 'inset(0 round 2rem)' }}>
+      <ReactParallaxTilt
+        className={cn(
+          "w-full md:w-[240px] h-[320px] md:h-[500px] relative z-10",
+          className
+        )}
+        style={{
+          transform: "translateX(0%) translateY(0%) rotate(-3deg)",
+          zIndex: 10,
+        }}
+        tiltMaxAngleX={isHovered ? 8 : 3}
+        tiltMaxAngleY={isHovered ? 8 : 3}
+        scale={isHovered ? 1.05 : 1.0}
+        transitionSpeed={1500}
+        glareEnable={true}
+        glareMaxOpacity={isHovered ? 0.3 : 0.1}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
       <motion.div
         className={cn(
           "relative w-full h-full border-[3px] rounded-[2rem]",
           "transition-all duration-500 cursor-pointer overflow-hidden",
           "bg-gradient-to-br from-neutral-950/90 via-neutral-900/80 to-neutral-950/90",
           isHovered 
-            ? "border-[#CCFF00] z-[99]" 
+            ? "border-[#CCFF00]/60 z-[99]" 
             : "border-white/30"
         )}
-        style={{ width: '100%', height: '100%', minHeight: '320px' }}
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          minHeight: '320px',
+          clipPath: 'inset(0 round 2rem)', // Ensure rounded corners clip everything
+        }}
         onClick={handleCardClick}
         initial={{ opacity: 0, y: 20 }}
         animate={{ 
@@ -151,15 +157,15 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
         {/* Subtle gradient overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-30 pointer-events-none z-0"></div>
         
-        {/* Phone Frame with glow effect - limited to frame only */}
+        {/* Phone Frame with glow effect - limited to frame only, no external shadow */}
         <div 
           className={cn(
-            "absolute inset-0 border-[3px] pointer-events-none z-10 transition-all duration-700 rounded-[2rem]",
-            isHovered ? "border-[#CCFF00]/40" : "border-neutral-700"
+            "absolute inset-0 border-[3px] pointer-events-none z-10 transition-all duration-700 rounded-[2rem] overflow-hidden",
+            isHovered ? "border-[#CCFF00]" : "border-white/30"
           )}
           style={{
             boxShadow: isHovered 
-              ? 'inset 0 0 20px rgba(204,255,0,0.3), 0 0 15px rgba(204,255,0,0.4)' 
+              ? 'inset 0 0 15px rgba(204,255,0,0.2)' 
               : 'none',
           }}
         />
@@ -279,6 +285,7 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
         {/* Glow effect removed - using only border glow to avoid edges outside frame */}
       </motion.div>
     </ReactParallaxTilt>
+    </div>
   );
 }
 

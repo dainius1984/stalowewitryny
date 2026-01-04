@@ -8,51 +8,58 @@ import { cn } from "@/lib/utils";
 const projects = [
   {
     title: "White Effect",
-    category: "Medycyna Estetyczna",
+    category: "Usługi Sprzątające",
+    description: "Profesjonalne sprzątanie biur i mieszkań",
     url: "https://www.whiteeffect.pl/",
     image: "/img/projects/whiteportfolio.png",
     colSpan: "md:col-span-2",
   },
   {
     title: "Autyzm od Kuchni",
-    category: "Blog / Edukacja",
+    category: "Dieta, Zdrowie",
+    description: "Blog o zdrowym odżywianiu i diecie",
     url: "https://www.autyzmodkuchni.pl/",
     image: "/img/projects/autyzmportfolio.png",
     colSpan: "md:col-span-1",
   },
   {
     title: "Fryzjerka Małgosia",
-    category: "Usługi Lokalne",
+    category: "Usługi Lokalne, Fryzjer",
+    description: "Salon fryzjerski - profesjonalne usługi",
     url: "https://www.fryzjerkamalgosia.pl/",
     image: "/img/projects/fryzjerkaportfolio.png",
     colSpan: "md:col-span-1",
   },
   {
     title: "Zielone Mile",
-    category: "Usługi Lokalne",
+    category: "Usługi Lokalne (Ogrody, Tarasy)",
+    description: "Projektowanie i wykonawstwo ogrodów i tarasów",
     url: "https://www.zielonemile.pl/",
-    image: "/img/projects/tarasyportfolio.png",
+    image: "/img/projects/zieloneportfolio.png",
     colSpan: "md:col-span-1",
   },
   {
     title: "Studio Figura",
-    category: "Fitness / Wellness",
+    category: "Fitness, Wellness",
+    description: "Studio fitness i wellness - treningi personalne",
     url: "https://www.studiofigurastablowice.pl/",
-    image: "/img/projects/figuraportfolio.png",
-    colSpan: "md:col-span-1",
-  },
-  {
-    title: "OpenPol",
-    category: "Biznes / Przemysł",
-    url: "https://openpol.pl/",
-    image: "/img/projects/openpolportfolio.png",
+    image: "/img/projects/studi aportfolio.png",
     colSpan: "md:col-span-1",
   },
   {
     title: "Oranzeria",
-    category: "Gastro / Koncept",
+    category: "Usługi Kosmetyczne, Kosmetologia",
+    description: "Salon kosmetyczny - zabiegi pielęgnacyjne",
     url: "https://www.oraneria.vercel.app/",
-    image: "/img/projects/oranzeri aportfolio.png",
+    image: "/img/projects/oranzeriaportfolio.png",
+    colSpan: "md:col-span-1",
+  },
+  {
+    title: "OpenPol",
+    category: "Usługi Konsultacje AI",
+    description: "Konsultacje i rozwiązania z zakresu sztucznej inteligencji",
+    url: "https://openpol.pl/",
+    image: "/img/projects/openpolportfolio.png",
     colSpan: "md:col-span-1",
   }
 ];
@@ -193,9 +200,14 @@ function PortfolioCard({ project, colSpan }) {
             <h3 className="text-xl md:text-2xl font-bold text-white font-sans mb-2">
               {project.title}
             </h3>
-            <p className="text-sm text-neutral-400 font-sans">
+            <p className="text-sm font-semibold text-primary font-sans mb-1">
               {project.category}
             </p>
+            {project.description && (
+              <p className="text-sm text-neutral-400 font-sans mt-1">
+                {project.description}
+              </p>
+            )}
           </div>
         </BentoCard>
       </a>
