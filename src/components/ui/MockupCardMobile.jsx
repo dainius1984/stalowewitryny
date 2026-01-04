@@ -158,12 +158,12 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
         )} />
         
         {/* Screen Content with Image Carousel */}
-        <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 rounded-[1.5rem]">
+        <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 rounded-[1.5rem] overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
               ref={imageRef}
-              className="absolute inset-0 w-full h-full z-0 scrollbar-hide overflow-y-auto overflow-x-hidden"
+              className="absolute inset-0 w-full h-full z-0 scrollbar-hide overflow-y-auto overflow-x-hidden rounded-[1.5rem]"
               style={{
                 scrollBehavior: 'smooth',
               }}
@@ -182,11 +182,12 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
                     display: 'block',
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain',
+                    objectFit: 'cover',
                     objectPosition: 'top center',
                     transform: 'none',
                     transformOrigin: 'top center',
                   }}
+                  className="rounded-[1.5rem]"
                   onError={(e) => {
                     console.error('Image failed to load:', images[currentImageIndex]);
                     e.target.style.display = "none";
