@@ -72,7 +72,7 @@ const projects = [
     category: "Usługi Konsultacje AI",
     description: "Konsultacje i rozwiązania z zakresu sztucznej inteligencji",
     url: "https://openpol.pl/",
-    image: "/img/projects/openpolportfolio.png",
+    image: "/img/projects/openpolportfolio.jpg",
     colSpan: "md:col-span-2",
     rowSpan: "md:row-span-1",
     size: "wide",
@@ -238,19 +238,20 @@ function PortfolioCard({ project, colSpan, index }) {
               }}
             >
               {/* Gradient overlay for depth */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-5 pointer-events-none"></div>
               
               {/* Scrollable Image Container */}
-              <div className="absolute inset-0 w-full h-full overflow-y-auto scrollbar-hide">
+              <div className="absolute inset-0 w-full h-full overflow-y-auto scrollbar-hide z-0">
                 <motion.img
                   src={project.image}
                   alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
-                  className="relative z-0 w-full h-auto min-h-full object-cover"
+                  className="relative w-full h-auto min-h-full object-cover"
                   style={{
                     objectPosition: 'top center',
+                    zIndex: 0,
                   }}
                   loading="lazy"
-                  animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
+                  animate={isHovered ? { scale: 1.05, opacity: 1 } : { scale: 1, opacity: 1 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   onError={(e) => {
                     e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
@@ -299,15 +300,15 @@ function PortfolioCard({ project, colSpan, index }) {
                 </motion.div>
               )}
 
-              {/* Hover Overlay with enhanced animation */}
+              {/* Hover Overlay with enhanced animation - only bottom part */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/40 z-30 pointer-events-none flex items-center justify-center"
+                className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-25 pointer-events-none flex items-end justify-center pb-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isHovered ? 1 : 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <motion.div
-                  className="flex items-center gap-3 text-white font-sans font-semibold text-lg px-8 py-4 bg-black/70 backdrop-blur-xl rounded-full border-2 border-primary/50 shadow-2xl shadow-primary/30"
+                  className="flex items-center gap-3 text-white font-sans font-semibold text-lg px-8 py-4 bg-black/80 backdrop-blur-xl rounded-full border-2 border-primary/50 shadow-2xl shadow-primary/30"
                   initial={{ y: 20, opacity: 0, scale: 0.9 }}
                   animate={{ 
                     y: isHovered ? 0 : 20, 
