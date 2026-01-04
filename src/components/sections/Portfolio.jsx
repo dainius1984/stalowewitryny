@@ -14,6 +14,7 @@ const projects = [
     url: "https://www.whiteeffect.pl/",
     image: "/img/projects/whiteportfolio.png",
     colSpan: "md:col-span-2",
+    rowSpan: "md:row-span-2",
   },
   {
     title: "Autyzm od Kuchni",
@@ -22,6 +23,7 @@ const projects = [
     url: "https://www.autyzmodkuchni.pl/",
     image: "/img/projects/autyzmportfolio.png",
     colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
   },
   {
     title: "Fryzjerka Małgosia",
@@ -30,14 +32,16 @@ const projects = [
     url: "https://www.fryzjerkamalgosia.pl/",
     image: "/img/projects/fryzjerkaportfolio.png",
     colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
   },
   {
     title: "Zielone Mile",
     category: "Usługi Lokalne (Ogrody, Tarasy)",
     description: "Projektowanie i wykonawstwo ogrodów i tarasów",
-    url: "https://www.zielonemile.pl/",
+    url: "https://zielonemile.pl/",
     image: "/img/projects/zieloneportfolio.png",
     colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
   },
   {
     title: "Studio Figura",
@@ -46,6 +50,7 @@ const projects = [
     url: "https://www.studiofigurastablowice.pl/",
     image: "/img/projects/figuraportfolio.png",
     colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
   },
   {
     title: "Oranzeria",
@@ -54,6 +59,7 @@ const projects = [
     url: "https://oraneria.vercel.app/",
     image: "/img/projects/oranzeriaportfolio.png",
     colSpan: "md:col-span-1",
+    rowSpan: "md:row-span-1",
   },
   {
     title: "OpenPol",
@@ -61,7 +67,8 @@ const projects = [
     description: "Konsultacje i rozwiązania z zakresu sztucznej inteligencji",
     url: "https://openpol.pl/",
     image: "/img/projects/openpolportfolio.png",
-    colSpan: "md:col-span-1",
+    colSpan: "md:col-span-2",
+    rowSpan: "md:row-span-1",
   }
 ];
 
@@ -113,13 +120,14 @@ function PortfolioCard({ project, colSpan, index }) {
     };
   }, [isHovered]);
 
-  // Determine card height based on colSpan
+  // Determine card height based on colSpan and rowSpan
   const isLarge = colSpan === "md:col-span-2";
-  const cardHeight = isLarge ? "md:h-[500px]" : "md:h-[450px]";
+  const isTall = project.rowSpan === "md:row-span-2";
+  const cardHeight = isTall ? "md:h-[600px]" : isLarge ? "md:h-[500px]" : "md:h-[450px]";
 
   return (
     <motion.div
-      className={cn("group", colSpan)}
+      className={cn("group", colSpan, project.rowSpan)}
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -159,12 +167,12 @@ function PortfolioCard({ project, colSpan, index }) {
               animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
             />
 
-            {/* Image Container with Auto-Scroll */}
-            <div 
+            {/* Image Container with Auto-Scroll - expands on hover */}
+            <motion.div 
               ref={imageContainerRef}
               className={cn(
                 "relative overflow-hidden scrollbar-hide",
-                isLarge ? "h-72 md:h-[320px]" : "h-64 md:h-[280px]"
+                isHovered ? "flex-1" : (isTall ? "h-[60%]" : isLarge ? "h-[55%]" : "h-[50%]")
               )}
               style={{
                 scrollBehavior: 'smooth',
@@ -247,10 +255,21 @@ function PortfolioCard({ project, colSpan, index }) {
                 animate={{ borderColor: isHovered ? "rgba(204,255,0,0.4)" : "rgba(204,255,0,0)" }}
                 transition={{ duration: 0.3 }}
               />
-            </div>
+            </motion.div>
 
-            {/* Content Below Image with better styling */}
-            <div className="relative p-6 md:p-8 flex-grow flex flex-col bg-gradient-to-b from-neutral-900/50 to-neutral-950/50 z-10">
+            {/* Content Below Image - hides on hover */}
+            <motion.div
+              className="relative p-6 md:p-8 flex flex-col bg-gradient-to-b from-neutral-900/50 to-neutral-950/50 z-10 overflow-hidden"
+              initial={{ opacity: 1, height: "auto" }}
+              animate={{
+                opacity: isHovered ? 0 : 1,
+                height: isHovered ? 0 : "auto",
+                marginTop: isHovered ? 0 : undefined,
+                paddingTop: isHovered ? 0 : undefined,
+                paddingBottom: isHovered ? 0 : undefined,
+              }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            >
               <motion.h3
                 className="text-2xl md:text-3xl font-bold text-white font-sans mb-3 group-hover:text-primary transition-colors duration-300"
                 initial={{ opacity: 0, y: 10 }}
@@ -282,18 +301,7 @@ function PortfolioCard({ project, colSpan, index }) {
                   {project.description}
                 </motion.p>
               )}
-
-              {/* CTA hint on hover */}
-              <motion.div
-                className="mt-auto pt-4 flex items-center gap-2 text-primary/60 text-sm font-medium"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <span>Kliknij, aby zobaczyć</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.div>
-            </div>
+            </motion.div>
 
             {/* Decorative corner accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
@@ -352,8 +360,8 @@ export function Portfolio() {
           </motion.p>
         </motion.div>
 
-        {/* Portfolio Grid with improved spacing */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        {/* Portfolio Grid with improved masonry-style layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-fr">
           {projects.map((project, index) => (
             <PortfolioCard
               key={project.url}
