@@ -31,7 +31,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
 
   return (
     <div
-      className={cn("w-full h-[38vh] md:h-[50vh] relative", className)}
+      className={cn("w-full h-[38vh] md:h-[50vh] relative overflow-hidden", className)}
       style={{
         width: '100%',
         height: '38vh',
@@ -49,7 +49,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
       onClick={handleClick}
     >
       <motion.div
-        className="relative w-full h-full border-[3px] rounded-xl shadow-2xl cursor-pointer bg-neutral-900 overflow-hidden"
+        className="relative w-full h-full border-[3px] rounded-xl cursor-pointer bg-neutral-900 overflow-hidden"
         style={{ 
           width: '100%', 
           height: '100%',
@@ -169,11 +169,18 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           </div>
         )}
 
-        {/* Border */}
-        <div className={cn(
-          "absolute inset-0 border-[3px] rounded-xl pointer-events-none transition-all duration-300",
-          isHovered ? "border-[#CCFF00]" : "border-white/30"
-        )} />
+        {/* Border with hover glow effect - limited to frame only */}
+        <div 
+          className={cn(
+            "absolute inset-0 border-[3px] rounded-xl pointer-events-none transition-all duration-300",
+            isHovered ? "border-[#CCFF00]" : "border-white/30"
+          )}
+          style={{
+            boxShadow: isHovered 
+              ? 'inset 0 0 15px rgba(204,255,0,0.2), 0 0 15px rgba(204,255,0,0.4)' 
+              : 'none',
+          }}
+        />
       </motion.div>
     </div>
   );
