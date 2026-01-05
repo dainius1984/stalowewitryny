@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +13,7 @@ export function Footer() {
       { label: "Kontakt", href: "#kontakt" },
     ],
     legal: [
-      { label: "Polityka Prywatności", href: "#privacy" },
+      { label: "Polityka Prywatności", href: "/polityka-prywatnosci" },
       { label: "Regulamin", href: "#terms" },
     ],
   };
@@ -59,16 +60,23 @@ export function Footer() {
               Informacje
             </h3>
             <nav className="flex flex-col gap-3">
-              {footerLinks.legal.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
-                  title={`Przeczytaj ${link.label}`}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {footerLinks.legal.map((link) => {
+                const LinkComponent = link.href.startsWith('#') ? 'a' : Link;
+                const linkProps = link.href.startsWith('#') 
+                  ? { href: link.href }
+                  : { to: link.href };
+                
+                return (
+                  <LinkComponent
+                    key={link.href}
+                    {...linkProps}
+                    className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
+                    title={`Przeczytaj ${link.label}`}
+                  >
+                    {link.label}
+                  </LinkComponent>
+                );
+              })}
             </nav>
           </div>
         </div>
