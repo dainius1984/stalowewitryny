@@ -144,7 +144,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                       className={cn(
                         "text-base font-medium transition-all duration-300 py-4 px-6 rounded-xl font-sans touch-manipulation relative",
                         active
-                          ? "text-primary bg-primary/10 border border-primary/30"
+                          ? "text-primary"
                           : "text-neutral-300 hover:text-white hover:bg-white/5 border border-transparent"
                       )}
                       title={link.title || `Przejdź do sekcji ${link.label}`}
