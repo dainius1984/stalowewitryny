@@ -74,10 +74,10 @@ export function TermsPage() {
       {/* Efekt ziarna na tle */}
       <div className="bg-grain" />
       
-      <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
+      <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col overflow-x-hidden w-full">
         <Navbar isModalOpen={false} />
         
-        <main className="pt-24 md:pt-28 flex-grow relative">
+        <main className="pt-24 md:pt-28 flex-grow relative w-full overflow-x-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
