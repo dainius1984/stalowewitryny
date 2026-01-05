@@ -1,9 +1,59 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    // Use Lenis if available
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  };
+
+  // Handle hash link clicks
+  const handleHashLink = (e, hash) => {
+    e.preventDefault();
+    
+    // If we're not on homepage, navigate to homepage first
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation, then scroll to hash
+      setTimeout(() => {
+        scrollToTop();
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      }, 100);
+    } else {
+      // Already on homepage, just scroll to hash
+      scrollToTop();
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  };
+
+  // Handle React Router link clicks
+  const handleRouteLink = (e, path) => {
+    e.preventDefault();
+    navigate(path);
+    scrollToTop();
+  };
 
   const footerLinks = {
     navigation: [
@@ -24,12 +74,23 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Brand */}
           <div className="space-y-4 text-center md:text-left">
-            <a href="#" className="inline-block" title="Stalowe Witryny - Strona główna">
+            <Link 
+              to="/" 
+              onClick={(e) => {
+                e.preventDefault();
+                if (location.pathname !== '/') {
+                  navigate('/');
+                }
+                scrollToTop();
+              }}
+              className="inline-block" 
+              title="Stalowe Witryny - Strona główna"
+            >
               <span className="text-2xl md:text-3xl font-black tracking-tighter font-sans text-white">
                 STALOWEWITRYNY
                 <span className="text-primary">.</span>
               </span>
-            </a>
+            </Link>
             <p className="text-sm text-neutral-400 font-sans max-w-xs mx-auto md:mx-0">
               Tanie i solidne strony internetowe dla firm. Kodowane ręcznie, bez abonamentu, strona na własność.
             </p>
@@ -45,7 +106,8 @@ export function Footer() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
+                  onClick={(e) => handleHashLink(e, link.href)}
+                  className="text-sm text-neutral-400 hover:text-white transition-colors font-sans cursor-pointer"
                   title={`Przejdź do sekcji ${link.label}`}
                 >
                   {link.label}
@@ -66,6 +128,7 @@ export function Footer() {
                   <Link
                     key={link.href}
                     to={link.href}
+                    onClick={scrollToTop}
                     className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
                     title={`Przeczytaj ${link.label}`}
                   >
