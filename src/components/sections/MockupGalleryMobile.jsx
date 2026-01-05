@@ -86,6 +86,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const [isSwiping, setIsSwiping] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState(0); // -1 for left, 1 for right
   const [isManualNavigation, setIsManualNavigation] = useState(false);
+  const [isManualSwipe, setIsManualSwipe] = useState(false); // Track if swipe is manual or auto
   const hoverTimeoutRef = useRef(null);
   const leaveTimeoutRef = useRef(null);
   const currentProjectRef = useRef(null);
@@ -119,6 +120,8 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   useEffect(() => {
     if (!isManualNavigation && !isSwiping && !previewOpen) {
       rotationIntervalRef.current = setInterval(() => {
+        setIsManualSwipe(false); // Mark as auto-scroll
+        setSwipeDirection(1); // Set direction for auto-scroll
         setCurrentProjectIndex((prev) => (prev + 1) % mockupProjects.length);
       }, 5000); // Rotate every 5 seconds
     } else {
@@ -149,6 +152,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const handleDragStart = () => {
     setIsSwiping(true);
     setIsManualNavigation(true);
+    setIsManualSwipe(true); // Mark as manual swipe
     if (rotationIntervalRef.current) {
       clearInterval(rotationIntervalRef.current);
       rotationIntervalRef.current = null;
@@ -181,12 +185,21 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         setSwipeDirection(1);
       }
       setIsManualNavigation(true);
+      setIsManualSwipe(true); // Keep manual flag for animation
+    } else {
+      // Reset manual flag if swipe wasn't completed
+      setIsManualSwipe(false);
     }
     
     // Reset position
     controls.start({ x: 0, transition: { duration: 0.3 } });
     x.set(0);
-    setSwipeDirection(0);
+    
+    // Reset swipe direction after animation completes
+    setTimeout(() => {
+      setSwipeDirection(0);
+      setIsManualSwipe(false);
+    }, 400); // Match animation duration
   };
 
   const handleClick = (project) => {
@@ -292,39 +305,74 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             {mockupProjects.map((project, index) => {
               if (index !== currentProjectIndex) return null;
               
+              // Different animations for manual swipe vs auto-scroll
+              const isManual = isManualSwipe;
+              
               return (
                 <motion.div
                   key={`project-${index}-${currentProjectIndex}`}
                   custom={swipeDirection}
                   className="flex items-center justify-center w-full"
-                  initial={(dir) => ({ 
-                    opacity: 0, 
-                    scale: 0.8, 
-                    x: dir === 1 ? 100 : -100,
-                    y: 50,
-                    rotateY: dir === 1 ? -15 : 15,
-                    rotateX: 5,
-                    filter: "blur(20px) brightness(0.3)",
-                  })}
+                  initial={(dir) => {
+                    if (isManual) {
+                      // Manual swipe: Smooth slide with fade
+                      return {
+                        opacity: 0,
+                        x: dir === 1 ? 50 : -50,
+                        scale: 0.95,
+                      };
+                    } else {
+                      // Auto-scroll: 3D effect with blur
+                      return {
+                        opacity: 0,
+                        scale: 0.8,
+                        x: dir === 1 ? 100 : -100,
+                        y: 50,
+                        rotateY: dir === 1 ? -15 : 15,
+                        rotateX: 5,
+                        filter: "blur(20px) brightness(0.3)",
+                      };
+                    }
+                  }}
                   animate={{ 
-                    opacity: 1, 
-                    scale: 1, 
+                    opacity: 1,
+                    scale: 1,
                     x: 0,
                     y: 0,
                     rotateY: 0,
                     rotateX: 0,
                     filter: "blur(0px) brightness(1)",
                   }}
-                  exit={(dir) => ({ 
-                    opacity: 0, 
-                    scale: 0.7, 
-                    x: dir === 1 ? -100 : 100,
-                    y: -30,
-                    rotateY: dir === 1 ? 15 : -15,
-                    rotateX: -5,
-                    filter: "blur(20px) brightness(0.3)",
-                  })}
-                  transition={{ 
+                  exit={(dir) => {
+                    if (isManual) {
+                      // Manual swipe: Smooth slide out
+                      return {
+                        opacity: 0,
+                        x: dir === 1 ? -50 : 50,
+                        scale: 0.95,
+                      };
+                    } else {
+                      // Auto-scroll: 3D effect
+                      return {
+                        opacity: 0,
+                        scale: 0.7,
+                        x: dir === 1 ? -100 : 100,
+                        y: -30,
+                        rotateY: dir === 1 ? 15 : -15,
+                        rotateX: -5,
+                        filter: "blur(20px) brightness(0.3)",
+                      };
+                    }
+                  }}
+                  transition={isManual ? {
+                    // Manual swipe: Faster, smoother transition
+                    duration: 0.3,
+                    ease: [0.25, 0.46, 0.45, 0.94], // Smooth ease
+                    opacity: { duration: 0.25 },
+                    x: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] },
+                    scale: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] },
+                  } : {
+                    // Auto-scroll: Original 3D effect
                     duration: 0.6,
                     ease: [0.4, 0, 0.2, 1],
                     scale: { 
@@ -363,39 +411,59 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                       key={`mobile-${index}-${currentProjectIndex}`}
                       className="w-full"
                       style={{ width: '100%', minWidth: '100%', display: 'flex', justifyContent: 'center' }}
-                      initial={{ 
-                        opacity: 0, 
-                        x: 50, 
+                      initial={isManual ? {
+                        // Manual swipe: Simple fade and slide
+                        opacity: 0,
+                        x: swipeDirection === 1 ? 30 : -30,
+                        scale: 0.98,
+                      } : {
+                        // Auto-scroll: Original effect
+                        opacity: 0,
+                        x: 50,
                         y: 20,
                         rotate: 5,
                         scale: 0.9,
                         filter: "blur(8px) brightness(0.7)",
                       }}
                       animate={{ 
-                        opacity: 1, 
+                        opacity: 1,
                         x: 0,
                         y: 0,
                         rotate: 0,
                         scale: 1,
                         filter: "blur(0px) brightness(1)",
                       }}
-                      exit={{ 
-                        opacity: 0, 
+                      exit={isManual ? {
+                        // Manual swipe: Smooth exit
+                        opacity: 0,
+                        x: swipeDirection === 1 ? -30 : 30,
+                        scale: 0.98,
+                      } : {
+                        // Auto-scroll: Original exit
+                        opacity: 0,
                         x: -50,
                         y: -20,
-                        rotate: -5, 
+                        rotate: -5,
                         scale: 0.9,
                         filter: "blur(8px) brightness(0.7)",
                       }}
-                      transition={{ 
-                        delay: 0.1, 
-                        duration: 0.6, 
+                      transition={isManual ? {
+                        // Manual swipe: Faster, smoother
+                        duration: 0.3,
+                        ease: [0.25, 0.46, 0.45, 0.94],
+                        opacity: { duration: 0.25 },
+                        x: { duration: 0.3 },
+                        scale: { duration: 0.3 },
+                      } : {
+                        // Auto-scroll: Original timing
+                        delay: 0.1,
+                        duration: 0.6,
                         ease: [0.4, 0, 0.2, 1],
                         opacity: { duration: 0.4 },
                         filter: { duration: 0.5 },
                         scale: {
                           duration: 0.6,
-                          ease: [0.34, 1.56, 0.64, 1] // Spring bounce
+                          ease: [0.34, 1.56, 0.64, 1]
                         }
                       }}
                     >
@@ -403,7 +471,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         key={`${project.alt}-mobile-${index}`}
                         images={[project.desktopHero]} // Desktop hero section for mobile view
                         alt={`${project.alt} - Desktop Hero`}
-                        delay={0.1}
+                        delay={isManual ? 0 : 0.1}
                         project={{ 
                           ...project, 
                           url: project.url
