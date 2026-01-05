@@ -146,7 +146,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         backgroundColor: '#18181b',
         // CRITICAL: Allow touch events to pass through to parent when single image on mobile
         touchAction: shouldPassThroughToParent ? 'pan-x' : 'auto',
-        pointerEvents: 'auto', // CRITICAL: Must be 'auto' so events can bubble to parent
+        pointerEvents: shouldPassThroughToParent ? 'none' : 'auto', // Pass through pointer events
       }}
       onMouseEnter={() => {
         if (!shouldPassThroughToParent) {
@@ -173,7 +173,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           cursor: isMobile ? 'default' : (isDragging ? 'grabbing' : 'grab'),
           // CRITICAL: Allow pan-x for parent drag to work on mobile
           touchAction: shouldPassThroughToParent ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
-          pointerEvents: 'auto', // CRITICAL: Must be 'auto' so events can bubble to parent
+          pointerEvents: shouldPassThroughToParent ? 'none' : 'auto', // Pass through pointer events
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
