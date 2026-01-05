@@ -23,7 +23,7 @@ export function AboutPage() {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
           </div>
 
-          <Container className="relative z-10 py-12 md:py-16">
+          <Container className="relative z-10 py-12 md:py-16 px-4 md:px-6">
             {/* Page Header */}
             <motion.div
               className="mb-12 md:mb-16 text-center"
@@ -59,13 +59,13 @@ export function AboutPage() {
             </motion.div>
 
             {/* Content Sections */}
-            <div className="space-y-16 max-w-4xl mx-auto">
+            <div className="space-y-8 md:space-y-12 lg:space-y-16 max-w-4xl mx-auto w-full">
               {/* Mission */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="bg-neutral-900/30 backdrop-blur-sm rounded-2xl p-8 md:p-10 border border-white/5"
+                className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
                   Misja
@@ -82,7 +82,7 @@ export function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="bg-neutral-900/30 backdrop-blur-sm rounded-2xl p-8 md:p-10 border border-white/5"
+                className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
                   Dlaczego Ręcznie Kodowane?
@@ -112,7 +112,7 @@ export function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="bg-neutral-900/30 backdrop-blur-sm rounded-2xl p-8 md:p-10 border border-white/5"
+                className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
                   Technologie

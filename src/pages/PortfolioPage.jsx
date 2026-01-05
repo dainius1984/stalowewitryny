@@ -53,8 +53,9 @@ function PortfolioListItem({ project, index }) {
       ref={itemRef}
       className={cn(
         "flex flex-col md:flex-row gap-4 md:gap-6",
-        "bg-neutral-900/30 backdrop-blur-sm rounded-2xl border border-white/5",
+        "bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl border border-white/5",
         "overflow-hidden",
+        "w-full max-w-full",
         "md:[&:nth-child(even)]:flex-row-reverse" // Reverse order for even items
       )}
       initial={{ opacity: 0, y: 40 }}
@@ -69,7 +70,7 @@ function PortfolioListItem({ project, index }) {
       {/* Column A: Scrollable Image */}
       <div 
         ref={imageContainerRef}
-        className="flex-1 h-[400px] md:h-[450px] overflow-y-auto overflow-x-hidden scrollbar-hide bg-neutral-950"
+        className="flex-1 h-[300px] md:h-[450px] overflow-y-auto overflow-x-hidden scrollbar-hide bg-neutral-950 w-full"
         style={{
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch',
@@ -91,7 +92,7 @@ function PortfolioListItem({ project, index }) {
       </div>
 
       {/* Column B: Content - Always visible */}
-      <div className="flex-1 flex flex-col justify-center p-6 md:p-8">
+      <div className="flex-1 flex flex-col justify-center p-4 md:p-6 lg:p-8 w-full">
         {/* Category Badge */}
         <motion.div
           className="mb-4"
@@ -170,7 +171,7 @@ export function PortfolioPage() {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
           </div>
 
-          <Container className="relative z-10 py-12 md:py-16">
+          <Container className="relative z-10 py-12 md:py-16 px-4 md:px-6">
             {/* Page Header */}
             <motion.div
               className="mb-12 md:mb-16 lg:mb-20 text-center"
@@ -206,7 +207,7 @@ export function PortfolioPage() {
             </motion.div>
 
             {/* Portfolio List: Single column with alternating layout */}
-            <div className="flex flex-col gap-8 md:gap-12">
+            <div className="flex flex-col gap-6 md:gap-8 lg:gap-12">
               {sortedProjects.map((project, index) => (
                 <PortfolioListItem
                   key={project.url}
