@@ -13,6 +13,13 @@ export function Navbar({ isModalOpen = false }) {
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
   const location = useLocation();
 
+  // Reset navbar visibility when route changes
+  useEffect(() => {
+    setIsVisible(true);
+    setLastScrollY(0);
+    setIsScrolling(false);
+  }, [location.pathname]);
+
   // Handle scroll to hide/show navbar with throttling for better performance
   useEffect(() => {
     if (isModalOpen) {
