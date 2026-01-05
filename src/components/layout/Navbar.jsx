@@ -13,11 +13,15 @@ export function Navbar({ isModalOpen = false }) {
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
   const location = useLocation();
 
-  // Reset navbar visibility when route changes
+  // Reset navbar visibility when route changes - ALWAYS show on route change
   useEffect(() => {
     setIsVisible(true);
     setLastScrollY(0);
     setIsScrolling(false);
+    // Force navbar to be visible immediately on route change
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
   }, [location.pathname]);
 
   // Handle scroll to hide/show navbar with throttling for better performance
@@ -27,6 +31,9 @@ export function Navbar({ isModalOpen = false }) {
       return;
     }
 
+    // Don't hide navbar on subpages - only on homepage
+    const isHomePage = location.pathname === '/';
+    
     let ticking = false;
 
     const handleScroll = () => {
@@ -47,10 +54,10 @@ export function Navbar({ isModalOpen = false }) {
           if (currentScrollY < 30) {
             setIsVisible(true);
           } 
-          // Hide navbar when scrolling down, show when scrolling up
-          else if (currentScrollY > lastScrollY && currentScrollY > 80) {
+          // Hide navbar when scrolling down ONLY on homepage, always show on subpages
+          else if (isHomePage && currentScrollY > lastScrollY && currentScrollY > 80) {
             setIsVisible(false);
-          } else if (currentScrollY < lastScrollY) {
+          } else if (currentScrollY < lastScrollY || !isHomePage) {
             setIsVisible(true);
           }
           
@@ -66,7 +73,7 @@ export function Navbar({ isModalOpen = false }) {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, isModalOpen]);
+  }, [lastScrollY, isModalOpen, location.pathname]);
 
   const navLinks = [
     { label: "Strona Główna", href: "/", title: "Strona główna - Stalowe Witryny", isExternal: false },

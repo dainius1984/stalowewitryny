@@ -130,16 +130,22 @@ export function Hero({ onModalStateChange }) {
                 className="text-2xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
                 variants={itemVariants}
               >
-                Tanie i solidne strony internetowe dla firm –{" "}
-                <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Stalowe Witryny</span>
+                Profesjonalne Strony Internetowe we Wrocławiu
               </motion.h1>
               
               <motion.h2 
                 className="text-base font-bold text-neutral-300 mt-1 font-sans text-center"
                 variants={itemVariants}
               >
-                Szybkie strony www bez abonamentu i WordPressa
+                Nowoczesne witryny dla małych i średnich firm z Dolnego Śląska
               </motion.h2>
+              
+              <motion.h3 
+                className="text-sm font-semibold text-primary mt-1 font-sans text-center"
+                variants={itemVariants}
+              >
+                Dlaczego Stalowe Witryny? Szybkość, SEO i UX
+              </motion.h3>
               
               <motion.p 
                 className="text-xs text-neutral-400 mt-0.5 font-sans text-center leading-relaxed"
@@ -202,16 +208,22 @@ export function Hero({ onModalStateChange }) {
                   className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white max-w-full"
                   variants={itemVariants}
                 >
-                  Tanie i solidne strony internetowe dla firm –{" "}
-                  <span className="text-[#CCFF00] drop-shadow-[0_0_20px_rgba(204,255,0,0.5)]">Stalowe Witryny</span>
+                  Profesjonalne Strony Internetowe we Wrocławiu
                 </motion.h1>
                 
                 <motion.h2 
                   className="text-xl md:text-2xl font-bold text-neutral-300 mt-3 md:mt-4 font-sans"
                   variants={itemVariants}
                 >
-                  Szybkie strony www bez abonamentu i WordPressa
+                  Nowoczesne witryny dla małych i średnich firm z Dolnego Śląska
                 </motion.h2>
+                
+                <motion.h3 
+                  className="text-lg md:text-xl font-semibold text-primary mt-3 md:mt-4 font-sans"
+                  variants={itemVariants}
+                >
+                  Dlaczego Stalowe Witryny? Szybkość, SEO i UX
+                </motion.h3>
                 
                 <motion.p 
                   className="text-base md:text-lg text-neutral-400 mt-3 md:mt-4 font-sans leading-relaxed max-w-[90%]"

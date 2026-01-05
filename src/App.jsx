@@ -12,6 +12,7 @@ import { PortfolioPage } from "@/pages/PortfolioPage";
 import { AboutPage } from "@/pages/AboutPage";
 import { ContactPage } from "@/pages/ContactPage";
 import { PrivacyPolicyPage } from "@/pages/PrivacyPolicyPage";
+import { TermsPage } from "@/pages/TermsPage";
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,6 +77,7 @@ function App() {
         <Route path="/o-nas" element={<AboutPage />} />
         <Route path="/kontakt" element={<ContactPage />} />
         <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />
+        <Route path="/regulamin" element={<TermsPage />} />
       </Routes>
     </BrowserRouter>
   );

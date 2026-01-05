@@ -14,7 +14,7 @@ export function Footer() {
     ],
     legal: [
       { label: "Polityka Prywatności", href: "/polityka-prywatnosci" },
-      { label: "Regulamin", href: "#terms" },
+      { label: "Regulamin", href: "/regulamin" },
     ],
   };
 
@@ -54,7 +54,7 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Legal Links */}
+          {/* Legal Links & Service Areas */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider font-sans">
               Informacje
@@ -78,6 +78,24 @@ export function Footer() {
                 );
               })}
             </nav>
+            
+            {/* Service Areas - Local SEO */}
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <h4 className="text-xs font-semibold text-white uppercase tracking-wider font-sans mb-3">
+                Obsługiwane miasta
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {["Wrocław", "Legnica", "Lubin", "Świdnica", "Oleśnica", "Oława", "Dzierżoniów"].map((city) => (
+                  <span
+                    key={city}
+                    className="text-xs text-neutral-400 font-sans px-2 py-1 bg-neutral-900/50 rounded border border-white/5"
+                    title={`Strony internetowe ${city}`}
+                  >
+                    {city}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
