@@ -76,27 +76,32 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
       }}
     >
       <motion.div
-        className="relative w-full h-full border-[3px] rounded-xl cursor-pointer bg-neutral-900 overflow-hidden"
+        className="relative w-full h-full border-[3px] rounded-xl bg-neutral-900 overflow-hidden touch-none"
         style={{ 
           width: '100%', 
           height: '100%',
+          cursor: isDragging ? 'grabbing' : 'grab',
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.3}
+        dragElastic={0.2}
         dragMomentum={false}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
-        onClick={handleClick}
-        whileDrag={{ cursor: "grabbing" }}
+        onClick={(e) => {
+          // Only trigger click if not dragging
+          if (!isDragging) {
+            handleClick();
+          }
+        }}
       >
         {/* Image Container with Swipe Support */}
         {currentImage ? (
           <div 
-            className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center pointer-events-none"
+            className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center"
             style={{
               width: 'calc(100% - 12px)',
               height: 'calc(100% - 12px + 20px)', // Extra 20px at top to show navbar
@@ -105,14 +110,13 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
               bottom: '6px',
               marginTop: '-20px', // Move up by 20px to show navbar
               borderRadius: '0.5rem',
-              pointerEvents: 'none', // Ensure image container doesn't block touch events
             }}
           >
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentImageIndex}
                 custom={direction}
-                className="absolute inset-0 w-full h-full pointer-events-none"
+                className="absolute inset-0 w-full h-full"
                 initial={(dir) => ({ 
                   opacity: 0, 
                   scale: 1.05, 
@@ -145,6 +149,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                     objectPosition: 'center center',
                     userSelect: 'none',
                     WebkitUserDrag: 'none',
+                    pointerEvents: 'none',
                   }}
                   loading="eager"
                   onError={(e) => {
@@ -157,47 +162,6 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                 />
               </motion.div>
             </AnimatePresence>
-
-
-            {/* Image Indicator Dots with swipe animation */}
-            {images.length > 1 && (
-              <motion.div 
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2 pointer-events-auto"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                style={{ pointerEvents: 'auto' }} // Allow clicking dots
-              >
-                {images.map((_, index) => (
-                  <motion.button
-                    key={index}
-                    className={cn(
-                      "rounded-full transition-all duration-300 touch-manipulation",
-                      index === currentImageIndex
-                        ? "bg-[#CCFF00] w-8 h-2 shadow-[0_0_10px_rgba(204,255,0,0.6)]"
-                        : "bg-white/40 w-2 h-2 hover:bg-white/60"
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      setCurrentImageIndex(index);
-                    }}
-                    onTouchStart={(e) => {
-                      e.stopPropagation(); // Prevent triggering swipe
-                    }}
-                    initial={false}
-                    animate={{
-                      scale: index === currentImageIndex ? 1.1 : 1,
-                    }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ WebkitTapHighlightColor: 'transparent', pointerEvents: 'auto' }}
-                  />
-                ))}
-              </motion.div>
-            )}
-
-
             {/* Hover Overlay */}
             <AnimatePresence>
               {isHovered && (

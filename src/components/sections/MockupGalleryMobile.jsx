@@ -280,27 +280,6 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             </AnimatePresence>
           )}
 
-          {/* Project Indicator Dots */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-40 flex gap-2">
-            {mockupProjects.map((_, index) => (
-              <motion.button
-                key={index}
-                className={cn(
-                  "rounded-full transition-all duration-300 touch-manipulation",
-                  index === currentProjectIndex
-                    ? "bg-[#CCFF00] w-8 h-2 shadow-[0_0_10px_rgba(204,255,0,0.6)]"
-                    : "bg-white/40 w-2 h-2"
-                )}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurrentProjectIndex(index);
-                  setIsManualNavigation(true);
-                }}
-                whileTap={{ scale: 0.9 }}
-                style={{ WebkitTapHighlightColor: 'transparent' }}
-              />
-            ))}
-          </div>
 
           {/* Current Project */}
           <AnimatePresence mode="wait" custom={swipeDirection}>
