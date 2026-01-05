@@ -39,9 +39,10 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   // Touch event handlers for mobile swipe - pass through to parent on mobile
   const handleTouchStart = (e) => {
     // On mobile, allow touch events to bubble up to parent (MockupGalleryMobile)
-    // Don't handle swipe here if only one image
+    // Don't handle swipe here if only one image - let parent handle it
     if (isMobile && images && images.length <= 1) {
-      return; // Let parent handle the swipe
+      // Don't stop propagation - let parent handle
+      return;
     }
     
     touchStartX.current = e.touches[0].clientX;
@@ -52,6 +53,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   const handleTouchMove = (e) => {
     // On mobile with single image, don't prevent default - let parent handle
     if (isMobile && images && images.length <= 1) {
+      // Don't stop propagation - let parent handle
       return;
     }
     
@@ -61,6 +63,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     const deltaX = e.touches[0].clientX - touchStartX.current;
     if (Math.abs(deltaX) > 10) {
       e.preventDefault();
+      e.stopPropagation(); // Only stop propagation for multi-image case
     }
   };
 
@@ -68,6 +71,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     // On mobile with single image, don't handle - let parent handle
     if (isMobile && images && images.length <= 1) {
       setIsDragging(false);
+      // Don't stop propagation - let parent handle
       return;
     }
     
@@ -137,6 +141,9 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         height: '38vh',
         minHeight: '270px',
         backgroundColor: '#18181b',
+        // Allow touch events to pass through to parent when single image on mobile
+        touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : 'auto',
+        pointerEvents: 'auto',
       }}
       onMouseEnter={() => {
         setIsHovered(true);
@@ -153,7 +160,9 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           width: '100%', 
           height: '100%',
           cursor: isMobile ? 'default' : (isDragging ? 'grabbing' : 'grab'),
-          touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : 'none',
+          // On mobile with single image, allow pan-x for parent to handle swipe
+          // On desktop or multiple images, use pan-y or none to allow internal drag
+          touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
