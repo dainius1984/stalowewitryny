@@ -57,7 +57,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
         </AnimatePresence>
       </motion.button>
 
-      {/* Mobile Menu Dropdown - Right Side Panel */}
+      {/* Mobile Menu Dropdown - Full Width */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
@@ -71,22 +71,22 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
               onClick={() => setIsMobileMenuOpen(false)}
             />
             
-            {/* Side Panel */}
+            {/* Full Width Panel */}
             <motion.div
-              initial={{ x: "100%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "100%", opacity: 0 }}
+              initial={{ y: "-100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "-100%", opacity: 0 }}
               transition={{ 
                 duration: 0.3,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
-              className="fixed top-0 right-0 h-full w-[280px] bg-black border-l border-white/10 z-[60] md:hidden overflow-y-auto shadow-2xl"
+              className="fixed top-0 left-0 right-0 w-full bg-black border-b border-white/10 z-[60] md:hidden overflow-y-auto shadow-2xl"
             >
               {/* Header with Logo and Close Button */}
-              <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <Link 
                   to="/"
-                  className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation" 
+                  className="text-xl font-black tracking-tighter font-sans text-white touch-manipulation" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -107,7 +107,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
 
               {/* Menu Content */}
               <motion.div 
-                className="flex flex-col gap-3 p-4"
+                className="flex flex-col gap-2 p-6"
                 initial="closed"
                 animate="open"
                 variants={{
@@ -125,7 +125,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                     ? { href: link.href }
                     : { to: link.href };
                   const isActive = link.href.startsWith('#') 
-                    ? location.pathname === '/' && window.location.hash === link.href
+                    ? location.pathname === '/'
                     : location.pathname === link.href;
                   
                   return (
@@ -134,21 +134,21 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                       {...linkProps}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
-                        "text-sm font-medium transition-colors py-3 px-3 rounded-lg font-sans touch-manipulation relative",
+                        "text-base font-medium transition-all duration-300 py-4 px-6 rounded-xl font-sans touch-manipulation relative",
                         isActive
-                          ? "text-primary bg-primary/10"
-                          : "text-neutral-400 hover:text-white hover:bg-white/5"
+                          ? "text-primary bg-primary/10 border border-primary/30"
+                          : "text-neutral-300 hover:text-white hover:bg-white/5 border border-transparent"
                       )}
                       title={link.title || `Przejdź do sekcji ${link.label}`}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2, delay: index * 0.05 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       {link.label}
                       {isActive && (
-                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-full" />
+                        <span className="absolute -bottom-1 left-6 right-6 h-0.5 bg-primary rounded-full" />
                       )}
                     </LinkComponent>
                   );
@@ -158,11 +158,11 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2, delay: navLinks.length * 0.05 }}
-                  className="mt-4"
+                  className="mt-6 pt-6 border-t border-white/10"
                 >
                   <Button
                     variant="primary"
-                    className="w-full touch-manipulation"
+                    className="w-full touch-manipulation py-4 text-base font-semibold"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       if (onSurveyClick) {
