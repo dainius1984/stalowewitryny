@@ -119,7 +119,7 @@ export function Hero({ onModalStateChange }) {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex-shrink-0 flex items-center justify-center -mx-2"
+            className="flex-shrink-0 flex items-center justify-center -mx-2 -mb-[10px]"
             style={{ pointerEvents: 'none' }} // Allow touch events to pass through
           >
             <div className="w-full px-2" style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
