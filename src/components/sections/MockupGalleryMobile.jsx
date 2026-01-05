@@ -96,7 +96,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const controls = useAnimation();
   
   // Minimum swipe distance to trigger project change (reduced for better UX)
-  const minSwipeDistance = 30; // Lower threshold for easier swiping
+  const minSwipeDistance = 20; // Lower threshold for easier swiping
 
   // Preload all images when component mounts
   useEffect(() => {
@@ -167,7 +167,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const handleNativeTouchMove = (e) => {
     if (!touchStartXRef.current) return;
     const deltaX = e.touches[0].clientX - touchStartXRef.current;
-    // Update visual position during drag
+    // Update visual position during drag for smooth feedback
     x.set(deltaX);
     // Set direction
     if (deltaX > 0) {
@@ -176,8 +176,9 @@ export function MockupGalleryMobile({ onModalStateChange }) {
       setSwipeDirection(1);
     }
     // Prevent vertical scroll during horizontal swipe
-    if (Math.abs(deltaX) > 10) {
+    if (Math.abs(deltaX) > 5) {
       e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -194,15 +195,24 @@ export function MockupGalleryMobile({ onModalStateChange }) {
 
     setIsSwiping(false);
 
-    // Check if swipe threshold is met
-    if (Math.abs(deltaX) > minSwipeDistance || velocity > 0.3) {
+    // Check if swipe threshold is met - lower threshold for better responsiveness
+    const swipeThreshold = Math.max(minSwipeDistance, Math.abs(deltaX) * 0.3); // Dynamic threshold
+    if (Math.abs(deltaX) > swipeThreshold || velocity > 0.2) {
       if (deltaX > 0) {
         // Swiped right - previous project
-        setCurrentProjectIndex((prev) => (prev - 1 + mockupProjects.length) % mockupProjects.length);
+        setCurrentProjectIndex((prev) => {
+          const newIndex = (prev - 1 + mockupProjects.length) % mockupProjects.length;
+          console.log(`Swipe right: ${prev} -> ${newIndex} (${mockupProjects[newIndex].title})`);
+          return newIndex;
+        });
         setSwipeDirection(-1);
       } else {
         // Swiped left - next project
-        setCurrentProjectIndex((prev) => (prev + 1) % mockupProjects.length);
+        setCurrentProjectIndex((prev) => {
+          const newIndex = (prev + 1) % mockupProjects.length;
+          console.log(`Swipe left: ${prev} -> ${newIndex} (${mockupProjects[newIndex].title})`);
+          return newIndex;
+        });
         setSwipeDirection(1);
       }
       setIsManualNavigation(true);
@@ -356,24 +366,18 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             minWidth: '100%', 
             x,
             touchAction: 'pan-x', // Allow horizontal panning
+            WebkitUserSelect: 'none',
+            userSelect: 'none',
           }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.3}
-          dragMomentum={true}
-          dragTransition={{ 
-            bounceStiffness: 300, 
-            bounceDamping: 30,
-            power: 0.3,
-            timeConstant: 200
-          }}
-          onDragStart={handleDragStart}
-          onDrag={handleDrag}
-          onDragEnd={handleDragEnd}
-          // Native touch handlers as backup for mobile
+          // Use native touch handlers for mobile - more reliable than framer-motion drag
+          drag={false}
           onTouchStart={handleNativeTouchStart}
           onTouchMove={handleNativeTouchMove}
           onTouchEnd={handleNativeTouchEnd}
+          // Keep framer-motion drag for desktop fallback
+          onDragStart={handleDragStart}
+          onDrag={handleDrag}
+          onDragEnd={handleDragEnd}
           animate={controls}
         >
           {/* Swipe Direction Indicators */}
