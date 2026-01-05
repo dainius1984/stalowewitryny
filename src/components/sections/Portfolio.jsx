@@ -12,12 +12,27 @@ import { portfolioProjects } from "@/data/portfolioProjects";
 function PortfolioTile({ project, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
+  const [isMobileOverlayHidden, setIsMobileOverlayHidden] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const imageContainerRef = useRef(null);
   const tileRef = useRef(null);
 
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Check if image is scrollable and handle scroll prevention
   useEffect(() => {
-    if (!isHovered || !imageContainerRef.current) {
+    const shouldShowScroll = isMobile ? isMobileOverlayHidden : isHovered;
+    
+    if (!shouldShowScroll || !imageContainerRef.current) {
       setCanScroll(false);
       return;
     }
@@ -130,12 +145,15 @@ function PortfolioTile({ project, index }) {
         }
       };
     }
-  }, [isHovered, canScroll]);
+  }, [isHovered, isMobileOverlayHidden, isMobile, canScroll]);
 
   return (
-    <motion.div
+    <motion.a
+      href={project.url}
+      target="_blank"
+      rel="noopener noreferrer"
       ref={tileRef}
-      className="group relative h-[500px] overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 cursor-pointer"
+      className="group relative h-[500px] overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 cursor-pointer block"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -144,24 +162,45 @@ function PortfolioTile({ project, index }) {
         delay: index * 0.1,
         ease: [0.4, 0, 0.2, 1],
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        // Reset scroll position when leaving
-        if (imageContainerRef.current) {
-          imageContainerRef.current.scrollTop = 0;
+      onMouseEnter={() => {
+        if (!isMobile) {
+          setIsHovered(true);
         }
+      }}
+      onMouseLeave={() => {
+        if (!isMobile) {
+          setIsHovered(false);
+          // Reset scroll position when leaving
+          if (imageContainerRef.current) {
+            imageContainerRef.current.scrollTop = 0;
+          }
+        }
+      }}
+      onClick={(e) => {
+        if (isMobile) {
+          // On mobile, always toggle overlay and prevent navigation
+          e.preventDefault();
+          setIsMobileOverlayHidden(!isMobileOverlayHidden);
+          // If showing overlay, reset scroll
+          if (isMobileOverlayHidden) {
+            if (imageContainerRef.current) {
+              imageContainerRef.current.scrollTop = 0;
+            }
+          }
+        }
+        // On desktop, allow default link behavior (navigation)
       }}
       style={{
         cursor: isHovered && canScroll ? "n-resize" : "pointer",
       }}
+      title={`Zobacz ${project.title} - ${project.category}`}
     >
       {/* Bottom Layer: Full-height website screenshot */}
       <div
         ref={imageContainerRef}
         className={cn(
           "absolute inset-0 transition-all duration-500 scrollbar-hide",
-          isHovered && canScroll 
+          ((isMobile && isMobileOverlayHidden) || (!isMobile && isHovered)) && canScroll 
             ? "overflow-y-auto overflow-x-hidden" 
             : "overflow-hidden"
         )}
@@ -187,7 +226,7 @@ function PortfolioTile({ project, index }) {
 
       {/* Top Layer: Overlay with content */}
       <AnimatePresence>
-        {!isHovered && (
+        {((isMobile && !isMobileOverlayHidden) || (!isMobile && !isHovered)) && (
           <motion.div
             className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/85 to-black/70 flex flex-col justify-end p-6 md:p-8 z-10"
             initial={{ opacity: 1 }}
@@ -243,23 +282,25 @@ function PortfolioTile({ project, index }) {
       </AnimatePresence>
 
       {/* Hover State: Click to visit indicator */}
-      {isHovered && (
+      {((isMobile && isMobileOverlayHidden) || (!isMobile && isHovered)) && (
         <motion.a
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-6 py-3 bg-black/90 backdrop-blur-md text-white font-sans font-medium rounded-full border border-primary/50 shadow-lg hover:bg-black hover:border-primary transition-all duration-300"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-2 bg-black/90 backdrop-blur-md text-white font-sans text-sm font-medium rounded-full border border-primary/50 shadow-lg hover:bg-black hover:border-primary transition-all duration-300"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent tile click from firing
+          }}
         >
           <span>Odwiedź stronę</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3.5 h-3.5" />
         </motion.a>
       )}
-    </motion.div>
+    </motion.a>
   );
 }
 

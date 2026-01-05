@@ -99,6 +99,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
 
   return (
     <div
+      ref={containerRef}
       className={cn("w-full h-[38vh] md:h-[50vh] relative overflow-hidden", className)}
       style={{
         width: '100%',
@@ -115,22 +116,31 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         if (onLeave) onLeave();
       }}
       onClick={handleClick}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
       <motion.div
         className="relative w-full h-full border-[3px] rounded-xl cursor-pointer bg-neutral-900 overflow-hidden"
         style={{ 
           width: '100%', 
           height: '100%',
+          x,
+          opacity,
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.2}
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={handleDragEnd}
       >
         {/* Image Container with Swipe Support */}
         {currentImage ? (
           <div 
-            ref={containerRef}
-            className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center touch-pan-y"
+            className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center"
             style={{
               width: 'calc(100% - 12px)',
               height: 'calc(100% - 12px + 20px)', // Extra 20px at top to show navbar
@@ -140,21 +150,12 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
               marginTop: '-20px', // Move up by 20px to show navbar
               borderRadius: '0.5rem',
             }}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
           >
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentImageIndex}
                 custom={direction}
-                className="absolute inset-0 w-full h-full"
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.2}
-                onDragStart={() => setIsDragging(true)}
-                onDragEnd={handleDragEnd}
-                style={{ x, opacity }}
+                className="absolute inset-0 w-full h-full pointer-events-none"
                 initial={(dir) => ({ 
                   opacity: 0, 
                   scale: 1.05, 
@@ -266,24 +267,6 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
               </motion.div>
             )}
 
-            {/* Swipe hint text (only on mobile, first time) */}
-            {images && images.length > 1 && !isDragging && (
-              <motion.div
-                className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: [0, 1, 1, 0], y: 0 }}
-                transition={{ 
-                  duration: 3,
-                  repeat: Infinity,
-                  repeatDelay: 5,
-                  ease: "easeInOut"
-                }}
-              >
-                <div className="px-3 py-1.5 bg-black/70 backdrop-blur-md rounded-full border border-primary/30 text-xs text-primary/80 font-medium">
-                  Przesuń, aby zmienić
-                </div>
-              </motion.div>
-            )}
 
             {/* Hover Overlay */}
             <AnimatePresence>
