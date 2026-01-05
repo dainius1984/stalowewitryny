@@ -15,6 +15,16 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
     }
   }, [isModalOpen]);
 
+  // Same active link logic as NavbarDesktop
+  const isActive = (href) => {
+    if (href.startsWith('#')) {
+      // For hash links, check if we're on home page
+      return location.pathname === '/';
+    }
+    // For route links, check if pathname matches exactly
+    return location.pathname === href;
+  };
+
   return (
     <>
       {/* Mobile Menu Button */}
@@ -124,9 +134,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                   const linkProps = link.href.startsWith('#') 
                     ? { href: link.href }
                     : { to: link.href };
-                  const isActive = link.href.startsWith('#') 
-                    ? location.pathname === '/'
-                    : location.pathname === link.href;
+                  const active = isActive(link.href);
                   
                   return (
                     <LinkComponent
@@ -135,7 +143,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         "text-base font-medium transition-all duration-300 py-4 px-6 rounded-xl font-sans touch-manipulation relative",
-                        isActive
+                        active
                           ? "text-primary bg-primary/10 border border-primary/30"
                           : "text-neutral-300 hover:text-white hover:bg-white/5 border border-transparent"
                       )}
@@ -147,7 +155,7 @@ export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick })
                       whileTap={{ scale: 0.98 }}
                     >
                       {link.label}
-                      {isActive && (
+                      {active && (
                         <span className="absolute -bottom-1 left-6 right-6 h-0.5 bg-primary rounded-full" />
                       )}
                     </LinkComponent>
