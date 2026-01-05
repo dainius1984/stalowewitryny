@@ -109,10 +109,10 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         clearTimeout(reEnableTimeoutRef.current);
       }
       
-      // Re-enable auto-rotate after 5 seconds of inactivity
+      // Re-enable auto-rotate after 3 seconds of inactivity
       reEnableTimeoutRef.current = setTimeout(() => {
         setAutoRotateEnabled(true);
-      }, 5000);
+      }, 3000);
 
       if (deltaX > 0) {
         // Swipe right - previous

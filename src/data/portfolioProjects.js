@@ -46,7 +46,7 @@ export const portfolioProjects = [
     title: "Zielone Mile",
     category: "Usługi Lokalne (Ogrody, Tarasy)",
     description: "Projektowanie i wykonawstwo ogrodów i tarasów",
-    url: "https://zielonemile.pl/",
+    url: "https://www.zielonemile.pl/",
     image: "/img/projects/zieloneportfolio.png",
     colSpan: "md:col-span-1",
     rowSpan: "md:row-span-1",
