@@ -135,11 +135,11 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   return (
     <div
       ref={containerRef}
-      className={cn("w-full h-[38vh] md:h-[50vh] relative overflow-hidden", className)}
+      className={cn("w-full h-[30vh] md:h-[50vh] relative overflow-hidden", className)}
       style={{
         width: '100%',
-        height: '38vh',
-        minHeight: '270px',
+        height: '30vh',
+        minHeight: '220px',
         backgroundColor: '#18181b',
         // Allow touch events to pass through to parent when single image on mobile
         touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : 'auto',

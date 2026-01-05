@@ -365,13 +365,13 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         "p-0 overflow-visible relative",
         "transition-all duration-700 ease-out",
         "w-full",
-        "min-h-[300px]" // Ensure minimum height for images
+        "min-h-[240px]" // Reduced height for mobile
       )}>
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
         <motion.div 
           ref={containerRef}
-          className="relative w-full max-w-[120%] min-h-[38vh] flex items-center justify-center overflow-visible mx-auto" 
+          className="relative w-full max-w-[120%] min-h-[30vh] flex items-center justify-center overflow-visible mx-auto" 
           style={{ 
             width: '100%', 
             minWidth: '100%', 
