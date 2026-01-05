@@ -9,7 +9,7 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
 
   if (!image) {
     return (
-      <div className="w-full h-[25vh] min-h-[180px] max-h-[200px] bg-neutral-900 rounded-xl flex items-center justify-center">
+      <div className="w-full h-[32vh] min-h-[220px] max-h-[260px] bg-neutral-900 rounded-xl flex items-center justify-center">
         <div className="text-neutral-500 text-xs">Brak obrazu</div>
       </div>
     );
@@ -17,7 +17,7 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
 
   return (
     <div
-      className={`w-full h-[25vh] min-h-[180px] max-h-[200px] relative cursor-pointer ${className || ''}`}
+      className={`w-full h-[32vh] min-h-[220px] max-h-[260px] relative cursor-pointer ${className || ''}`}
       style={{
         backgroundColor: '#18181b',
       }}

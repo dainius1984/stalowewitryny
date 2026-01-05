@@ -119,10 +119,10 @@ export function Hero({ onModalStateChange }) {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex-shrink-0 flex items-center justify-center"
+            className="flex-shrink-0 flex items-center justify-center -mx-2"
             style={{ pointerEvents: 'none' }} // Allow touch events to pass through
           >
-            <div style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
+            <div className="w-full px-2" style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
               <MockupGalleryMobile onModalStateChange={onModalStateChange} />
             </div>
           </motion.div>
@@ -185,7 +185,7 @@ export function Hero({ onModalStateChange }) {
                   variant="primary"
                   onClick={() => setIsSurveyOpen(true)}
                   title="Zamów darmową wycenę taniej i solidnej strony internetowej"
-                  className="text-xs px-5 py-2 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                  className="text-sm px-6 py-2.5 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
                 >
                   Darmowa Wycena
                 </Button>
