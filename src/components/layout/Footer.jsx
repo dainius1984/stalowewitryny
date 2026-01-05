@@ -57,10 +57,10 @@ export function Footer() {
 
   const footerLinks = {
     navigation: [
-      { label: "Portfolio", href: "#portfolio" },
-      { label: "Proces", href: "#proces" },
-      { label: "Cennik", href: "#cennik" },
-      { label: "Kontakt", href: "#kontakt" },
+      { label: "Strona Główna", href: "/", isHash: false },
+      { label: "Portfolio", href: "/portfolio", isHash: false },
+      { label: "O Nas", href: "/o-nas", isHash: false },
+      { label: "Kontakt", href: "/kontakt", isHash: false },
     ],
     legal: [
       { label: "Polityka Prywatności", href: "/polityka-prywatnosci" },
@@ -102,17 +102,35 @@ export function Footer() {
               Szybki dostęp
             </h3>
             <nav className="flex flex-col gap-3 items-center md:items-start">
-              {footerLinks.navigation.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleHashLink(e, link.href)}
-                  className="text-sm text-neutral-400 hover:text-white transition-colors font-sans cursor-pointer"
-                  title={`Przejdź do sekcji ${link.label}`}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {footerLinks.navigation.map((link) => {
+                if (link.isHash) {
+                  // Hash links (for homepage sections)
+                  return (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={(e) => handleHashLink(e, link.href)}
+                      className="text-sm text-neutral-400 hover:text-white transition-colors font-sans cursor-pointer"
+                      title={`Przejdź do sekcji ${link.label}`}
+                    >
+                      {link.label}
+                    </a>
+                  );
+                } else {
+                  // React Router links (subpages)
+                  return (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      onClick={scrollToTop}
+                      className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
+                      title={`Przejdź do ${link.label}`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                }
+              })}
             </nav>
           </div>
 

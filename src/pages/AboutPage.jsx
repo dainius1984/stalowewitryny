@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { Process } from "@/components/sections/Process";
 
 /**
  * About Page (O Nas)
@@ -132,6 +133,43 @@ export function AboutPage() {
                 </div>
               </motion.div>
 
+              {/* Analytics & Tracking */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.65 }}
+                className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
+              >
+                <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
+                  Analityka i Śledzenie
+                </h2>
+                <p className="text-base md:text-lg text-neutral-300 leading-relaxed mb-4">
+                  Każda strona internetowa, którą tworzę, jest wyposażona w <strong className="text-primary">Google Analytics</strong> – 
+                  profesjonalne narzędzie do analizy ruchu na stronie.
+                </p>
+                <div className="space-y-3 text-base md:text-lg text-neutral-300">
+                  <div className="flex items-start gap-3">
+                    <span className="text-primary text-2xl leading-none">✓</span>
+                    <span><strong className="text-white">Śledzenie ruchu</strong> – dowiedz się, skąd przychodzą Twoi klienci</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-primary text-2xl leading-none">✓</span>
+                    <span><strong className="text-white">Analiza zachowań</strong> – zobacz, które strony są najpopularniejsze</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-primary text-2xl leading-none">✓</span>
+                    <span><strong className="text-white">Optymalizacja konwersji</strong> – poprawiaj wyniki na podstawie danych</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-primary text-2xl leading-none">✓</span>
+                    <span><strong className="text-white">Raporty SEO</strong> – monitoruj pozycję w Google</span>
+                  </div>
+                </div>
+                <p className="text-sm text-neutral-400 mt-4 italic">
+                  Google Analytics jest w pełni zgodne z RODO i pomaga w optymalizacji strony pod kątem lepszych wyników biznesowych.
+                </p>
+              </motion.div>
+
               {/* CTA */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -151,6 +189,11 @@ export function AboutPage() {
               </motion.div>
             </div>
           </Container>
+
+          {/* Process Section */}
+          <div id="proces" className="relative z-10">
+            <Process />
+          </div>
         </main>
         
         <Footer />

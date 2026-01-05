@@ -242,7 +242,8 @@ export function Process() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             Każda <strong className="text-white">szybka witryna dla biznesu</strong> powstaje w 4 krokach. 
-            Tworzę <strong className="text-primary">strony na własność</strong> – bez ukrytych kosztów, bez abonamentu.
+            Tworzę <strong className="text-primary">strony na własność</strong> – bez ukrytych kosztów, bez abonamentu. 
+            Każda strona wyposażona jest w <strong className="text-primary">Google Analytics</strong> – profesjonalne narzędzie do analizy ruchu i optymalizacji konwersji.
           </motion.p>
         </motion.div>
 

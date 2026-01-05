@@ -87,6 +87,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const [swipeDirection, setSwipeDirection] = useState(0); // -1 for left, 1 for right
   const [isManualNavigation, setIsManualNavigation] = useState(false);
   const [isManualSwipe, setIsManualSwipe] = useState(false); // Track if swipe is manual or auto
+  const [isMobile, setIsMobile] = useState(false);
   const hoverTimeoutRef = useRef(null);
   const leaveTimeoutRef = useRef(null);
   const currentProjectRef = useRef(null);
@@ -94,6 +95,16 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const containerRef = useRef(null);
   const x = useMotionValue(0);
   const controls = useAnimation();
+  
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Minimum swipe distance to trigger project change (reduced for better UX)
   const minSwipeDistance = 20; // Lower threshold for easier swiping
@@ -365,19 +376,30 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             width: '100%', 
             minWidth: '100%', 
             x,
-            touchAction: 'pan-x', // Allow horizontal panning
+            touchAction: isMobile ? 'pan-x' : 'auto', // Allow horizontal panning on mobile only
             WebkitUserSelect: 'none',
             userSelect: 'none',
           }}
           // Use native touch handlers for mobile - more reliable than framer-motion drag
-          drag={false}
-          onTouchStart={handleNativeTouchStart}
-          onTouchMove={handleNativeTouchMove}
-          onTouchEnd={handleNativeTouchEnd}
-          // Keep framer-motion drag for desktop fallback
-          onDragStart={handleDragStart}
-          onDrag={handleDrag}
-          onDragEnd={handleDragEnd}
+          // On desktop, use framer-motion drag
+          drag={isMobile ? false : "x"}
+          dragConstraints={isMobile ? undefined : { left: 0, right: 0 }}
+          dragElastic={isMobile ? undefined : 0.3}
+          dragMomentum={isMobile ? undefined : true}
+          dragTransition={isMobile ? undefined : { 
+            bounceStiffness: 300, 
+            bounceDamping: 30,
+            power: 0.3,
+            timeConstant: 200
+          }}
+          // Native touch handlers for mobile only
+          onTouchStart={isMobile ? handleNativeTouchStart : undefined}
+          onTouchMove={isMobile ? handleNativeTouchMove : undefined}
+          onTouchEnd={isMobile ? handleNativeTouchEnd : undefined}
+          // Framer-motion drag for desktop only
+          onDragStart={isMobile ? undefined : handleDragStart}
+          onDrag={isMobile ? undefined : handleDrag}
+          onDragEnd={isMobile ? undefined : handleDragEnd}
           animate={controls}
         >
           {/* Swipe Direction Indicators */}
