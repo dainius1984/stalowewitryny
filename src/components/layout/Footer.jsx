@@ -61,20 +61,16 @@ export function Footer() {
             </h3>
             <nav className="flex flex-col gap-3">
               {footerLinks.legal.map((link) => {
-                const LinkComponent = link.href.startsWith('#') ? 'a' : Link;
-                const linkProps = link.href.startsWith('#') 
-                  ? { href: link.href }
-                  : { to: link.href };
-                
+                // All legal links are React Router routes
                 return (
-                  <LinkComponent
+                  <Link
                     key={link.href}
-                    {...linkProps}
+                    to={link.href}
                     className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
                     title={`Przeczytaj ${link.label}`}
                   >
                     {link.label}
-                  </LinkComponent>
+                  </Link>
                 );
               })}
             </nav>
