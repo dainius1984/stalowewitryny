@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
@@ -9,7 +10,7 @@ import { portfolioProjects } from "@/data/portfolioProjects";
  * Portfolio Tile Component
  * Optimized tile-based layout with hover interaction and scroll
  */
-function PortfolioTile({ project, index, isLastInRow, totalItems }) {
+export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
   const [isHovered, setIsHovered] = useState(false);
   const imageContainerRef = useRef(null);
   const tileRef = useRef(null);
@@ -194,11 +195,12 @@ function PortfolioTile({ project, index, isLastInRow, totalItems }) {
 
 /**
  * Portfolio Section Component
- * Optimized grid layout with orphan handling
+ * Shows only 6 projects with "View More" button
  */
-export function Portfolio() {
+export function Portfolio({ limit = 6 }) {
   const sortedProjects = portfolioProjects.sort((a, b) => (a.order || 0) - (b.order || 0));
-  const totalItems = sortedProjects.length;
+  const displayedProjects = sortedProjects.slice(0, limit);
+  const hasMore = sortedProjects.length > limit;
 
   return (
     <section id="portfolio" className="py-16 md:py-24 relative overflow-hidden">
@@ -247,23 +249,37 @@ export function Portfolio() {
           </motion.p>
         </motion.div>
 
-        {/* Portfolio Grid: Responsive columns with orphan handling */}
+        {/* Portfolio Grid: Show only 6 projects */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sortedProjects.map((project, index) => {
-            const remainder = totalItems % 3;
-            const isLastInRow = remainder !== 0 && index >= totalItems - remainder;
-            
-            return (
-              <PortfolioTile
-                key={project.url}
-                project={project}
-                index={index}
-                isLastInRow={isLastInRow}
-                totalItems={totalItems}
-              />
-            );
-          })}
+          {displayedProjects.map((project, index) => (
+            <PortfolioTile
+              key={project.url}
+              project={project}
+              index={index}
+              isLastInRow={false}
+              totalItems={displayedProjects.length}
+            />
+          ))}
         </div>
+
+        {/* View More Button */}
+        {hasMore && (
+          <motion.div
+            className="mt-12 md:mt-16 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-black font-sans font-semibold rounded-full hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105"
+            >
+              <span>Zobacz wszystkie realizacje</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </motion.div>
+        )}
       </Container>
     </section>
   );

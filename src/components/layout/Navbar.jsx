@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { NavbarDesktop } from "./NavbarDesktop";
 import { NavbarMobile } from "./NavbarMobile";
@@ -10,6 +11,7 @@ export function Navbar({ isModalOpen = false }) {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
+  const location = useLocation();
 
   // Handle scroll to hide/show navbar with throttling for better performance
   useEffect(() => {
@@ -60,10 +62,10 @@ export function Navbar({ isModalOpen = false }) {
   }, [lastScrollY, isModalOpen]);
 
   const navLinks = [
-    { label: "Portfolio", href: "#portfolio", title: "Zobacz przykłady taniej i solidnej strony internetowej" },
-    { label: "Proces", href: "#proces", title: "Jak powstaje ręcznie kodowana strona internetowa" },
-    { label: "Porównanie", href: "#porownanie", title: "Ręcznie kodowane vs platformy - porównanie" },
-    { label: "Kontakt", href: "#kontakt", title: "Skontaktuj się - darmowa wycena strony internetowej" },
+    { label: "Portfolio", href: "/portfolio", title: "Zobacz wszystkie realizacje portfolio", isExternal: false },
+    { label: "Proces", href: location.pathname === "/" ? "#proces" : "/#proces", title: "Jak powstaje ręcznie kodowana strona internetowa", isExternal: false },
+    { label: "Porównanie", href: location.pathname === "/" ? "#porownanie" : "/#porownanie", title: "Ręcznie kodowane vs platformy - porównanie", isExternal: false },
+    { label: "Kontakt", href: location.pathname === "/" ? "#kontakt" : "/#kontakt", title: "Skontaktuj się - darmowa wycena strony internetowej", isExternal: false },
   ];
 
   return (
@@ -105,14 +107,14 @@ export function Navbar({ isModalOpen = false }) {
             <div className="hidden md:flex items-center justify-between gap-2 md:gap-6 relative">
               {/* Left: Logo */}
               <div className="flex items-center flex-shrink-0 relative z-10">
-                <a 
-                  href="#" 
+                <Link 
+                  to="/"
                   className="text-lg md:text-xl font-black tracking-tighter font-sans text-white touch-manipulation relative z-10" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
                   STALOWEWITRYNY
                   <span className="text-primary">.</span>
-                </a>
+                </Link>
               </div>
 
               {/* Desktop Navigation */}
@@ -123,14 +125,14 @@ export function Navbar({ isModalOpen = false }) {
             <div className="md:hidden flex items-center justify-between gap-2 relative">
               {/* Left: Logo */}
               <div className="flex items-center flex-shrink-0 relative z-10">
-                <a 
-                  href="#" 
+                <Link 
+                  to="/"
                   className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation relative z-10" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
                   STALOWEWITRYNY
                   <span className="text-primary">.</span>
-                </a>
+                </Link>
               </div>
 
               {/* Right: Hamburger Menu */}

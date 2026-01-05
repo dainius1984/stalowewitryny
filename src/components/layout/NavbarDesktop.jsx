@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -6,16 +7,23 @@ export function NavbarDesktop({ navLinks, onSurveyClick }) {
     <>
       {/* Center: Navigation Links */}
       <div className="hidden md:flex items-center gap-6 flex-1 justify-center mx-4">
-        {navLinks.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="text-sm font-medium text-neutral-400 hover:text-white transition-colors font-sans whitespace-nowrap"
-            title={link.title || `Przejdź do sekcji ${link.label}`}
-          >
-            {link.label}
-          </a>
-        ))}
+        {navLinks.map((link) => {
+          const LinkComponent = link.href.startsWith('#') ? 'a' : Link;
+          const linkProps = link.href.startsWith('#') 
+            ? { href: link.href }
+            : { to: link.href };
+          
+          return (
+            <LinkComponent
+              key={link.href}
+              {...linkProps}
+              className="text-sm font-medium text-neutral-400 hover:text-white transition-colors font-sans whitespace-nowrap"
+              title={link.title || `Przejdź do sekcji ${link.label}`}
+            >
+              {link.label}
+            </LinkComponent>
+          );
+        })}
       </div>
 
       {/* Right: CTA Button */}

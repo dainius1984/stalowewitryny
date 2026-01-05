@@ -82,15 +82,15 @@ export function NavbarMobile({ navLinks, isModalOpen, onSurveyClick }) {
             >
               {/* Header with Logo and Close Button */}
               <div className="flex items-center justify-between p-4 border-b border-white/10">
-                <a 
-                  href="#" 
+                <Link 
+                  to="/"
                   className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   STALOWEWITRYNY
                   <span className="text-primary">.</span>
-                </a>
+                </Link>
                 <motion.button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2 text-white hover:text-primary transition-colors touch-manipulation"
@@ -117,22 +117,29 @@ export function NavbarMobile({ navLinks, isModalOpen, onSurveyClick }) {
                   }
                 }}
               >
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-sm font-medium text-neutral-400 hover:text-white transition-colors py-3 px-3 rounded-lg hover:bg-white/5 font-sans touch-manipulation"
-                    title={link.title || `Przejdź do sekcji ${link.label}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.2, delay: index * 0.05 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, index) => {
+                  const LinkComponent = link.href.startsWith('#') ? motion.a : motion(Link);
+                  const linkProps = link.href.startsWith('#') 
+                    ? { href: link.href }
+                    : { to: link.href };
+                  
+                  return (
+                    <LinkComponent
+                      key={link.href}
+                      {...linkProps}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-sm font-medium text-neutral-400 hover:text-white transition-colors py-3 px-3 rounded-lg hover:bg-white/5 font-sans touch-manipulation"
+                      title={link.title || `Przejdź do sekcji ${link.label}`}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ duration: 0.2, delay: index * 0.05 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {link.label}
+                    </LinkComponent>
+                  );
+                })}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
