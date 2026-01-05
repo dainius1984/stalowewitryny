@@ -1,9 +1,9 @@
 /**
  * MockupCardMobileOnly Component
- * Simple component for mobile - displays full image
+ * Simple component for mobile - displays full image with swipe support
  */
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave, onClick, project, className }) {
@@ -12,6 +12,8 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   const [isDragging, setIsDragging] = useState(false);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
   const containerRef = useRef(null);
+  const touchStartX = useRef(null);
+  const touchStartTime = useRef(null);
 
   // Auto-rotate between images (only when not dragging)
   useEffect(() => {
@@ -23,24 +25,67 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     }
   }, [isHovered, isDragging, images]);
 
-  // Handle swipe gestures - simplified for mobile
+  // Touch event handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartTime.current = Date.now();
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!touchStartX.current) return;
+    
+    // Prevent default to avoid page scrolling during horizontal swipe
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    if (Math.abs(deltaX) > 10) {
+      e.preventDefault();
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!touchStartX.current) {
+      setIsDragging(false);
+      return;
+    }
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchEndX - touchStartX.current;
+    const deltaTime = Date.now() - touchStartTime.current;
+    const velocity = Math.abs(deltaX) / deltaTime; // pixels per ms
+
+    // Threshold: 50px or fast swipe (velocity > 0.5 px/ms)
+    if (Math.abs(deltaX) > 50 || velocity > 0.5) {
+      if (deltaX > 0) {
+        // Swiped right - previous image
+        setDirection(-1);
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+      } else {
+        // Swiped left - next image
+        setDirection(1);
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartTime.current = null;
+    setIsDragging(false);
+  };
+
+  // Handle framer-motion drag for desktop
   const handleDragStart = () => {
     setIsDragging(true);
   };
 
   const handleDragEnd = (event, info) => {
     setIsDragging(false);
-    // Lower threshold for easier swiping on mobile
     const threshold = 50;
     const velocity = Math.abs(info.velocity.x);
     
     if ((Math.abs(info.offset.x) > threshold || velocity > 500) && images && images.length > 1) {
       if (info.offset.x > 0 || info.velocity.x > 500) {
-        // Swiped right - previous image
         setDirection(-1);
         setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
       } else if (info.offset.x < 0 || info.velocity.x < -500) {
-        // Swiped left - next image
         setDirection(1);
         setCurrentImageIndex((prev) => (prev + 1) % images.length);
       }
@@ -48,12 +93,11 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   };
 
   const handleClick = () => {
-    if (onClick && project) {
+    if (onClick && project && !isDragging) {
       onClick(project);
     }
   };
 
-  // Always render something, even if no images
   const currentImage = images && images.length > 0 ? images[currentImageIndex] : null;
 
   return (
@@ -76,7 +120,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
       }}
     >
       <motion.div
-        className="relative w-full h-full border-[3px] rounded-xl bg-neutral-900 overflow-hidden touch-none"
+        className="relative w-full h-full border-[3px] rounded-xl bg-neutral-900 overflow-hidden"
         style={{ 
           width: '100%', 
           height: '100%',
@@ -91,24 +135,22 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         dragMomentum={false}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
-        onClick={(e) => {
-          // Only trigger click if not dragging
-          if (!isDragging) {
-            handleClick();
-          }
-        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onClick={handleClick}
       >
-        {/* Image Container with Swipe Support */}
+        {/* Image Container */}
         {currentImage ? (
           <div 
             className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center"
             style={{
               width: 'calc(100% - 12px)',
-              height: 'calc(100% - 12px + 20px)', // Extra 20px at top to show navbar
+              height: 'calc(100% - 12px + 20px)',
               top: '6px',
               left: '6px',
               bottom: '6px',
-              marginTop: '-20px', // Move up by 20px to show navbar
+              marginTop: '-20px',
               borderRadius: '0.5rem',
             }}
           >
@@ -120,20 +162,20 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                 initial={(dir) => ({ 
                   opacity: 0, 
                   scale: 1.05, 
-                  x: dir === 1 ? 300 : -300 
+                  x: dir === 1 ? 300 : dir === -1 ? -300 : 0
                 })}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
                 exit={(dir) => ({ 
                   opacity: 0, 
                   scale: 0.95, 
-                  x: dir === 1 ? -300 : 300 
+                  x: dir === 1 ? -300 : dir === -1 ? 300 : 0
                 })}
                 transition={{ 
                   duration: 0.35,
                   ease: [0.4, 0, 0.2, 1],
                   scale: {
                     duration: 0.35,
-                    ease: [0.34, 1.56, 0.64, 1] // Spring bounce
+                    ease: [0.34, 1.56, 0.64, 1]
                   }
                 }}
               >
@@ -162,11 +204,12 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                 />
               </motion.div>
             </AnimatePresence>
+
             {/* Hover Overlay */}
             <AnimatePresence>
               {isHovered && (
                 <motion.div
-                  className="absolute inset-0 bg-black/40 flex items-center justify-center z-20"
+                  className="absolute inset-0 bg-black/40 flex items-center justify-center z-20 pointer-events-none"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -179,7 +222,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                     exit={{ scale: 0.8, y: 10 }}
                     transition={{ 
                       duration: 0.3,
-                      ease: [0.34, 1.56, 0.64, 1] // Spring bounce
+                      ease: [0.34, 1.56, 0.64, 1]
                     }}
                   >
                     Kliknij, aby otworzyć
@@ -194,7 +237,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           </div>
         )}
 
-        {/* Border with hover glow effect - limited to frame only */}
+        {/* Border with hover glow effect */}
         <div 
           className={cn(
             "absolute inset-0 border-[3px] rounded-xl pointer-events-none transition-all duration-300",
