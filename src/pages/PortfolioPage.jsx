@@ -118,7 +118,7 @@ function PortfolioListItem({ project, index }) {
         ref={imageContainerRef}
         onClick={handleImageClick}
         className={cn(
-          "flex-1 h-[300px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
+          "flex-1 h-[250px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
           "transition-all duration-500",
           // On mobile: only scrollable when overlay is hidden (after click)
           // On desktop: always scrollable
@@ -137,10 +137,15 @@ function PortfolioListItem({ project, index }) {
         <img
           src={project.image}
           alt={`${project.title} - ${project.category}`}
-          className="w-full h-auto object-cover object-top"
+          className="w-full object-cover object-top"
           style={{
+            // On mobile when overlay is visible: clip image to container height
+            // When scrollable: show full image height for scrolling
+            height: (isMobile && !isMobileOverlayHidden) ? "100%" : "auto",
             minHeight: "100%",
             display: "block",
+            objectFit: "cover",
+            objectPosition: "top center",
           }}
           loading="lazy"
           onError={(e) => {

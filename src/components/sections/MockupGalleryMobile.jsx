@@ -148,7 +148,91 @@ export function MockupGalleryMobile({ onModalStateChange }) {
     }
   }, [isManualNavigation, currentProjectIndex]);
 
-  // Handle swipe gestures for project navigation
+  // Native touch handlers for mobile swipe (backup for framer-motion)
+  const touchStartXRef = useRef(null);
+  const touchStartTimeRef = useRef(null);
+
+  const handleNativeTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartTimeRef.current = Date.now();
+    setIsSwiping(true);
+    setIsManualNavigation(true);
+    setIsManualSwipe(true);
+    if (rotationIntervalRef.current) {
+      clearInterval(rotationIntervalRef.current);
+      rotationIntervalRef.current = null;
+    }
+  };
+
+  const handleNativeTouchMove = (e) => {
+    if (!touchStartXRef.current) return;
+    const deltaX = e.touches[0].clientX - touchStartXRef.current;
+    // Update visual position during drag
+    x.set(deltaX);
+    // Set direction
+    if (deltaX > 0) {
+      setSwipeDirection(-1);
+    } else if (deltaX < 0) {
+      setSwipeDirection(1);
+    }
+    // Prevent vertical scroll during horizontal swipe
+    if (Math.abs(deltaX) > 10) {
+      e.preventDefault();
+    }
+  };
+
+  const handleNativeTouchEnd = (e) => {
+    if (!touchStartXRef.current) {
+      setIsSwiping(false);
+      return;
+    }
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchEndX - touchStartXRef.current;
+    const deltaTime = Date.now() - (touchStartTimeRef.current || 0);
+    const velocity = deltaTime > 0 ? Math.abs(deltaX) / deltaTime : 0;
+
+    setIsSwiping(false);
+
+    // Check if swipe threshold is met
+    if (Math.abs(deltaX) > minSwipeDistance || velocity > 0.3) {
+      if (deltaX > 0) {
+        // Swiped right - previous project
+        setCurrentProjectIndex((prev) => (prev - 1 + mockupProjects.length) % mockupProjects.length);
+        setSwipeDirection(-1);
+      } else {
+        // Swiped left - next project
+        setCurrentProjectIndex((prev) => (prev + 1) % mockupProjects.length);
+        setSwipeDirection(1);
+      }
+      setIsManualNavigation(true);
+      setIsManualSwipe(true);
+    } else {
+      setIsManualSwipe(false);
+    }
+
+    // Reset position
+    controls.start({ 
+      x: 0, 
+      transition: { 
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        duration: 0.25
+      } 
+    });
+    x.set(0);
+    touchStartXRef.current = null;
+    touchStartTimeRef.current = null;
+
+    // Reset swipe direction after animation
+    setTimeout(() => {
+      setSwipeDirection(0);
+      setIsManualSwipe(false);
+    }, 300);
+  };
+
+  // Handle swipe gestures for project navigation (framer-motion)
   const handleDragStart = () => {
     setIsSwiping(true);
     setIsManualNavigation(true);
@@ -286,6 +370,10 @@ export function MockupGalleryMobile({ onModalStateChange }) {
           onDragStart={handleDragStart}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
+          // Native touch handlers as backup for mobile
+          onTouchStart={handleNativeTouchStart}
+          onTouchMove={handleNativeTouchMove}
+          onTouchEnd={handleNativeTouchEnd}
           animate={controls}
         >
           {/* Swipe Direction Indicators */}

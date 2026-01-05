@@ -143,7 +143,6 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         backgroundColor: '#18181b',
         // Allow touch events to pass through to parent when single image on mobile
         touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : 'auto',
-        pointerEvents: 'auto',
       }}
       onMouseEnter={() => {
         setIsHovered(true);
@@ -160,22 +159,23 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           width: '100%', 
           height: '100%',
           cursor: isMobile ? 'default' : (isDragging ? 'grabbing' : 'grab'),
-          // On mobile with single image, allow pan-x for parent to handle swipe
-          // On desktop or multiple images, use pan-y or none to allow internal drag
+          // On mobile with single image: allow pan-x for parent drag to work
           touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        // Disable drag on mobile when single image - parent handles it
         drag={isMobile && images && images.length <= 1 ? false : "x"}
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.2}
         dragMomentum={false}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        // Remove touch handlers on mobile when single image - let parent handle
+        onTouchStart={isMobile && images && images.length <= 1 ? undefined : handleTouchStart}
+        onTouchMove={isMobile && images && images.length <= 1 ? undefined : handleTouchMove}
+        onTouchEnd={isMobile && images && images.length <= 1 ? undefined : handleTouchEnd}
         onClick={handleClick}
       >
         {/* Image Container */}
