@@ -115,28 +115,28 @@ export function PortfolioPreviewOverlay({
           />
           
           {/* Overlay Content */}
-          <div key="overlay-content" className="fixed inset-0 z-[301] flex items-center justify-center p-2 md:p-8 pointer-events-none">
+          <div key="overlay-content" className="fixed inset-0 z-[301] flex items-center justify-center p-0 md:p-8 pointer-events-none">
             <motion.div
               ref={overlayRef}
               className={cn(
-                "relative w-full max-w-7xl h-full max-h-[98vh] md:max-h-[95vh]",
-                "bg-neutral-900 rounded-[2rem] md:rounded-[2rem] border-2 border-[#CCFF00]/30",
-                "shadow-[0_0_80px_rgba(204,255,0,0.4)]",
+                "relative w-full h-full md:max-w-7xl md:h-full md:max-h-[95vh]",
+                "bg-neutral-900 rounded-none md:rounded-[2rem] border-0 md:border-2 border-[#CCFF00]/30",
+                "shadow-none md:shadow-[0_0_80px_rgba(204,255,0,0.4)]",
                 "pointer-events-auto overflow-hidden flex flex-col"
               )}
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 50 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              initial={{ opacity: 0, y: '100%' }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: '100%' }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
             >
               {/* Header Bar */}
-              <div className="flex items-center justify-between p-3 md:p-4 border-b border-white/10 bg-neutral-900/80 backdrop-blur-md relative">
+              <div className="flex items-center justify-between p-4 md:p-4 border-b border-white/10 bg-neutral-900/95 backdrop-blur-md relative">
                 {/* Swipe Indicator for Mobile */}
-                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-white/20 rounded-full md:hidden"></div>
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-white/30 rounded-full md:hidden"></div>
                 
                 {/* Project Title */}
                 <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
@@ -172,10 +172,7 @@ export function PortfolioPreviewOverlay({
                 </div>
               </div>
 
-              {/* Mobile Close Hint */}
-              <div className="md:hidden text-center py-2 border-b border-white/5">
-                <span className="text-xs text-neutral-400 font-sans">Przesuń w dół, aby zamknąć</span>
-              </div>
+              {/* Mobile Close Hint - Removed for cleaner fullscreen */}
 
               {/* Loading Indicator */}
               {isLoading && (
@@ -202,16 +199,7 @@ export function PortfolioPreviewOverlay({
                 />
               </div>
 
-              {/* Mobile Bottom Close Button */}
-              <div className="md:hidden p-4 border-t border-white/10 bg-neutral-900/80 backdrop-blur-md">
-                <button
-                  onClick={onClose}
-                  className="w-full py-3 px-6 rounded-full bg-[#CCFF00] text-black font-semibold text-base active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(204,255,0,0.4)] hover:shadow-[0_0_30px_rgba(204,255,0,0.6)] touch-manipulation"
-                  aria-label="Zamknij"
-                >
-                  Zamknij
-                </button>
-              </div>
+              {/* Mobile Bottom Close Button - Removed, using header button only for cleaner UX */}
             </motion.div>
           </div>
         </>
