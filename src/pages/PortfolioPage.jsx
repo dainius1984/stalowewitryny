@@ -1,15 +1,107 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { portfolioProjects } from "@/data/portfolioProjects";
-import { PortfolioTile } from "@/components/sections/Portfolio";
+import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+/**
+ * Portfolio List Item Component
+ * Alternating layout with image and content side-by-side
+ */
+function PortfolioListItem({ project, index }) {
+  return (
+    <motion.article
+      className={cn(
+        "flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12",
+        "bg-neutral-900/30 backdrop-blur-sm rounded-3xl border border-white/5",
+        "overflow-hidden",
+        "md:[&:nth-child(even)]:flex-row-reverse" // Reverse order for even items
+      )}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.4, 0, 0.2, 1],
+      }}
+    >
+      {/* Column A: Image */}
+      <div className="flex-1 min-h-[400px] md:min-h-[500px] lg:min-h-[600px] overflow-hidden bg-neutral-950">
+        <img
+          src={project.image}
+          alt={`${project.title} - ${project.category}`}
+          className="w-full h-full object-cover object-top"
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
+          }}
+        />
+      </div>
+
+      {/* Column B: Content */}
+      <div className="flex-1 flex flex-col justify-center p-6 md:p-8 lg:p-12">
+        {/* Category Badge */}
+        <motion.div
+          className="mb-4"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: index * 0.1 + 0.1 }}
+        >
+          <span className="inline-block px-3 py-1.5 text-xs font-semibold uppercase tracking-wider bg-primary/20 text-primary border border-primary/40 rounded-full font-sans">
+            {project.category}
+          </span>
+        </motion.div>
+
+        {/* Title */}
+        <motion.h3
+          className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-sans mb-4"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: index * 0.1 + 0.15 }}
+        >
+          {project.title}
+        </motion.h3>
+
+        {/* Description */}
+        {project.description && (
+          <motion.p
+            className="text-base md:text-lg lg:text-xl text-neutral-300 font-sans leading-relaxed mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 + 0.2 }}
+          >
+            {project.description}
+          </motion.p>
+        )}
+
+        {/* CTA Button */}
+        <motion.a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-black font-sans font-semibold rounded-full hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 w-fit"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: index * 0.1 + 0.25 }}
+        >
+          <span>Odwiedź stronę</span>
+          <ArrowRight className="w-5 h-5" />
+        </motion.a>
+      </div>
+    </motion.article>
+  );
+}
 
 /**
  * Full Portfolio Page
- * Displays all portfolio projects
+ * Displays all portfolio projects in alternating list layout
  */
 export function PortfolioPage() {
   const sortedProjects = portfolioProjects.sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -64,15 +156,13 @@ export function PortfolioPage() {
               </motion.p>
             </motion.div>
 
-            {/* Portfolio Grid: All projects */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Portfolio List: Single column with alternating layout */}
+            <div className="flex flex-col gap-8 md:gap-12">
               {sortedProjects.map((project, index) => (
-                <PortfolioTile
+                <PortfolioListItem
                   key={project.url}
                   project={project}
                   index={index}
-                  isLastInRow={false}
-                  totalItems={sortedProjects.length}
                 />
               ))}
             </div>
