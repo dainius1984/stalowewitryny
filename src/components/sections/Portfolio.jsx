@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -11,10 +11,130 @@ import { portfolioProjects } from "@/data/portfolioProjects";
  */
 function PortfolioTile({ project, index }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [canScroll, setCanScroll] = useState(false);
   const imageContainerRef = useRef(null);
+  const tileRef = useRef(null);
+
+  // Check if image is scrollable and handle scroll prevention
+  useEffect(() => {
+    if (!isHovered || !imageContainerRef.current) {
+      setCanScroll(false);
+      return;
+    }
+
+    const container = imageContainerRef.current;
+    const img = container.querySelector('img');
+    
+    if (!img) {
+      setCanScroll(false);
+      return;
+    }
+
+    // Check if image is taller than container
+    const checkScrollability = () => {
+      const containerHeight = container.clientHeight;
+      const imgHeight = img.naturalHeight || img.offsetHeight || img.scrollHeight;
+      const isScrollable = imgHeight > containerHeight;
+      setCanScroll(isScrollable);
+    };
+
+    // Check immediately and after image loads
+    if (img.complete && img.naturalHeight > 0) {
+      checkScrollability();
+    } else {
+      img.addEventListener('load', checkScrollability);
+      // Fallback timeout
+      setTimeout(checkScrollability, 500);
+    }
+
+    // Handle wheel events to prevent page scroll when scrolling in tile
+    const handleWheel = (e) => {
+      if (!canScroll) return;
+
+      const container = imageContainerRef.current;
+      if (!container) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const maxScroll = scrollHeight - clientHeight;
+      const isAtTop = scrollTop <= 1;
+      const isAtBottom = scrollTop >= maxScroll - 1;
+      const isScrollingDown = e.deltaY > 0;
+      const isScrollingUp = e.deltaY < 0;
+
+      // Always prevent default when hovering over scrollable tile
+      // This ensures page doesn't scroll when user intends to scroll tile
+      if ((isScrollingDown && !isAtBottom) || (isScrollingUp && !isAtTop)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        
+        // Apply scroll to container with smooth behavior
+        const newScrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
+        container.scrollTop = newScrollTop;
+        
+        return false;
+      } else if ((isScrollingDown && isAtBottom) || (isScrollingUp && isAtTop)) {
+        // At boundaries - allow page scroll
+        return true;
+      }
+    };
+
+    // Handle touch events for mobile
+    let touchStartY = 0;
+    let touchStartScrollTop = 0;
+
+    const handleTouchStart = (e) => {
+      if (!canScroll) return;
+      touchStartY = e.touches[0].clientY;
+      touchStartScrollTop = container.scrollTop;
+    };
+
+    const handleTouchMove = (e) => {
+      if (!canScroll) return;
+      
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY;
+      const newScrollTop = touchStartScrollTop + deltaY;
+      
+      const { scrollHeight, clientHeight } = container;
+      const maxScroll = scrollHeight - clientHeight;
+      
+      // Only prevent default if we're within scroll bounds
+      if (newScrollTop >= 0 && newScrollTop <= maxScroll) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    if (canScroll && tileRef.current && imageContainerRef.current) {
+      const tile = tileRef.current;
+      const container = imageContainerRef.current;
+      
+      // Add event listeners to both tile and container for better coverage
+      tile.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+      container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+      tile.addEventListener('touchstart', handleTouchStart, { passive: true });
+      tile.addEventListener('touchmove', handleTouchMove, { passive: false });
+      container.addEventListener('touchstart', handleTouchStart, { passive: true });
+      container.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+      return () => {
+        tile.removeEventListener('wheel', handleWheel, { capture: true });
+        container.removeEventListener('wheel', handleWheel, { capture: true });
+        tile.removeEventListener('touchstart', handleTouchStart);
+        tile.removeEventListener('touchmove', handleTouchMove);
+        container.removeEventListener('touchstart', handleTouchStart);
+        container.removeEventListener('touchmove', handleTouchMove);
+        if (img) {
+          img.removeEventListener('load', checkScrollability);
+        }
+      };
+    }
+  }, [isHovered, canScroll]);
 
   return (
     <motion.div
+      ref={tileRef}
       className="group relative h-[500px] overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 cursor-pointer"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -25,18 +145,30 @@ function PortfolioTile({ project, index }) {
         ease: [0.4, 0, 0.2, 1],
       }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        // Reset scroll position when leaving
+        if (imageContainerRef.current) {
+          imageContainerRef.current.scrollTop = 0;
+        }
+      }}
       style={{
-        cursor: isHovered ? "n-resize" : "pointer",
+        cursor: isHovered && canScroll ? "n-resize" : "pointer",
       }}
     >
       {/* Bottom Layer: Full-height website screenshot */}
       <div
         ref={imageContainerRef}
         className={cn(
-          "absolute inset-0 transition-all duration-500",
-          isHovered ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"
+          "absolute inset-0 transition-all duration-500 scrollbar-hide",
+          isHovered && canScroll 
+            ? "overflow-y-auto overflow-x-hidden" 
+            : "overflow-hidden"
         )}
+        style={{
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+        }}
       >
         <img
           src={project.image}
