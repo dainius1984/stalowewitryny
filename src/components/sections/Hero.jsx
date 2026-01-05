@@ -86,7 +86,7 @@ export function Hero({ onModalStateChange }) {
   }, [currentVideo, videos.length]);
 
   return (
-    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center pt-16 pb-4 md:py-0 flex flex-col justify-center">
+    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center pt-12 pb-2 md:py-0 flex flex-col md:justify-center">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -113,13 +113,13 @@ export function Hero({ onModalStateChange }) {
 
       <Container className="relative z-10">
         {/* Mobile Layout: Portfolio Slider First, Then Banner */}
-        <div className="md:hidden flex flex-col gap-3 justify-center min-h-[calc(100vh-5rem)] py-4">
+        <div className="md:hidden flex flex-col gap-2 justify-start min-h-screen py-2">
           {/* Portfolio Slider First on Mobile */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex-1 flex items-center justify-center"
+            className="flex-shrink-0 flex items-center justify-center"
             style={{ pointerEvents: 'none' }} // Allow touch events to pass through
           >
             <div style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
@@ -128,31 +128,31 @@ export function Hero({ onModalStateChange }) {
           </motion.div>
 
           {/* Banner Below on Mobile */}
-          <BentoCard className="flex flex-col justify-center p-4 flex-shrink-0">
-            <motion.div className="space-y-2" variants={containerVariants}>
+          <BentoCard className="w-full flex flex-col justify-center p-3 flex-shrink-0">
+            <motion.div className="space-y-1.5" variants={containerVariants}>
               <motion.h1 
-                className="text-2xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
+                className="text-xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
                 variants={itemVariants}
               >
                 Profesjonalne Strony Internetowe we Wrocławiu
               </motion.h1>
               
               <motion.h2 
-                className="text-sm font-bold text-neutral-300 mt-1 font-sans text-center"
+                className="text-xs font-bold text-neutral-300 mt-0.5 font-sans text-center"
                 variants={itemVariants}
               >
                 Nowoczesne witryny dla małych i średnich firm z Dolnego Śląska
               </motion.h2>
               
               <motion.h3 
-                className="text-xs font-semibold text-primary mt-1 font-sans text-center"
+                className="text-[10px] font-semibold text-primary mt-0.5 font-sans text-center"
                 variants={itemVariants}
               >
                 Dlaczego Stalowe Witryny? Szybkość, SEO i UX
               </motion.h3>
               
               <motion.p 
-                className="text-xs text-neutral-400 mt-1.5 font-sans text-center leading-relaxed px-2"
+                className="text-[10px] text-neutral-400 mt-1 font-sans text-center leading-relaxed px-1"
                 variants={itemVariants}
               >
                 Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100. <strong className="text-primary">Google Analytics</strong> w standardzie – śledź ruch i optymalizuj wyniki.
@@ -160,32 +160,32 @@ export function Hero({ onModalStateChange }) {
               
               {/* Trust Bar - USP Highlights */}
               <motion.div 
-                className="flex flex-wrap items-center justify-center gap-2 pt-1"
+                className="flex flex-wrap items-center justify-center gap-1.5 pt-0.5"
                 variants={itemVariants}
               >
-                <div className="flex items-center gap-1.5 text-[10px] text-neutral-300 font-sans">
-                  <Zap className="w-3 h-3 text-primary" />
+                <div className="flex items-center gap-1 text-[9px] text-neutral-300 font-sans">
+                  <Zap className="w-2.5 h-2.5 text-primary" />
                   <span className="font-medium">Szybkość 100/100</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-neutral-300 font-sans">
-                  <Shield className="w-3 h-3 text-primary" />
+                <div className="flex items-center gap-1 text-[9px] text-neutral-300 font-sans">
+                  <Shield className="w-2.5 h-2.5 text-primary" />
                   <span className="font-medium">Bez WordPressa</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-neutral-300 font-sans">
-                  <Search className="w-3 h-3 text-primary" />
+                <div className="flex items-center gap-1 text-[9px] text-neutral-300 font-sans">
+                  <Search className="w-2.5 h-2.5 text-primary" />
                   <span className="font-medium">SEO Friendly</span>
                 </div>
               </motion.div>
               
               <motion.div 
-                className="pt-2 flex justify-center"
+                className="pt-1.5 flex justify-center"
                 variants={itemVariants}
               >
                 <Button 
                   variant="primary"
                   onClick={() => setIsSurveyOpen(true)}
                   title="Zamów darmową wycenę taniej i solidnej strony internetowej"
-                  className="text-sm px-6 py-2.5 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
+                  className="text-xs px-5 py-2 shadow-[0_0_40px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.8)] transition-all duration-300"
                 >
                   Darmowa Wycena
                 </Button>
