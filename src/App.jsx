@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Lenis from "lenis";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { Portfolio } from "@/components/sections/Portfolio";
@@ -46,6 +47,9 @@ function App() {
       infinite: false,
     });
 
+    // Make lenis available globally for ScrollToTop
+    window.lenis = lenis;
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -56,11 +60,13 @@ function App() {
     // Cleanup
     return () => {
       lenis.destroy();
+      delete window.lenis;
     };
   }, []);
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/portfolio" element={<PortfolioPage />} />

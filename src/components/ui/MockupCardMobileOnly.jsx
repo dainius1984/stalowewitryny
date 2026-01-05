@@ -18,8 +18,8 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   const x = useMotionValue(0);
   const opacity = useTransform(x, [-300, 0, 300], [0, 1, 0]);
 
-  // Minimum swipe distance to trigger change (in pixels)
-  const minSwipeDistance = 50;
+  // Minimum swipe distance to trigger change (in pixels) - lowered for easier swiping
+  const minSwipeDistance = 30;
 
   // Auto-rotate between images (only when not dragging)
   useEffect(() => {
@@ -31,18 +31,30 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     }
   }, [isHovered, isDragging, images]);
 
-  // Handle swipe gestures
+  // Handle swipe gestures - improved for mobile
   const onTouchStart = (e) => {
+    // Prevent default to avoid scrolling page
+    e.stopPropagation();
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
     setIsDragging(true);
   };
 
   const onTouchMove = (e) => {
+    // Prevent default scrolling when swiping horizontally
+    if (touchStart !== null) {
+      const currentX = e.targetTouches[0].clientX;
+      const deltaX = Math.abs(currentX - touchStart);
+      // Only prevent default if horizontal movement is significant
+      if (deltaX > 10) {
+        e.preventDefault();
+      }
+    }
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const onTouchEnd = () => {
+  const onTouchEnd = (e) => {
+    e.stopPropagation();
     if (!touchStart || !touchEnd) {
       setIsDragging(false);
       return;
@@ -67,10 +79,16 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     setIsDragging(false);
   };
 
-  // Handle drag end for framer-motion drag
+  // Handle drag end for framer-motion drag - improved threshold for mobile
+  const handleDrag = (event, info) => {
+    // Update x position during drag for visual feedback
+    x.set(info.offset.x);
+  };
+
   const handleDragEnd = (event, info) => {
     setIsDragging(false);
-    const threshold = 100;
+    // Lower threshold for easier swiping on mobile
+    const threshold = 50;
     
     if (Math.abs(info.offset.x) > threshold && images && images.length > 1) {
       if (info.offset.x > 0) {
@@ -100,12 +118,13 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   return (
     <div
       ref={containerRef}
-      className={cn("w-full h-[38vh] md:h-[50vh] relative overflow-hidden", className)}
+      className={cn("w-full h-[38vh] md:h-[50vh] relative overflow-hidden touch-pan-y", className)}
       style={{
         width: '100%',
         height: '38vh',
         minHeight: '270px',
         backgroundColor: '#18181b',
+        touchAction: 'pan-y pinch-zoom', // Allow vertical scroll, prevent horizontal scroll
       }}
       onMouseEnter={() => {
         setIsHovered(true);
@@ -116,31 +135,34 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         if (onLeave) onLeave();
       }}
       onClick={handleClick}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
     >
       <motion.div
-        className="relative w-full h-full border-[3px] rounded-xl cursor-pointer bg-neutral-900 overflow-hidden"
+        className="relative w-full h-full border-[3px] rounded-xl cursor-pointer bg-neutral-900 overflow-hidden touch-none"
         style={{ 
           width: '100%', 
           height: '100%',
           x,
           opacity,
+          touchAction: 'pan-x', // Allow horizontal panning for swipe
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.2}
+        dragElastic={0.3}
+        dragMomentum={false}
         onDragStart={() => setIsDragging(true)}
+        onDrag={handleDrag}
         onDragEnd={handleDragEnd}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         {/* Image Container with Swipe Support */}
         {currentImage ? (
           <div 
-            className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center"
+            className="absolute overflow-hidden bg-neutral-950 flex items-center justify-center pointer-events-none"
             style={{
               width: 'calc(100% - 12px)',
               height: 'calc(100% - 12px + 20px)', // Extra 20px at top to show navbar
@@ -149,6 +171,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
               bottom: '6px',
               marginTop: '-20px', // Move up by 20px to show navbar
               borderRadius: '0.5rem',
+              pointerEvents: 'none', // Ensure image container doesn't block touch events
             }}
           >
             <AnimatePresence mode="wait" custom={direction}>
@@ -237,10 +260,11 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
             {/* Image Indicator Dots with swipe animation */}
             {images.length > 1 && (
               <motion.div 
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2"
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2 pointer-events-auto"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                style={{ pointerEvents: 'auto' }} // Allow clicking dots
               >
                 {images.map((_, index) => (
                   <motion.button
@@ -253,7 +277,11 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                     )}
                     onClick={(e) => {
                       e.stopPropagation();
+                      e.preventDefault();
                       setCurrentImageIndex(index);
+                    }}
+                    onTouchStart={(e) => {
+                      e.stopPropagation(); // Prevent triggering swipe
                     }}
                     initial={false}
                     animate={{
@@ -261,7 +289,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                     }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ duration: 0.2 }}
-                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                    style={{ WebkitTapHighlightColor: 'transparent', pointerEvents: 'auto' }}
                   />
                 ))}
               </motion.div>

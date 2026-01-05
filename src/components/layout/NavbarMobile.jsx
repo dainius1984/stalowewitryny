@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
-export function NavbarMobile({ navLinks, isModalOpen, onSurveyClick }) {
+export function NavbarMobile({ navLinks, location, isModalOpen, onSurveyClick }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Close mobile menu when modal opens
@@ -122,13 +124,21 @@ export function NavbarMobile({ navLinks, isModalOpen, onSurveyClick }) {
                   const linkProps = link.href.startsWith('#') 
                     ? { href: link.href }
                     : { to: link.href };
+                  const isActive = link.href.startsWith('#') 
+                    ? location.pathname === '/' && window.location.hash === link.href
+                    : location.pathname === link.href;
                   
                   return (
                     <LinkComponent
                       key={link.href}
                       {...linkProps}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-sm font-medium text-neutral-400 hover:text-white transition-colors py-3 px-3 rounded-lg hover:bg-white/5 font-sans touch-manipulation"
+                      className={cn(
+                        "text-sm font-medium transition-colors py-3 px-3 rounded-lg font-sans touch-manipulation relative",
+                        isActive
+                          ? "text-primary bg-primary/10"
+                          : "text-neutral-400 hover:text-white hover:bg-white/5"
+                      )}
                       title={link.title || `Przejdź do sekcji ${link.label}`}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -137,6 +147,9 @@ export function NavbarMobile({ navLinks, isModalOpen, onSurveyClick }) {
                       whileTap={{ scale: 0.98 }}
                     >
                       {link.label}
+                      {isActive && (
+                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-full" />
+                      )}
                     </LinkComponent>
                   );
                 })}

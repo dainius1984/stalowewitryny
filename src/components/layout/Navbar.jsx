@@ -118,7 +118,7 @@ export function Navbar({ isModalOpen = false }) {
               </div>
 
               {/* Desktop Navigation */}
-              <NavbarDesktop navLinks={navLinks} onSurveyClick={() => setIsSurveyOpen(true)} />
+              <NavbarDesktop navLinks={navLinks} location={location} onSurveyClick={() => setIsSurveyOpen(true)} />
             </div>
 
             {/* Mobile Layout - Hamburger Menu */}
@@ -136,7 +136,7 @@ export function Navbar({ isModalOpen = false }) {
               </div>
 
               {/* Right: Hamburger Menu */}
-              <NavbarMobile navLinks={navLinks} isModalOpen={isModalOpen} onSurveyClick={() => setIsSurveyOpen(true)} />
+              <NavbarMobile navLinks={navLinks} location={location} isModalOpen={isModalOpen} onSurveyClick={() => setIsSurveyOpen(true)} />
             </div>
           </nav>
           </motion.header>
