@@ -7,68 +7,30 @@ import { portfolioProjects } from "@/data/portfolioProjects";
 
 /**
  * Portfolio Tile Component
- * Modern tile-based layout with hover interaction
+ * Optimized tile-based layout with hover interaction and scroll
  */
-function PortfolioTile({ project, index }) {
+function PortfolioTile({ project, index, isLastInRow, totalItems }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [canScroll, setCanScroll] = useState(false);
-  const [isMobileOverlayHidden, setIsMobileOverlayHidden] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const imageContainerRef = useRef(null);
   const tileRef = useRef(null);
 
-  // Detect if device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // md breakpoint
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Check if image is scrollable and handle scroll prevention
-  useEffect(() => {
-    const shouldShowScroll = isMobile ? isMobileOverlayHidden : isHovered;
-    
-    if (!shouldShowScroll || !imageContainerRef.current) {
-      setCanScroll(false);
-      return;
+  // Handle mouse leave - reset scroll and show overlay
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    // Reset scroll position to top
+    if (imageContainerRef.current) {
+      imageContainerRef.current.scrollTop = 0;
     }
+  };
+
+  // Prevent page scroll when scrolling inside tile
+  useEffect(() => {
+    if (!isHovered || !imageContainerRef.current || !tileRef.current) return;
 
     const container = imageContainerRef.current;
-    const img = container.querySelector('img');
-    
-    if (!img) {
-      setCanScroll(false);
-      return;
-    }
+    const tile = tileRef.current;
 
-    // Check if image is taller than container
-    const checkScrollability = () => {
-      const containerHeight = container.clientHeight;
-      const imgHeight = img.naturalHeight || img.offsetHeight || img.scrollHeight;
-      const isScrollable = imgHeight > containerHeight;
-      setCanScroll(isScrollable);
-    };
-
-    // Check immediately and after image loads
-    if (img.complete && img.naturalHeight > 0) {
-      checkScrollability();
-    } else {
-      img.addEventListener('load', checkScrollability);
-      // Fallback timeout
-      setTimeout(checkScrollability, 500);
-    }
-
-    // Handle wheel events to prevent page scroll when scrolling in tile
     const handleWheel = (e) => {
-      if (!canScroll) return;
-
-      const container = imageContainerRef.current;
-      if (!container) return;
-
       const { scrollTop, scrollHeight, clientHeight } = container;
       const maxScroll = scrollHeight - clientHeight;
       const isAtTop = scrollTop <= 1;
@@ -76,76 +38,36 @@ function PortfolioTile({ project, index }) {
       const isScrollingDown = e.deltaY > 0;
       const isScrollingUp = e.deltaY < 0;
 
-      // Always prevent default when hovering over scrollable tile
-      // This ensures page doesn't scroll when user intends to scroll tile
+      // Prevent page scroll if scrolling within tile bounds
       if ((isScrollingDown && !isAtBottom) || (isScrollingUp && !isAtTop)) {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation();
-        
-        // Apply scroll to container with smooth behavior
-        const newScrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
-        container.scrollTop = newScrollTop;
-        
-        return false;
-      } else if ((isScrollingDown && isAtBottom) || (isScrollingUp && isAtTop)) {
-        // At boundaries - allow page scroll
-        return true;
+        container.scrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
       }
     };
 
-    // Handle touch events for mobile
-    let touchStartY = 0;
-    let touchStartScrollTop = 0;
+    tile.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
 
-    const handleTouchStart = (e) => {
-      if (!canScroll) return;
-      touchStartY = e.touches[0].clientY;
-      touchStartScrollTop = container.scrollTop;
+    return () => {
+      tile.removeEventListener('wheel', handleWheel, { capture: true });
+      container.removeEventListener('wheel', handleWheel, { capture: true });
     };
+  }, [isHovered]);
 
-    const handleTouchMove = (e) => {
-      if (!canScroll) return;
-      
-      const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
-      const newScrollTop = touchStartScrollTop + deltaY;
-      
-      const { scrollHeight, clientHeight } = container;
-      const maxScroll = scrollHeight - clientHeight;
-      
-      // Only prevent default if we're within scroll bounds
-      if (newScrollTop >= 0 && newScrollTop <= maxScroll) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
-    if (canScroll && tileRef.current && imageContainerRef.current) {
-      const tile = tileRef.current;
-      const container = imageContainerRef.current;
-      
-      // Add event listeners to both tile and container for better coverage
-      tile.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-      container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-      tile.addEventListener('touchstart', handleTouchStart, { passive: true });
-      tile.addEventListener('touchmove', handleTouchMove, { passive: false });
-      container.addEventListener('touchstart', handleTouchStart, { passive: true });
-      container.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-      return () => {
-        tile.removeEventListener('wheel', handleWheel, { capture: true });
-        container.removeEventListener('wheel', handleWheel, { capture: true });
-        tile.removeEventListener('touchstart', handleTouchStart);
-        tile.removeEventListener('touchmove', handleTouchMove);
-        container.removeEventListener('touchstart', handleTouchStart);
-        container.removeEventListener('touchmove', handleTouchMove);
-        if (img) {
-          img.removeEventListener('load', checkScrollability);
-        }
-      };
+  // Calculate column span for orphan handling
+  const getColSpan = () => {
+    const remainder = totalItems % 3;
+    const isLastItem = index === totalItems - 1;
+    const isSecondLastItem = index === totalItems - 2;
+    
+    // If last item is alone (remainder === 1), make it span full width
+    if (remainder === 1 && isLastItem) {
+      return "lg:col-span-3";
     }
-  }, [isHovered, isMobileOverlayHidden, isMobile, canScroll]);
+    // If last two items (remainder === 2), center them (keep normal span)
+    return "";
+  };
 
   return (
     <motion.a
@@ -153,60 +75,32 @@ function PortfolioTile({ project, index }) {
       target="_blank"
       rel="noopener noreferrer"
       ref={tileRef}
-      className="group relative h-[500px] overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 cursor-pointer block"
+      className={cn(
+        "group relative h-[550px] overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 cursor-pointer block",
+        getColSpan()
+      )}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration: 0.6,
-        delay: index * 0.1,
+        delay: index * 0.08,
         ease: [0.4, 0, 0.2, 1],
       }}
-      onMouseEnter={() => {
-        if (!isMobile) {
-          setIsHovered(true);
-        }
-      }}
-      onMouseLeave={() => {
-        if (!isMobile) {
-          setIsHovered(false);
-          // Reset scroll position when leaving
-          if (imageContainerRef.current) {
-            imageContainerRef.current.scrollTop = 0;
-          }
-        }
-      }}
-      onClick={(e) => {
-        if (isMobile) {
-          // On mobile, always toggle overlay and prevent navigation
-          e.preventDefault();
-          setIsMobileOverlayHidden(!isMobileOverlayHidden);
-          // If showing overlay, reset scroll
-          if (isMobileOverlayHidden) {
-            if (imageContainerRef.current) {
-              imageContainerRef.current.scrollTop = 0;
-            }
-          }
-        }
-        // On desktop, allow default link behavior (navigation)
-      }}
-      style={{
-        cursor: isHovered && canScroll ? "n-resize" : "pointer",
-      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
       title={`Zobacz ${project.title} - ${project.category}`}
     >
-      {/* Bottom Layer: Full-height website screenshot */}
+      {/* Layer 0: Full-height website screenshot */}
       <div
         ref={imageContainerRef}
         className={cn(
           "absolute inset-0 transition-all duration-500 scrollbar-hide",
-          ((isMobile && isMobileOverlayHidden) || (!isMobile && isHovered)) && canScroll 
-            ? "overflow-y-auto overflow-x-hidden" 
-            : "overflow-hidden"
+          isHovered ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"
         )}
         style={{
           scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+          WebkitOverflowScrolling: 'touch',
         }}
       >
         <img
@@ -224,9 +118,9 @@ function PortfolioTile({ project, index }) {
         />
       </div>
 
-      {/* Top Layer: Overlay with content */}
+      {/* Layer 1: Overlay with content - visible by default, hides on hover */}
       <AnimatePresence>
-        {((isMobile && !isMobileOverlayHidden) || (!isMobile && !isHovered)) && (
+        {!isHovered && (
           <motion.div
             className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/85 to-black/70 flex flex-col justify-end p-6 md:p-8 z-10"
             initial={{ opacity: 1 }}
@@ -282,23 +176,17 @@ function PortfolioTile({ project, index }) {
       </AnimatePresence>
 
       {/* Hover State: Click to visit indicator */}
-      {((isMobile && isMobileOverlayHidden) || (!isMobile && isHovered)) && (
-        <motion.a
-          href={project.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-2 bg-black/90 backdrop-blur-md text-white font-sans text-sm font-medium rounded-full border border-primary/50 shadow-lg hover:bg-black hover:border-primary transition-all duration-300"
+      {isHovered && (
+        <motion.div
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-2 bg-black/90 backdrop-blur-md text-white font-sans text-sm font-medium rounded-full border border-primary/50 shadow-lg pointer-events-none"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent tile click from firing
-          }}
         >
           <span>Odwiedź stronę</span>
           <ArrowRight className="w-3.5 h-3.5" />
-        </motion.a>
+        </motion.div>
       )}
     </motion.a>
   );
@@ -306,9 +194,12 @@ function PortfolioTile({ project, index }) {
 
 /**
  * Portfolio Section Component
- * Modern tile-based grid layout
+ * Optimized grid layout with orphan handling
  */
 export function Portfolio() {
+  const sortedProjects = portfolioProjects.sort((a, b) => (a.order || 0) - (b.order || 0));
+  const totalItems = sortedProjects.length;
+
   return (
     <section id="portfolio" className="py-16 md:py-24 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -356,17 +247,22 @@ export function Portfolio() {
           </motion.p>
         </motion.div>
 
-        {/* Portfolio Grid: 3 columns on desktop, 1 column on mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
-          {portfolioProjects
-            .sort((a, b) => (a.order || 0) - (b.order || 0))
-            .map((project, index) => (
+        {/* Portfolio Grid: Responsive columns with orphan handling */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedProjects.map((project, index) => {
+            const remainder = totalItems % 3;
+            const isLastInRow = remainder !== 0 && index >= totalItems - remainder;
+            
+            return (
               <PortfolioTile
                 key={project.url}
                 project={project}
                 index={index}
+                isLastInRow={isLastInRow}
+                totalItems={totalItems}
               />
-            ))}
+            );
+          })}
         </div>
       </Container>
     </section>
