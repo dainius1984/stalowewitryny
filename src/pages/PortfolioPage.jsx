@@ -118,7 +118,7 @@ function PortfolioListItem({ project, index }) {
         ref={imageContainerRef}
         onClick={handleImageClick}
         className={cn(
-          "flex-1 h-[180px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
+          "flex-1 h-[280px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
           "transition-all duration-500",
           // On mobile: only scrollable when overlay is hidden (after click)
           // On desktop: always scrollable
@@ -153,32 +153,86 @@ function PortfolioListItem({ project, index }) {
           }}
         />
         
-        {/* Mobile Overlay Hint - Only show on mobile when overlay is visible */}
+        {/* Mobile Overlay with Project Details - Only show on mobile when overlay is visible */}
         {isMobile && !isMobileOverlayHidden && (
           <AnimatePresence>
             <motion.div
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 flex items-end justify-center p-4 z-10 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/85 to-black/70 flex flex-col justify-end p-6 z-10"
+              initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             >
+              {/* Category Badge */}
               <motion.div
-                className="text-white text-xs font-medium px-4 py-2 bg-black/70 backdrop-blur-sm rounded-full border border-primary/40"
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 10, opacity: 0 }}
+                className="mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                Kliknij, aby zobaczyć więcej
+                <span className="inline-block px-3 py-1.5 text-xs font-semibold uppercase tracking-wider bg-primary/20 text-primary border border-primary/40 rounded-full font-sans">
+                  {project.category}
+                </span>
+              </motion.div>
+
+              {/* Title */}
+              <motion.h3
+                className="text-2xl font-bold text-white font-sans mb-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                {project.title}
+              </motion.h3>
+
+              {/* Description */}
+              {project.description && (
+                <motion.p
+                  className="text-sm text-neutral-300 font-sans leading-relaxed mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  {project.description}
+                </motion.p>
+              )}
+
+              {/* CTA Hint */}
+              <motion.div
+                className="mt-2 flex items-center gap-2 text-primary/80 text-sm font-medium"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <span>Kliknij, aby zobaczyć więcej</span>
+                <ArrowRight className="w-4 h-4" />
               </motion.div>
             </motion.div>
           </AnimatePresence>
         )}
+
+        {/* Mobile: Visit Button - Show when scrolling (overlay hidden) */}
+        {isMobile && isMobileOverlayHidden && (
+          <motion.a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-2 bg-black/90 backdrop-blur-md text-white font-sans text-sm font-medium rounded-full border border-primary/50 shadow-lg hover:bg-black/95 transition-colors"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent image click from firing
+            }}
+          >
+            <span>Odwiedź stronę</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </motion.a>
+        )}
       </div>
 
-      {/* Column B: Content - Always visible */}
-      <div className="flex-1 flex flex-col justify-center p-4 md:p-6 lg:p-8 w-full min-w-0">
+      {/* Column B: Content - Only visible on desktop */}
+      <div className="hidden md:flex flex-1 flex-col justify-center p-4 md:p-6 lg:p-8 w-full min-w-0">
         {/* Category Badge */}
         <motion.div
           className="mb-4"
