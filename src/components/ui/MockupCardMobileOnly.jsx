@@ -36,13 +36,11 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     }
   }, [isHovered, isDragging, images]);
 
-  // Touch event handlers for mobile swipe - pass through to parent on mobile
+  // Touch event handlers for mobile swipe - ONLY for multiple images
   const handleTouchStart = (e) => {
-    // On mobile, allow touch events to bubble up to parent (MockupGalleryMobile)
-    // Don't handle swipe here if only one image - let parent handle it
+    // Only handle if multiple images - single image passes to parent
     if (isMobile && images && images.length <= 1) {
-      // Don't stop propagation - let parent handle
-      return;
+      return; // Let parent handle
     }
     
     touchStartX.current = e.touches[0].clientX;
@@ -51,28 +49,24 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   };
 
   const handleTouchMove = (e) => {
-    // On mobile with single image, don't prevent default - let parent handle
+    // Only handle if multiple images
     if (isMobile && images && images.length <= 1) {
-      // Don't stop propagation - let parent handle
-      return;
+      return; // Let parent handle
     }
     
     if (!touchStartX.current) return;
     
-    // Prevent default to avoid page scrolling during horizontal swipe
     const deltaX = e.touches[0].clientX - touchStartX.current;
     if (Math.abs(deltaX) > 10) {
       e.preventDefault();
-      e.stopPropagation(); // Only stop propagation for multi-image case
     }
   };
 
   const handleTouchEnd = (e) => {
-    // On mobile with single image, don't handle - let parent handle
+    // Only handle if multiple images
     if (isMobile && images && images.length <= 1) {
       setIsDragging(false);
-      // Don't stop propagation - let parent handle
-      return;
+      return; // Let parent handle
     }
     
     if (!touchStartX.current) {
@@ -83,16 +77,13 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     const touchEndX = e.changedTouches[0].clientX;
     const deltaX = touchEndX - touchStartX.current;
     const deltaTime = Date.now() - touchStartTime.current;
-    const velocity = Math.abs(deltaX) / deltaTime; // pixels per ms
+    const velocity = Math.abs(deltaX) / deltaTime;
 
-    // Threshold: 50px or fast swipe (velocity > 0.5 px/ms)
     if (Math.abs(deltaX) > 50 || velocity > 0.5) {
       if (deltaX > 0) {
-        // Swiped right - previous image
         setDirection(-1);
         setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
       } else {
-        // Swiped left - next image
         setDirection(1);
         setCurrentImageIndex((prev) => (prev + 1) % images.length);
       }
@@ -131,39 +122,34 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   };
 
   const currentImage = images && images.length > 0 ? images[currentImageIndex] : null;
-
-  // On mobile with single image, we want to pass ALL touch events to parent
-  const shouldPassThroughToParent = isMobile && images && images.length <= 1;
+  const isSingleImageOnMobile = isMobile && images && images.length <= 1;
 
   return (
     <div
       ref={containerRef}
-      className={cn("w-full h-[30vh] md:h-[50vh] relative overflow-hidden", className)}
+      className={cn("w-full h-[30vh] md:h-[50vh] relative", className)}
       style={{
         width: '100%',
         height: '30vh',
         minHeight: '220px',
         backgroundColor: '#18181b',
-        // CRITICAL: Allow touch events to pass through to parent when single image on mobile
-        touchAction: shouldPassThroughToParent ? 'pan-x' : 'auto',
-        pointerEvents: shouldPassThroughToParent ? 'none' : 'auto', // Pass through pointer events
+        touchAction: isSingleImageOnMobile ? 'pan-x' : 'auto',
       }}
       onMouseEnter={() => {
-        if (!shouldPassThroughToParent) {
+        if (!isSingleImageOnMobile) {
           setIsHovered(true);
           if (onHover) onHover(project);
         }
       }}
       onMouseLeave={() => {
-        if (!shouldPassThroughToParent) {
+        if (!isSingleImageOnMobile) {
           setIsHovered(false);
           if (onLeave) onLeave();
         }
       }}
-      // CRITICAL: Don't attach any touch handlers when passing through to parent
-      onTouchStart={shouldPassThroughToParent ? undefined : handleTouchStart}
-      onTouchMove={shouldPassThroughToParent ? undefined : handleTouchMove}
-      onTouchEnd={shouldPassThroughToParent ? undefined : handleTouchEnd}
+      onTouchStart={isSingleImageOnMobile ? undefined : handleTouchStart}
+      onTouchMove={isSingleImageOnMobile ? undefined : handleTouchMove}
+      onTouchEnd={isSingleImageOnMobile ? undefined : handleTouchEnd}
     >
       <motion.div
         className="relative w-full h-full border-[3px] rounded-xl bg-neutral-900 overflow-hidden"
@@ -171,25 +157,21 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           width: '100%', 
           height: '100%',
           cursor: isMobile ? 'default' : (isDragging ? 'grabbing' : 'grab'),
-          // CRITICAL: Allow pan-x for parent drag to work on mobile
-          touchAction: shouldPassThroughToParent ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
-          pointerEvents: shouldPassThroughToParent ? 'none' : 'auto', // Pass through pointer events
+          touchAction: isSingleImageOnMobile ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-        // CRITICAL: Disable drag on mobile when single image - parent handles it
-        drag={shouldPassThroughToParent ? false : (isMobile ? false : "x")}
-        dragConstraints={shouldPassThroughToParent ? undefined : { left: 0, right: 0 }}
-        dragElastic={shouldPassThroughToParent ? undefined : 0.2}
-        dragMomentum={shouldPassThroughToParent ? undefined : false}
-        onDragStart={shouldPassThroughToParent ? undefined : handleDragStart}
-        onDragEnd={shouldPassThroughToParent ? undefined : handleDragEnd}
-        // CRITICAL: Remove touch handlers on mobile when single image - let parent handle
-        onTouchStart={shouldPassThroughToParent ? undefined : handleTouchStart}
-        onTouchMove={shouldPassThroughToParent ? undefined : handleTouchMove}
-        onTouchEnd={shouldPassThroughToParent ? undefined : handleTouchEnd}
-        onClick={shouldPassThroughToParent ? undefined : handleClick}
+        drag={isSingleImageOnMobile ? false : (isMobile ? false : "x")}
+        dragConstraints={isSingleImageOnMobile ? undefined : { left: 0, right: 0 }}
+        dragElastic={isSingleImageOnMobile ? undefined : 0.2}
+        dragMomentum={isSingleImageOnMobile ? undefined : false}
+        onDragStart={isSingleImageOnMobile ? undefined : handleDragStart}
+        onDragEnd={isSingleImageOnMobile ? undefined : handleDragEnd}
+        onTouchStart={isSingleImageOnMobile ? undefined : handleTouchStart}
+        onTouchMove={isSingleImageOnMobile ? undefined : handleTouchMove}
+        onTouchEnd={isSingleImageOnMobile ? undefined : handleTouchEnd}
+        onClick={isSingleImageOnMobile ? undefined : handleClick}
       >
         {/* Image Container */}
         {currentImage ? (
@@ -242,8 +224,8 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                     objectPosition: 'center center',
                     userSelect: 'none',
                     WebkitUserDrag: 'none',
-                    pointerEvents: shouldPassThroughToParent ? 'none' : 'none', // Always none for images
-                    touchAction: shouldPassThroughToParent ? 'pan-x' : 'none', // Allow parent swipe
+                    pointerEvents: 'none',
+                    touchAction: 'pan-x',
                   }}
                   loading="eager"
                   onError={(e) => {
@@ -259,7 +241,7 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
 
             {/* Hover Overlay */}
             <AnimatePresence>
-              {isHovered && (
+              {isHovered && !isSingleImageOnMobile && (
                 <motion.div
                   className="absolute inset-0 bg-black/40 flex items-center justify-center z-20 pointer-events-none"
                   initial={{ opacity: 0 }}
@@ -293,10 +275,10 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         <div 
           className={cn(
             "absolute inset-0 border-[3px] rounded-xl pointer-events-none transition-all duration-300",
-            isHovered ? "border-[#CCFF00]" : "border-white/30"
+            isHovered && !isSingleImageOnMobile ? "border-[#CCFF00]" : "border-white/30"
           )}
           style={{
-            boxShadow: isHovered 
+            boxShadow: isHovered && !isSingleImageOnMobile
               ? 'inset 0 0 15px rgba(204,255,0,0.2), 0 0 15px rgba(204,255,0,0.4)' 
               : 'none',
           }}

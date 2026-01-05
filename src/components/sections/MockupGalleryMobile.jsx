@@ -641,19 +641,37 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         }
                       }}
                     >
-                      <MockupCardMobileOnly
-                        key={`${project.alt}-mobile-${index}`}
-                        images={[project.desktopHero]} // Desktop hero section for mobile view
-                        alt={`${project.alt} - Desktop Hero`}
-                        delay={isManual ? 0 : 0.1}
-                        project={{ 
-                          ...project, 
-                          url: project.url
+                      <div 
+                        style={{ 
+                          width: '100%', 
+                          touchAction: 'pan-x',
+                          pointerEvents: 'auto',
                         }}
-                        onHover={handleHover}
-                        onLeave={handleLeave}
-                        onClick={handleClick}
-                      />
+                        onTouchStart={(e) => {
+                          console.log('🖐️ Wrapper around MockupCardMobileOnly onTouchStart', e.touches[0].clientX);
+                          handleNativeTouchStart(e);
+                        }}
+                        onTouchMove={(e) => {
+                          handleNativeTouchMove(e);
+                        }}
+                        onTouchEnd={(e) => {
+                          handleNativeTouchEnd(e);
+                        }}
+                      >
+                        <MockupCardMobileOnly
+                          key={`${project.alt}-mobile-${index}`}
+                          images={[project.desktopHero]} // Desktop hero section for mobile view
+                          alt={`${project.alt} - Desktop Hero`}
+                          delay={isManual ? 0 : 0.1}
+                          project={{ 
+                            ...project, 
+                            url: project.url
+                          }}
+                          onHover={handleHover}
+                          onLeave={handleLeave}
+                          onClick={handleClick}
+                        />
+                      </div>
                     </motion.div>
                   </AnimatePresence>
                 </motion.div>
