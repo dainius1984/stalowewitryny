@@ -56,16 +56,26 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [hoveredProject, setHoveredProject] = useState(null);
+  const [autoRotateEnabled, setAutoRotateEnabled] = useState(true);
   const touchStartX = useRef(null);
   const touchStartTime = useRef(null);
+  const autoRotateIntervalRef = useRef(null);
+  const reEnableTimeoutRef = useRef(null);
 
-  // Auto-rotate every 5 seconds
+  // Auto-rotate every 5 seconds (only when enabled)
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (!autoRotateEnabled) return;
+
+    autoRotateIntervalRef.current = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % mockupProjects.length);
     }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+
+    return () => {
+      if (autoRotateIntervalRef.current) {
+        clearInterval(autoRotateIntervalRef.current);
+      }
+    };
+  }, [autoRotateEnabled]);
 
   // Touch handlers
   const handleTouchStart = (e) => {
@@ -91,6 +101,19 @@ export function MockupGalleryMobile({ onModalStateChange }) {
 
     // Swipe threshold: 50px or fast swipe
     if (Math.abs(deltaX) > 50 || velocity > 0.3) {
+      // Disable auto-rotate when user swipes
+      setAutoRotateEnabled(false);
+      
+      // Clear existing timeout if any
+      if (reEnableTimeoutRef.current) {
+        clearTimeout(reEnableTimeoutRef.current);
+      }
+      
+      // Re-enable auto-rotate after 5 seconds of inactivity
+      reEnableTimeoutRef.current = setTimeout(() => {
+        setAutoRotateEnabled(true);
+      }, 5000);
+
       if (deltaX > 0) {
         // Swipe right - previous
         setCurrentIndex((prev) => (prev - 1 + mockupProjects.length) % mockupProjects.length);
@@ -103,6 +126,18 @@ export function MockupGalleryMobile({ onModalStateChange }) {
     touchStartX.current = null;
     touchStartTime.current = null;
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (autoRotateIntervalRef.current) {
+        clearInterval(autoRotateIntervalRef.current);
+      }
+      if (reEnableTimeoutRef.current) {
+        clearTimeout(reEnableTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleClick = (project) => {
     setHoveredProject(project);
