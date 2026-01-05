@@ -434,24 +434,6 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             })}
           </AnimatePresence>
 
-          {/* Swipe Hint */}
-          {!isManualNavigation && !isSwiping && (
-            <motion.div
-              className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: [0, 1, 1, 0], y: 0 }}
-              transition={{ 
-                duration: 3,
-                repeat: Infinity,
-                repeatDelay: 5,
-                ease: "easeInOut"
-              }}
-            >
-              <div className="px-4 py-2 bg-black/70 backdrop-blur-md rounded-full border border-primary/30 text-xs text-primary/80 font-medium">
-                Przesuń, aby zobaczyć więcej projektów
-              </div>
-            </motion.div>
-          )}
         </motion.div>
       </div>
 
