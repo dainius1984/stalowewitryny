@@ -86,7 +86,7 @@ export function Hero({ onModalStateChange }) {
   }, [currentVideo, videos.length]);
 
   return (
-    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center pt-[calc(4rem-20px)] pb-4 md:py-0 flex flex-col justify-center">
+    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center pt-16 pb-4 md:py-0 flex flex-col justify-center">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -113,7 +113,7 @@ export function Hero({ onModalStateChange }) {
 
       <Container className="relative z-10">
         {/* Mobile Layout: Portfolio Slider First, Then Banner */}
-        <div className="md:hidden flex flex-col gap-3 justify-center min-h-[calc(100vh-8rem)]">
+        <div className="md:hidden flex flex-col gap-3 justify-center min-h-[calc(100vh-5rem)] py-4">
           {/* Portfolio Slider First on Mobile */}
           <motion.div
             variants={containerVariants}

@@ -118,7 +118,7 @@ function PortfolioListItem({ project, index }) {
         ref={imageContainerRef}
         onClick={handleImageClick}
         className={cn(
-          "flex-1 h-[250px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
+          "flex-1 h-[180px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
           "transition-all duration-500",
           // On mobile: only scrollable when overlay is hidden (after click)
           // On desktop: always scrollable
