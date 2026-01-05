@@ -11,9 +11,20 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const touchStartX = useRef(null);
   const touchStartTime = useRef(null);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Auto-rotate between images (only when not dragging)
   useEffect(() => {
@@ -25,14 +36,25 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
     }
   }, [isHovered, isDragging, images]);
 
-  // Touch event handlers for mobile swipe
+  // Touch event handlers for mobile swipe - pass through to parent on mobile
   const handleTouchStart = (e) => {
+    // On mobile, allow touch events to bubble up to parent (MockupGalleryMobile)
+    // Don't handle swipe here if only one image
+    if (isMobile && images && images.length <= 1) {
+      return; // Let parent handle the swipe
+    }
+    
     touchStartX.current = e.touches[0].clientX;
     touchStartTime.current = Date.now();
     setIsDragging(true);
   };
 
   const handleTouchMove = (e) => {
+    // On mobile with single image, don't prevent default - let parent handle
+    if (isMobile && images && images.length <= 1) {
+      return;
+    }
+    
     if (!touchStartX.current) return;
     
     // Prevent default to avoid page scrolling during horizontal swipe
@@ -43,6 +65,12 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
   };
 
   const handleTouchEnd = (e) => {
+    // On mobile with single image, don't handle - let parent handle
+    if (isMobile && images && images.length <= 1) {
+      setIsDragging(false);
+      return;
+    }
+    
     if (!touchStartX.current) {
       setIsDragging(false);
       return;
@@ -124,12 +152,13 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         style={{ 
           width: '100%', 
           height: '100%',
-          cursor: isDragging ? 'grabbing' : 'grab',
+          cursor: isMobile ? 'default' : (isDragging ? 'grabbing' : 'grab'),
+          touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : 'none',
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-        drag="x"
+        drag={isMobile && images && images.length <= 1 ? false : "x"}
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.2}
         dragMomentum={false}

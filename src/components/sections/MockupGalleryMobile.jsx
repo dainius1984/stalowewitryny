@@ -244,11 +244,17 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
         <motion.div 
           ref={containerRef}
-          className="relative w-full max-w-[120%] min-h-[38vh] flex items-center justify-center overflow-visible mx-auto touch-pan-y" 
-          style={{ width: '100%', minWidth: '100%', x }}
+          className="relative w-full max-w-[120%] min-h-[38vh] flex items-center justify-center overflow-visible mx-auto" 
+          style={{ 
+            width: '100%', 
+            minWidth: '100%', 
+            x,
+            touchAction: 'pan-x', // Allow horizontal panning
+          }}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.2}
+          dragMomentum={false}
           onDragStart={handleDragStart}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
