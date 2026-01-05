@@ -30,9 +30,6 @@ export function Navbar({ isModalOpen = false }) {
       setIsVisible(true); // Always show when modal is open
       return;
     }
-
-    // Don't hide navbar on subpages - only on homepage
-    const isHomePage = location.pathname === '/';
     
     let ticking = false;
 
@@ -54,10 +51,10 @@ export function Navbar({ isModalOpen = false }) {
           if (currentScrollY < 30) {
             setIsVisible(true);
           } 
-          // Hide navbar when scrolling down ONLY on homepage, always show on subpages
-          else if (isHomePage && currentScrollY > lastScrollY && currentScrollY > 80) {
+          // Hide navbar when scrolling down, show when scrolling up
+          else if (currentScrollY > lastScrollY && currentScrollY > 80) {
             setIsVisible(false);
-          } else if (currentScrollY < lastScrollY || !isHomePage) {
+          } else if (currentScrollY < lastScrollY) {
             setIsVisible(true);
           }
           

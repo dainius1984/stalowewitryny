@@ -23,24 +23,24 @@ export function Footer() {
       <Container className="py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Brand */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <a href="#" className="inline-block" title="Stalowe Witryny - Strona główna">
               <span className="text-2xl md:text-3xl font-black tracking-tighter font-sans text-white">
                 STALOWEWITRYNY
                 <span className="text-primary">.</span>
               </span>
             </a>
-            <p className="text-sm text-neutral-400 font-sans max-w-xs">
+            <p className="text-sm text-neutral-400 font-sans max-w-xs mx-auto md:mx-0">
               Tanie i solidne strony internetowe dla firm. Kodowane ręcznie, bez abonamentu, strona na własność.
             </p>
           </div>
 
           {/* Navigation Links */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider font-sans">
-              Nawigacja
+              Szybki dostęp
             </h3>
-            <nav className="flex flex-col gap-3">
+            <nav className="flex flex-col gap-3 items-center md:items-start">
               {footerLinks.navigation.map((link) => (
                 <a
                   key={link.href}
@@ -55,11 +55,11 @@ export function Footer() {
           </div>
 
           {/* Legal Links & Service Areas */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider font-sans">
               Informacje
             </h3>
-            <nav className="flex flex-col gap-3">
+            <nav className="flex flex-col gap-3 items-center md:items-start">
               {footerLinks.legal.map((link) => {
                 // All legal links are React Router routes
                 return (
@@ -80,7 +80,7 @@ export function Footer() {
               <h4 className="text-xs font-semibold text-white uppercase tracking-wider font-sans mb-3">
                 Obsługiwane miasta
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                 {["Wrocław", "Legnica", "Lubin", "Świdnica", "Oleśnica", "Oława", "Dzierżoniów"].map((city) => (
                   <span
                     key={city}

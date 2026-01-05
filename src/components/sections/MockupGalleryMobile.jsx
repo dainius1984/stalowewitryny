@@ -95,8 +95,8 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const x = useMotionValue(0);
   const controls = useAnimation();
   
-  // Minimum swipe distance to trigger project change
-  const minSwipeDistance = 50;
+  // Minimum swipe distance to trigger project change (reduced for better UX)
+  const minSwipeDistance = 30; // Lower threshold for easier swiping
 
   // Preload all images when component mounts
   useEffect(() => {
@@ -174,7 +174,8 @@ export function MockupGalleryMobile({ onModalStateChange }) {
     const threshold = minSwipeDistance;
     const velocity = Math.abs(info.velocity.x);
     
-    if (Math.abs(info.offset.x) > threshold || velocity > 500) {
+    // Lower velocity threshold for easier quick swipes (reduced from 500 to 300)
+    if (Math.abs(info.offset.x) > threshold || velocity > 300) {
       if (info.offset.x > 0) {
         // Swiped right - previous project
         setCurrentProjectIndex((prev) => (prev - 1 + mockupProjects.length) % mockupProjects.length);
@@ -191,15 +192,23 @@ export function MockupGalleryMobile({ onModalStateChange }) {
       setIsManualSwipe(false);
     }
     
-    // Reset position
-    controls.start({ x: 0, transition: { duration: 0.3 } });
+    // Reset position with smooth spring animation
+    controls.start({ 
+      x: 0, 
+      transition: { 
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        duration: 0.25
+      } 
+    });
     x.set(0);
     
     // Reset swipe direction after animation completes
     setTimeout(() => {
       setSwipeDirection(0);
       setIsManualSwipe(false);
-    }, 400); // Match animation duration
+    }, 300); // Match animation duration
   };
 
   const handleClick = (project) => {
@@ -266,8 +275,14 @@ export function MockupGalleryMobile({ onModalStateChange }) {
           }}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.2}
-          dragMomentum={false}
+          dragElastic={0.3}
+          dragMomentum={true}
+          dragTransition={{ 
+            bounceStiffness: 300, 
+            bounceDamping: 30,
+            power: 0.3,
+            timeConstant: 200
+          }}
           onDragStart={handleDragStart}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
@@ -315,11 +330,11 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                   className="flex items-center justify-center w-full"
                   initial={(dir) => {
                     if (isManual) {
-                      // Manual swipe: Smooth slide with fade
+                      // Manual swipe: Ultra-smooth slide with minimal fade
                       return {
-                        opacity: 0,
-                        x: dir === 1 ? 50 : -50,
-                        scale: 0.95,
+                        opacity: 0.7,
+                        x: dir === 1 ? 30 : -30,
+                        scale: 0.98,
                       };
                     } else {
                       // Auto-scroll: 3D effect with blur
@@ -345,11 +360,11 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                   }}
                   exit={(dir) => {
                     if (isManual) {
-                      // Manual swipe: Smooth slide out
+                      // Manual swipe: Ultra-smooth slide out
                       return {
-                        opacity: 0,
-                        x: dir === 1 ? -50 : 50,
-                        scale: 0.95,
+                        opacity: 0.7,
+                        x: dir === 1 ? -30 : 30,
+                        scale: 0.98,
                       };
                     } else {
                       // Auto-scroll: 3D effect
@@ -365,12 +380,27 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                     }
                   }}
                   transition={isManual ? {
-                    // Manual swipe: Faster, smoother transition
-                    duration: 0.3,
-                    ease: [0.25, 0.46, 0.45, 0.94], // Smooth ease
-                    opacity: { duration: 0.25 },
-                    x: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] },
-                    scale: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] },
+                    // Manual swipe: Ultra-fast, ultra-smooth spring transition
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 35,
+                    mass: 0.8,
+                    opacity: { 
+                      duration: 0.2,
+                      ease: [0.4, 0, 0.2, 1]
+                    },
+                    x: { 
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 35,
+                      mass: 0.8
+                    },
+                    scale: { 
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 35,
+                      mass: 0.8
+                    },
                   } : {
                     // Auto-scroll: Original 3D effect
                     duration: 0.6,
@@ -412,10 +442,10 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                       className="w-full"
                       style={{ width: '100%', minWidth: '100%', display: 'flex', justifyContent: 'center' }}
                       initial={isManual ? {
-                        // Manual swipe: Simple fade and slide
-                        opacity: 0,
-                        x: swipeDirection === 1 ? 30 : -30,
-                        scale: 0.98,
+                        // Manual swipe: Minimal fade and slide for ultra-smooth feel
+                        opacity: 0.8,
+                        x: swipeDirection === 1 ? 20 : -20,
+                        scale: 0.99,
                       } : {
                         // Auto-scroll: Original effect
                         opacity: 0,
@@ -434,10 +464,10 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         filter: "blur(0px) brightness(1)",
                       }}
                       exit={isManual ? {
-                        // Manual swipe: Smooth exit
-                        opacity: 0,
-                        x: swipeDirection === 1 ? -30 : 30,
-                        scale: 0.98,
+                        // Manual swipe: Ultra-smooth exit
+                        opacity: 0.8,
+                        x: swipeDirection === 1 ? -20 : 20,
+                        scale: 0.99,
                       } : {
                         // Auto-scroll: Original exit
                         opacity: 0,
@@ -448,12 +478,27 @@ export function MockupGalleryMobile({ onModalStateChange }) {
                         filter: "blur(8px) brightness(0.7)",
                       }}
                       transition={isManual ? {
-                        // Manual swipe: Faster, smoother
-                        duration: 0.3,
-                        ease: [0.25, 0.46, 0.45, 0.94],
-                        opacity: { duration: 0.25 },
-                        x: { duration: 0.3 },
-                        scale: { duration: 0.3 },
+                        // Manual swipe: Ultra-fast spring for instant feel
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 40,
+                        mass: 0.7,
+                        opacity: { 
+                          duration: 0.15,
+                          ease: [0.4, 0, 0.2, 1]
+                        },
+                        x: { 
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 40,
+                          mass: 0.7
+                        },
+                        scale: { 
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 40,
+                          mass: 0.7
+                        },
                       } : {
                         // Auto-scroll: Original timing
                         delay: 0.1,
