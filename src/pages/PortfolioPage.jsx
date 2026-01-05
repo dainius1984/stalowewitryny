@@ -101,9 +101,11 @@ function PortfolioListItem({ project, index }) {
         ref={imageContainerRef}
         onClick={handleImageClick}
         className={cn(
-          "flex-1 h-[300px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0",
+          "flex-1 h-[300px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0 relative",
           "transition-all duration-500",
-          (isMobile && isMobileOverlayHidden) || !isMobile
+          // On mobile: only scrollable when overlay is hidden (after click)
+          // On desktop: always scrollable
+          (isMobile && isMobileOverlayHidden) || (!isMobile)
             ? "overflow-y-auto overflow-x-hidden"
             : "overflow-hidden"
         )}
@@ -126,6 +128,29 @@ function PortfolioListItem({ project, index }) {
             e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
           }}
         />
+        
+        {/* Mobile Overlay Hint - Only show on mobile when overlay is visible */}
+        {isMobile && !isMobileOverlayHidden && (
+          <AnimatePresence>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 flex items-end justify-center p-4 z-10 pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                className="text-white text-xs font-medium px-4 py-2 bg-black/70 backdrop-blur-sm rounded-full border border-primary/40"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 10, opacity: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                Kliknij, aby zobaczyć więcej
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
 
       {/* Column B: Content - Always visible */}
