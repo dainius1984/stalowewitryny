@@ -96,10 +96,14 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const x = useMotionValue(0);
   const controls = useAnimation();
   
-  // Detect mobile device
+  // Detect mobile device - ALWAYS true for MockupGalleryMobile (it's mobile-only component)
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      // This component is ONLY used on mobile, so always set to true
+      // But also check actual screen size as fallback
+      const isMobileDevice = window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(isMobileDevice);
+      console.log('📱 MockupGalleryMobile - isMobile:', isMobileDevice, 'window.innerWidth:', window.innerWidth);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -368,13 +372,19 @@ export function MockupGalleryMobile({ onModalStateChange }) {
 
   return (
     <>
-      <div className={cn(
-        "flex items-center justify-center",
-        "p-0 overflow-visible relative",
-        "transition-all duration-700 ease-out",
-        "w-full",
-        "min-h-[240px]" // Reduced height for mobile
-      )}>
+      <div 
+        className={cn(
+          "flex items-center justify-center",
+          "p-0 overflow-visible relative",
+          "transition-all duration-700 ease-out",
+          "w-full",
+          "min-h-[240px]" // Reduced height for mobile
+        )}
+        style={{
+          touchAction: 'pan-x pan-y', // Allow touch events on wrapper
+          pointerEvents: 'auto', // Ensure wrapper can receive events
+        }}
+      >
         
         {/* Mockup Gallery Container - Mobile: Shows only desktop visuals, wider container */}
         <motion.div 
@@ -384,36 +394,27 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             width: '100%', 
             minWidth: '100%', 
             x,
-            touchAction: isMobile ? 'pan-x pan-y' : 'auto', // CRITICAL: Allow horizontal AND vertical panning on mobile
+            touchAction: 'pan-x pan-y', // CRITICAL: Always allow horizontal AND vertical panning (this is mobile-only component)
             WebkitUserSelect: 'none',
             userSelect: 'none',
             WebkitTouchCallout: 'none', // Prevent iOS callout menu
             WebkitTapHighlightColor: 'transparent', // Remove tap highlight
+            pointerEvents: 'auto', // CRITICAL: Ensure this element can receive touch events
           }}
-          // CRITICAL: Disable framer-motion drag on mobile - use native touch only
+          // CRITICAL: Always disable framer-motion drag - use native touch only
           drag={false}
-          // CRITICAL: Native touch handlers for mobile - MUST be attached here
+          // CRITICAL: Native touch handlers - ALWAYS active (this is mobile-only component)
           onTouchStart={(e) => {
-            console.log('🖐️ MockupGalleryMobile onTouchStart', e.touches[0].clientX);
-            if (isMobile) {
-              handleNativeTouchStart(e);
-            }
+            console.log('🖐️ MockupGalleryMobile motion.div onTouchStart', e.touches[0].clientX, 'isMobile:', isMobile, 'target:', e.target?.className || e.target?.tagName);
+            handleNativeTouchStart(e);
           }}
           onTouchMove={(e) => {
-            if (isMobile) {
-              handleNativeTouchMove(e);
-            }
+            handleNativeTouchMove(e);
           }}
           onTouchEnd={(e) => {
-            console.log('👆 MockupGalleryMobile onTouchEnd');
-            if (isMobile) {
-              handleNativeTouchEnd(e);
-            }
+            console.log('👆 MockupGalleryMobile onTouchEnd', 'isMobile:', isMobile);
+            handleNativeTouchEnd(e);
           }}
-          // Framer-motion drag for desktop only (fallback)
-          onDragStart={isMobile ? undefined : handleDragStart}
-          onDrag={isMobile ? undefined : handleDrag}
-          onDragEnd={isMobile ? undefined : handleDragEnd}
           animate={controls}
         >
           {/* Swipe Direction Indicators */}

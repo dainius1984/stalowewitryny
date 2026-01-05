@@ -86,7 +86,7 @@ export function Hero({ onModalStateChange }) {
   }, [currentVideo, videos.length]);
 
   return (
-    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center py-4 md:py-0 flex flex-col justify-center">
+    <div className="relative overflow-hidden min-h-screen md:h-[calc(100vh-6rem)] md:flex md:items-center pt-[calc(4rem-20px)] pb-4 md:py-0 flex flex-col justify-center">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -120,8 +120,11 @@ export function Hero({ onModalStateChange }) {
             initial="hidden"
             animate="visible"
             className="flex-1 flex items-center justify-center"
+            style={{ pointerEvents: 'none' }} // Allow touch events to pass through
           >
-            <MockupGalleryMobile onModalStateChange={onModalStateChange} />
+            <div style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
+              <MockupGalleryMobile onModalStateChange={onModalStateChange} />
+            </div>
           </motion.div>
 
           {/* Banner Below on Mobile */}
