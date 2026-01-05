@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
@@ -9,13 +10,50 @@ import { cn } from "@/lib/utils";
 /**
  * Portfolio List Item Component
  * Alternating layout with image and content side-by-side
+ * Image is scrollable, content is always visible
  */
 function PortfolioListItem({ project, index }) {
+  const imageContainerRef = useRef(null);
+  const itemRef = useRef(null);
+
+  // Prevent page scroll when scrolling inside image container
+  useEffect(() => {
+    if (!imageContainerRef.current || !itemRef.current) return;
+
+    const container = imageContainerRef.current;
+    const item = itemRef.current;
+
+    const handleWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const maxScroll = scrollHeight - clientHeight;
+      const isAtTop = scrollTop <= 1;
+      const isAtBottom = scrollTop >= maxScroll - 1;
+      const isScrollingDown = e.deltaY > 0;
+      const isScrollingUp = e.deltaY < 0;
+
+      // Prevent page scroll if scrolling within container bounds
+      if ((isScrollingDown && !isAtBottom) || (isScrollingUp && !isAtTop)) {
+        e.preventDefault();
+        e.stopPropagation();
+        container.scrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
+      }
+    };
+
+    item.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+
+    return () => {
+      item.removeEventListener('wheel', handleWheel, { capture: true });
+      container.removeEventListener('wheel', handleWheel, { capture: true });
+    };
+  }, []);
+
   return (
     <motion.article
+      ref={itemRef}
       className={cn(
-        "flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12",
-        "bg-neutral-900/30 backdrop-blur-sm rounded-3xl border border-white/5",
+        "flex flex-col md:flex-row gap-4 md:gap-6",
+        "bg-neutral-900/30 backdrop-blur-sm rounded-2xl border border-white/5",
         "overflow-hidden",
         "md:[&:nth-child(even)]:flex-row-reverse" // Reverse order for even items
       )}
@@ -28,12 +66,23 @@ function PortfolioListItem({ project, index }) {
         ease: [0.4, 0, 0.2, 1],
       }}
     >
-      {/* Column A: Image */}
-      <div className="flex-1 min-h-[400px] md:min-h-[500px] lg:min-h-[600px] overflow-hidden bg-neutral-950">
+      {/* Column A: Scrollable Image */}
+      <div 
+        ref={imageContainerRef}
+        className="flex-1 h-[400px] md:h-[450px] overflow-y-auto overflow-x-hidden scrollbar-hide bg-neutral-950"
+        style={{
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
         <img
           src={project.image}
           alt={`${project.title} - ${project.category}`}
-          className="w-full h-full object-cover object-top"
+          className="w-full h-auto object-cover object-top"
+          style={{
+            minHeight: "100%",
+            display: "block",
+          }}
           loading="lazy"
           onError={(e) => {
             e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
@@ -41,8 +90,8 @@ function PortfolioListItem({ project, index }) {
         />
       </div>
 
-      {/* Column B: Content */}
-      <div className="flex-1 flex flex-col justify-center p-6 md:p-8 lg:p-12">
+      {/* Column B: Content - Always visible */}
+      <div className="flex-1 flex flex-col justify-center p-6 md:p-8">
         {/* Category Badge */}
         <motion.div
           className="mb-4"
@@ -58,7 +107,7 @@ function PortfolioListItem({ project, index }) {
 
         {/* Title */}
         <motion.h3
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-sans mb-4"
+          className="text-2xl md:text-3xl lg:text-4xl font-bold text-white font-sans mb-4"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -70,7 +119,7 @@ function PortfolioListItem({ project, index }) {
         {/* Description */}
         {project.description && (
           <motion.p
-            className="text-base md:text-lg lg:text-xl text-neutral-300 font-sans leading-relaxed mb-6"
+            className="text-base md:text-lg text-neutral-300 font-sans leading-relaxed mb-6"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
