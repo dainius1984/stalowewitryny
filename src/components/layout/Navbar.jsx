@@ -62,10 +62,10 @@ export function Navbar({ isModalOpen = false }) {
   }, [lastScrollY, isModalOpen]);
 
   const navLinks = [
+    { label: "Strona Główna", href: "/", title: "Strona główna - Stalowe Witryny", isExternal: false },
     { label: "Portfolio", href: "/portfolio", title: "Zobacz wszystkie realizacje portfolio", isExternal: false },
-    { label: "Proces", href: location.pathname === "/" ? "#proces" : "/#proces", title: "Jak powstaje ręcznie kodowana strona internetowa", isExternal: false },
-    { label: "Porównanie", href: location.pathname === "/" ? "#porownanie" : "/#porownanie", title: "Ręcznie kodowane vs platformy - porównanie", isExternal: false },
-    { label: "Kontakt", href: location.pathname === "/" ? "#kontakt" : "/#kontakt", title: "Skontaktuj się - darmowa wycena strony internetowej", isExternal: false },
+    { label: "O Nas", href: "/o-nas", title: "Poznaj nas - kim jesteśmy i co robimy", isExternal: false },
+    { label: "Kontakt", href: "/kontakt", title: "Skontaktuj się - darmowa wycena strony internetowej", isExternal: false },
   ];
 
   return (

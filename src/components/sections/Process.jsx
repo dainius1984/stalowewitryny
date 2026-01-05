@@ -252,19 +252,6 @@ export function Process() {
             <ProcessCard key={step.number} step={step} index={index} />
           ))}
         </div>
-
-        {/* Bottom CTA Hint */}
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <p className="text-neutral-500 text-sm font-sans">
-            Najedź myszką na kartę, aby zobaczyć efekt ✨
-          </p>
-        </motion.div>
       </Container>
     </section>
   );

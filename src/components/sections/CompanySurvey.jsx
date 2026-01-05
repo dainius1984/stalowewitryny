@@ -3,7 +3,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
-export function CompanySurvey({ isOpen, onClose }) {
+export function CompanySurvey({ isOpen, onClose, isFullPage = false }) {
   const [formData, setFormData] = useState({
     companySize: "",
     industry: "",
@@ -21,6 +21,120 @@ export function CompanySurvey({ isOpen, onClose }) {
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  // If full page mode, render without modal
+  if (isFullPage) {
+    return (
+      <div className="w-full max-w-4xl mx-auto px-4">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Form content will be here */}
+          <div className="space-y-6">
+            {/* Company Size */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-3">
+                Wielkość firmy
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {["1-10 pracowników", "11-50 pracowników", "51-200 pracowników", "200+ pracowników"].map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => handleChange("companySize", size)}
+                    className={cn(
+                      "p-4 rounded-lg border-2 transition-all duration-300 text-left",
+                      formData.companySize === size
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-white/10 bg-neutral-900/50 text-neutral-300 hover:border-primary/50"
+                    )}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Industry */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-3">
+                Branża
+              </label>
+              <select
+                value={formData.industry}
+                onChange={(e) => handleChange("industry", e.target.value)}
+                className="w-full p-4 rounded-lg border-2 border-white/10 bg-neutral-900/50 text-white focus:border-primary focus:outline-none transition-colors"
+              >
+                <option value="">Wybierz branżę</option>
+                <option value="e-commerce">E-commerce</option>
+                <option value="uslugi">Usługi</option>
+                <option value="produkcja">Produkcja</option>
+                <option value="technologia">Technologia</option>
+                <option value="inne">Inne</option>
+              </select>
+            </div>
+
+            {/* Website Type */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-3">
+                Typ strony
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {["Wizytówka", "Landing Page", "Sklep Online", "Blog/Portfolio"].map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => handleChange("websiteType", type)}
+                    className={cn(
+                      "p-4 rounded-lg border-2 transition-all duration-300 text-left",
+                      formData.websiteType === type
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-white/10 bg-neutral-900/50 text-neutral-300 hover:border-primary/50"
+                    )}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Budget */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-300 mb-3">
+                Budżet
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {["< 2000 zł", "2000-5000 zł", "5000-10000 zł", "> 10000 zł"].map((budget) => (
+                  <button
+                    key={budget}
+                    type="button"
+                    onClick={() => handleChange("budget", budget)}
+                    className={cn(
+                      "p-4 rounded-lg border-2 transition-all duration-300 text-left",
+                      formData.budget === budget
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-white/10 bg-neutral-900/50 text-neutral-300 hover:border-primary/50"
+                    )}
+                  >
+                    {budget}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-center pt-6">
+            <Button
+              type="submit"
+              variant="primary"
+              className="px-8 py-4 text-lg"
+            >
+              Wyślij zapytanie
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <Modal

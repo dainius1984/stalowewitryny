@@ -9,6 +9,8 @@ import { Comparison } from "@/components/sections/Comparison";
 import { Process } from "@/components/sections/Process";
 import { Footer } from "@/components/layout/Footer";
 import { PortfolioPage } from "@/pages/PortfolioPage";
+import { AboutPage } from "@/pages/AboutPage";
+import { ContactPage } from "@/pages/ContactPage";
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,6 +72,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/portfolio" element={<PortfolioPage />} />
+        <Route path="/o-nas" element={<AboutPage />} />
+        <Route path="/kontakt" element={<ContactPage />} />
       </Routes>
     </BrowserRouter>
   );
