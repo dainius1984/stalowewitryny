@@ -5,79 +5,7 @@ import { ExternalLink, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { cn } from "@/lib/utils";
-
-const projects = [
-  {
-    title: "White Effect",
-    category: "Usługi Sprzątające",
-    description: "Profesjonalne sprzątanie biur i mieszkań",
-    url: "https://www.whiteeffect.pl/",
-    image: "/img/projects/whiteportfolio.png",
-    colSpan: "md:col-span-2",
-    rowSpan: "md:row-span-2",
-    size: "large",
-  },
-  {
-    title: "Autyzm od Kuchni",
-    category: "Dieta, Zdrowie",
-    description: "Blog o zdrowym odżywianiu i diecie",
-    url: "https://www.autyzmodkuchni.pl/",
-    image: "/img/projects/autyzmportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
-    size: "medium",
-  },
-  {
-    title: "Studio Figura",
-    category: "Fitness, Wellness",
-    description: "Studio fitness i wellness - treningi personalne",
-    url: "https://www.studiofigurastablowice.pl/",
-    image: "/img/projects/figuraportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
-    size: "medium",
-  },
-  {
-    title: "Zielone Mile",
-    category: "Usługi Lokalne (Ogrody, Tarasy)",
-    description: "Projektowanie i wykonawstwo ogrodów i tarasów",
-    url: "https://zielonemile.pl/",
-    image: "/img/projects/zieloneportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
-    size: "medium",
-  },
-  {
-    title: "Fryzjerka Małgosia",
-    category: "Usługi Lokalne, Fryzjer",
-    description: "Salon fryzjerski - profesjonalne usługi",
-    url: "https://www.fryzjerkamalgosia.pl/",
-    image: "/img/projects/fryzjerkaportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
-    size: "small",
-  },
-  {
-    title: "Oranzeria",
-    category: "Usługi Kosmetyczne, Kosmetologia",
-    description: "Salon kosmetyczny - zabiegi pielęgnacyjne",
-    url: "https://oraneria.vercel.app/",
-    image: "/img/projects/oranzeriaportfolio.png",
-    colSpan: "md:col-span-1",
-    rowSpan: "md:row-span-1",
-    size: "small",
-  },
-  {
-    title: "OpenPol",
-    category: "Usługi Konsultacje AI",
-    description: "Konsultacje i rozwiązania z zakresu sztucznej inteligencji",
-    url: "https://openpol.pl/",
-    image: "/img/projects/openpolportfolio.jpg",
-    colSpan: "md:col-span-2",
-    rowSpan: "md:row-span-1",
-    size: "wide",
-  }
-];
+import { portfolioProjects } from "@/data/portfolioProjects";
 
 // Portfolio Card Component with Auto-Scroll Effect
 function PortfolioCard({ project, colSpan, index }) {
@@ -93,30 +21,50 @@ function PortfolioCard({ project, colSpan, index }) {
       const img = container.querySelector('img');
       
       if (img) {
-        // Wait for image to load to get accurate dimensions
+        // Function to check and start auto-scroll
         const checkScroll = () => {
-          const containerHeight = container.clientHeight;
-          const imgHeight = img.naturalHeight || img.offsetHeight || img.scrollHeight;
-          const maxScroll = Math.max(0, imgHeight - containerHeight);
-          
-          if (maxScroll > 0) {
-            scrollIntervalRef.current = setInterval(() => {
-              setScrollProgress((prev) => {
-                const newProgress = Math.min(prev + 0.5, 100);
-                if (container) {
-                  container.scrollTop = (newProgress / 100) * maxScroll;
-                }
-                return newProgress;
-              });
-            }, 50);
-          }
+          // Use setTimeout to ensure DOM is updated
+          setTimeout(() => {
+            const containerHeight = container.clientHeight;
+            const imgHeight = img.naturalHeight || img.offsetHeight || img.scrollHeight || img.clientHeight;
+            const maxScroll = Math.max(0, imgHeight - containerHeight);
+            
+            console.log('Scroll check:', { containerHeight, imgHeight, maxScroll });
+            
+            if (maxScroll > 0) {
+              // Clear any existing interval
+              if (scrollIntervalRef.current) {
+                clearInterval(scrollIntervalRef.current);
+              }
+              
+              scrollIntervalRef.current = setInterval(() => {
+                setScrollProgress((prev) => {
+                  const newProgress = Math.min(prev + 0.4, 100);
+                  if (container) {
+                    container.scrollTop = (newProgress / 100) * maxScroll;
+                  }
+                  return newProgress;
+                });
+              }, 50);
+            } else {
+              setScrollProgress(0);
+            }
+          }, 100);
         };
 
-        // Check immediately and after image loads
-        if (img.complete) {
+        // Check immediately if image is loaded, otherwise wait
+        if (img.complete && img.naturalHeight > 0) {
           checkScroll();
         } else {
-          img.onload = checkScroll;
+          // Wait for image to load
+          const handleLoad = () => {
+            checkScroll();
+            img.removeEventListener('load', handleLoad);
+          };
+          img.addEventListener('load', handleLoad);
+          
+          // Fallback timeout
+          setTimeout(checkScroll, 500);
         }
       }
     } else {
@@ -144,15 +92,16 @@ function PortfolioCard({ project, colSpan, index }) {
   const isSmall = project.size === "small";
   const isTall = project.rowSpan === "md:row-span-2";
   
+  // Improved card heights for better visual balance
   const cardHeight = isTall 
-    ? "md:h-[650px]" 
+    ? "md:h-[680px]" // Tall cards (2 rows) - slightly taller
     : isLarge 
-    ? "md:h-[550px]" 
+    ? "md:h-[680px]" // Large featured cards
     : isWide
-    ? "md:h-[480px]"
+    ? "md:h-[420px]" // Wide cards (2 cols, 1 row) - more compact
     : isMedium
-    ? "md:h-[500px]"
-    : "md:h-[460px]";
+    ? "md:h-[480px]" // Medium cards - balanced height
+    : "md:h-[420px]"; // Small cards - compact
 
   return (
     <motion.div
@@ -199,7 +148,8 @@ function PortfolioCard({ project, colSpan, index }) {
             "hover:border-primary/50 hover:backdrop-blur-xl hover:bg-neutral-900/95",
             "transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20",
             "group/card",
-            isLarge && "hover:scale-[1.02]",
+            "border border-white/5", // Subtle border for definition
+            isLarge && "hover:scale-[1.015] md:shadow-lg", // Featured card gets shadow
             isWide && "hover:scale-[1.01]",
             cardHeight
           )}>
@@ -234,14 +184,14 @@ function PortfolioCard({ project, colSpan, index }) {
                 isHovered 
                   ? "flex-1" 
                   : isTall 
-                    ? "h-[65%]" 
+                    ? "h-[68%]" // Tall cards - more image space
                     : isLarge 
-                      ? "h-[60%]" 
+                      ? "h-[65%]" // Large cards - more image space
                       : isWide
-                        ? "h-[55%]"
+                        ? "h-[62%]" // Wide cards - balanced
                         : isMedium
-                          ? "h-[55%]"
-                          : "h-[50%]"
+                          ? "h-[60%]" // Medium cards - balanced
+                          : "h-[58%]" // Small cards - more image space
               )}
               style={{
                 scrollBehavior: 'smooth',
@@ -251,27 +201,33 @@ function PortfolioCard({ project, colSpan, index }) {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 z-15 pointer-events-none"></div>
               
               {/* Scrollable Image Container - preserves full image structure */}
-              <div 
-                className="relative w-full z-10"
-              >
-                <motion.img
-                  src={project.image}
-                  alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
-                  className="relative w-full h-auto block"
-                  style={{
-                    objectFit: 'contain',
-                    objectPosition: 'top center',
-                    display: 'block',
-                    minHeight: '100%',
-                  }}
-                  loading="lazy"
-                  animate={isHovered ? { opacity: 1 } : { opacity: 1 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  onError={(e) => {
-                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
-                  }}
-                />
-              </div>
+              <motion.img
+                src={project.image}
+                alt={`Szybka strona internetowa ${project.category.toLowerCase()} - ${project.title} - przykład realizacji Stalowe Witryny`}
+                className="relative w-full h-auto block z-10"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: 'auto',
+                }}
+                loading="lazy"
+                animate={isHovered ? { opacity: 1 } : { opacity: 1 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                onLoad={(e) => {
+                  // Ensure image dimensions are calculated for scroll
+                  const img = e.target;
+                  if (imageContainerRef.current && img) {
+                    const container = imageContainerRef.current;
+                    const containerHeight = container.clientHeight;
+                    const imgHeight = img.naturalHeight || img.offsetHeight || img.scrollHeight;
+                    // Force reflow to ensure scroll works
+                    container.style.overflowY = imgHeight > containerHeight ? 'auto' : 'hidden';
+                  }
+                }}
+                onError={(e) => {
+                  e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%2318181b' width='800' height='600'/%3E%3Ctext fill='%23666' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E" + encodeURIComponent(project.title) + "%3C/text%3E%3C/svg%3E";
+                }}
+              />
               
               {/* Category Badge with enhanced animation */}
               <motion.div
@@ -412,7 +368,7 @@ export function Portfolio() {
       <Container className="relative z-10">
         {/* Section Header with animation */}
         <motion.div
-          className="mb-16 md:mb-20 text-center"
+          className="mb-12 md:mb-16 lg:mb-20 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -448,16 +404,18 @@ export function Portfolio() {
           </motion.p>
         </motion.div>
 
-        {/* Portfolio Grid with improved dynamic layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
-          {projects.map((project, index) => (
-            <PortfolioCard
-              key={project.url}
-              project={project}
-              colSpan={project.colSpan}
-              index={index}
-            />
-          ))}
+        {/* Portfolio Grid with improved balanced layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
+          {portfolioProjects
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map((project, index) => (
+              <PortfolioCard
+                key={project.url}
+                project={project}
+                colSpan={project.colSpan}
+                index={index}
+              />
+            ))}
         </div>
       </Container>
     </section>
