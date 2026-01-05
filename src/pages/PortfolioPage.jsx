@@ -30,13 +30,14 @@ function PortfolioListItem({ project, index }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Prevent page scroll when scrolling inside image container
+  // Prevent page scroll when scrolling inside image container - Smooth scrolling version
   useEffect(() => {
     const shouldShowScroll = isMobile ? isMobileOverlayHidden : true;
     if (!shouldShowScroll || !imageContainerRef.current || !itemRef.current) return;
 
     const container = imageContainerRef.current;
     const item = itemRef.current;
+    let rafId = null;
 
     const handleWheel = (e) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
@@ -50,7 +51,20 @@ function PortfolioListItem({ project, index }) {
       if ((isScrollingDown && !isAtBottom) || (isScrollingUp && !isAtTop)) {
         e.preventDefault();
         e.stopPropagation();
-        container.scrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
+        
+        // Use requestAnimationFrame for smooth scrolling
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        
+        rafId = requestAnimationFrame(() => {
+          const newScrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
+          container.scrollTo({
+            top: newScrollTop,
+            behavior: 'auto' // Use 'auto' for instant but smooth via RAF
+          });
+          rafId = null;
+        });
       }
     };
 
@@ -58,6 +72,9 @@ function PortfolioListItem({ project, index }) {
     container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
 
     return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
       item.removeEventListener('wheel', handleWheel, { capture: true });
       container.removeEventListener('wheel', handleWheel, { capture: true });
     };
@@ -113,6 +130,8 @@ function PortfolioListItem({ project, index }) {
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch',
           cursor: isMobile ? 'pointer' : 'default',
+          willChange: (isMobile && isMobileOverlayHidden) || !isMobile ? 'scroll-position' : 'auto',
+          transform: 'translateZ(0)', // Force GPU acceleration
         }}
       >
         <img

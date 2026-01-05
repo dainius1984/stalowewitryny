@@ -39,13 +39,15 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
     }
   };
 
-  // Prevent page scroll when scrolling inside tile
+  // Prevent page scroll when scrolling inside tile - Smooth scrolling version
   useEffect(() => {
     const shouldShowScroll = isMobile ? isMobileOverlayHidden : isHovered;
     if (!shouldShowScroll || !imageContainerRef.current || !tileRef.current) return;
 
     const container = imageContainerRef.current;
     const tile = tileRef.current;
+    let rafId = null;
+    let isScrolling = false;
 
     const handleWheel = (e) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
@@ -59,7 +61,20 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
       if ((isScrollingDown && !isAtBottom) || (isScrollingUp && !isAtTop)) {
         e.preventDefault();
         e.stopPropagation();
-        container.scrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
+        
+        // Use requestAnimationFrame for smooth scrolling
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        
+        rafId = requestAnimationFrame(() => {
+          const newScrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
+          container.scrollTo({
+            top: newScrollTop,
+            behavior: 'auto' // Use 'auto' for instant but smooth via RAF
+          });
+          rafId = null;
+        });
       }
     };
 
@@ -67,6 +82,9 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
     container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
 
     return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
       tile.removeEventListener('wheel', handleWheel, { capture: true });
       container.removeEventListener('wheel', handleWheel, { capture: true });
     };
@@ -134,6 +152,8 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
         style={{
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch',
+          willChange: ((isMobile && isMobileOverlayHidden) || (!isMobile && isHovered)) ? 'scroll-position' : 'auto',
+          transform: 'translateZ(0)', // Force GPU acceleration
         }}
       >
         <img
