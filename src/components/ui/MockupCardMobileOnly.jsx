@@ -132,6 +132,9 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
 
   const currentImage = images && images.length > 0 ? images[currentImageIndex] : null;
 
+  // On mobile with single image, we want to pass ALL touch events to parent
+  const shouldPassThroughToParent = isMobile && images && images.length <= 1;
+
   return (
     <div
       ref={containerRef}
@@ -141,17 +144,26 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
         height: '30vh',
         minHeight: '220px',
         backgroundColor: '#18181b',
-        // Allow touch events to pass through to parent when single image on mobile
-        touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : 'auto',
+        // CRITICAL: Allow touch events to pass through to parent when single image on mobile
+        touchAction: shouldPassThroughToParent ? 'pan-x' : 'auto',
+        pointerEvents: shouldPassThroughToParent ? 'none' : 'auto', // Pass through pointer events
       }}
       onMouseEnter={() => {
-        setIsHovered(true);
-        if (onHover) onHover(project);
+        if (!shouldPassThroughToParent) {
+          setIsHovered(true);
+          if (onHover) onHover(project);
+        }
       }}
       onMouseLeave={() => {
-        setIsHovered(false);
-        if (onLeave) onLeave();
+        if (!shouldPassThroughToParent) {
+          setIsHovered(false);
+          if (onLeave) onLeave();
+        }
       }}
+      // CRITICAL: Don't attach any touch handlers when passing through to parent
+      onTouchStart={shouldPassThroughToParent ? undefined : handleTouchStart}
+      onTouchMove={shouldPassThroughToParent ? undefined : handleTouchMove}
+      onTouchEnd={shouldPassThroughToParent ? undefined : handleTouchEnd}
     >
       <motion.div
         className="relative w-full h-full border-[3px] rounded-xl bg-neutral-900 overflow-hidden"
@@ -159,24 +171,25 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
           width: '100%', 
           height: '100%',
           cursor: isMobile ? 'default' : (isDragging ? 'grabbing' : 'grab'),
-          // On mobile with single image: allow pan-x for parent drag to work
-          touchAction: isMobile && images && images.length <= 1 ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
+          // CRITICAL: Allow pan-x for parent drag to work on mobile
+          touchAction: shouldPassThroughToParent ? 'pan-x' : (isMobile ? 'pan-y pan-x' : 'none'),
+          pointerEvents: shouldPassThroughToParent ? 'none' : 'auto', // Pass through pointer events
         }}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-        // Disable drag on mobile when single image - parent handles it
-        drag={isMobile && images && images.length <= 1 ? false : "x"}
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.2}
-        dragMomentum={false}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        // Remove touch handlers on mobile when single image - let parent handle
-        onTouchStart={isMobile && images && images.length <= 1 ? undefined : handleTouchStart}
-        onTouchMove={isMobile && images && images.length <= 1 ? undefined : handleTouchMove}
-        onTouchEnd={isMobile && images && images.length <= 1 ? undefined : handleTouchEnd}
-        onClick={handleClick}
+        // CRITICAL: Disable drag on mobile when single image - parent handles it
+        drag={shouldPassThroughToParent ? false : (isMobile ? false : "x")}
+        dragConstraints={shouldPassThroughToParent ? undefined : { left: 0, right: 0 }}
+        dragElastic={shouldPassThroughToParent ? undefined : 0.2}
+        dragMomentum={shouldPassThroughToParent ? undefined : false}
+        onDragStart={shouldPassThroughToParent ? undefined : handleDragStart}
+        onDragEnd={shouldPassThroughToParent ? undefined : handleDragEnd}
+        // CRITICAL: Remove touch handlers on mobile when single image - let parent handle
+        onTouchStart={shouldPassThroughToParent ? undefined : handleTouchStart}
+        onTouchMove={shouldPassThroughToParent ? undefined : handleTouchMove}
+        onTouchEnd={shouldPassThroughToParent ? undefined : handleTouchEnd}
+        onClick={shouldPassThroughToParent ? undefined : handleClick}
       >
         {/* Image Container */}
         {currentImage ? (
@@ -229,7 +242,8 @@ export function MockupCardMobileOnly({ images, alt, delay = 0, onHover, onLeave,
                     objectPosition: 'center center',
                     userSelect: 'none',
                     WebkitUserDrag: 'none',
-                    pointerEvents: 'none',
+                    pointerEvents: shouldPassThroughToParent ? 'none' : 'none', // Always none for images
+                    touchAction: shouldPassThroughToParent ? 'pan-x' : 'none', // Allow parent swipe
                   }}
                   loading="eager"
                   onError={(e) => {

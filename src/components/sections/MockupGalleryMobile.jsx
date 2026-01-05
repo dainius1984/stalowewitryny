@@ -164,6 +164,8 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const touchStartTimeRef = useRef(null);
 
   const handleNativeTouchStart = (e) => {
+    console.log('🖐️ handleNativeTouchStart', e.touches[0].clientX);
+    // CRITICAL: Don't prevent default here - let it bubble naturally
     touchStartXRef.current = e.touches[0].clientX;
     touchStartTimeRef.current = Date.now();
     setIsSwiping(true);
@@ -178,6 +180,14 @@ export function MockupGalleryMobile({ onModalStateChange }) {
   const handleNativeTouchMove = (e) => {
     if (!touchStartXRef.current) return;
     const deltaX = e.touches[0].clientX - touchStartXRef.current;
+    const deltaY = Math.abs(e.touches[0].clientY - (e.touches[0].clientY || 0));
+    
+    // CRITICAL: Only prevent default if horizontal swipe is dominant
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+      e.preventDefault(); // Prevent vertical scroll during horizontal swipe
+      e.stopPropagation(); // Stop event from bubbling
+    }
+    
     // Update visual position during drag for smooth feedback
     x.set(deltaX);
     // Set direction
@@ -186,14 +196,10 @@ export function MockupGalleryMobile({ onModalStateChange }) {
     } else if (deltaX < 0) {
       setSwipeDirection(1);
     }
-    // Prevent vertical scroll during horizontal swipe
-    if (Math.abs(deltaX) > 5) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
   };
 
   const handleNativeTouchEnd = (e) => {
+    console.log('👆 handleNativeTouchEnd');
     if (!touchStartXRef.current) {
       setIsSwiping(false);
       return;
@@ -204,16 +210,17 @@ export function MockupGalleryMobile({ onModalStateChange }) {
     const deltaTime = Date.now() - (touchStartTimeRef.current || 0);
     const velocity = deltaTime > 0 ? Math.abs(deltaX) / deltaTime : 0;
 
+    console.log(`📊 Swipe stats: deltaX=${deltaX.toFixed(1)}px, velocity=${velocity.toFixed(3)}px/ms, threshold=${minSwipeDistance}px`);
+
     setIsSwiping(false);
 
-    // Check if swipe threshold is met - lower threshold for better responsiveness
-    const swipeThreshold = Math.max(minSwipeDistance, Math.abs(deltaX) * 0.3); // Dynamic threshold
-    if (Math.abs(deltaX) > swipeThreshold || velocity > 0.2) {
+    // CRITICAL: Lower threshold for easier swiping - check distance OR velocity
+    if (Math.abs(deltaX) > minSwipeDistance || velocity > 0.15) {
       if (deltaX > 0) {
         // Swiped right - previous project
         setCurrentProjectIndex((prev) => {
           const newIndex = (prev - 1 + mockupProjects.length) % mockupProjects.length;
-          console.log(`Swipe right: ${prev} -> ${newIndex} (${mockupProjects[newIndex].title})`);
+          console.log(`✅ Swipe RIGHT: ${prev} -> ${newIndex} (${mockupProjects[newIndex].title})`);
           return newIndex;
         });
         setSwipeDirection(-1);
@@ -221,7 +228,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         // Swiped left - next project
         setCurrentProjectIndex((prev) => {
           const newIndex = (prev + 1) % mockupProjects.length;
-          console.log(`Swipe left: ${prev} -> ${newIndex} (${mockupProjects[newIndex].title})`);
+          console.log(`✅ Swipe LEFT: ${prev} -> ${newIndex} (${mockupProjects[newIndex].title})`);
           return newIndex;
         });
         setSwipeDirection(1);
@@ -229,6 +236,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
       setIsManualNavigation(true);
       setIsManualSwipe(true);
     } else {
+      console.log('❌ Swipe too small, ignoring');
       setIsManualSwipe(false);
     }
 
@@ -376,27 +384,33 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             width: '100%', 
             minWidth: '100%', 
             x,
-            touchAction: isMobile ? 'pan-x' : 'auto', // Allow horizontal panning on mobile only
+            touchAction: isMobile ? 'pan-x pan-y' : 'auto', // CRITICAL: Allow horizontal AND vertical panning on mobile
             WebkitUserSelect: 'none',
             userSelect: 'none',
+            WebkitTouchCallout: 'none', // Prevent iOS callout menu
+            WebkitTapHighlightColor: 'transparent', // Remove tap highlight
           }}
-          // Use native touch handlers for mobile - more reliable than framer-motion drag
-          // On desktop, use framer-motion drag
-          drag={isMobile ? false : "x"}
-          dragConstraints={isMobile ? undefined : { left: 0, right: 0 }}
-          dragElastic={isMobile ? undefined : 0.3}
-          dragMomentum={isMobile ? undefined : true}
-          dragTransition={isMobile ? undefined : { 
-            bounceStiffness: 300, 
-            bounceDamping: 30,
-            power: 0.3,
-            timeConstant: 200
+          // CRITICAL: Disable framer-motion drag on mobile - use native touch only
+          drag={false}
+          // CRITICAL: Native touch handlers for mobile - MUST be attached here
+          onTouchStart={(e) => {
+            console.log('🖐️ MockupGalleryMobile onTouchStart', e.touches[0].clientX);
+            if (isMobile) {
+              handleNativeTouchStart(e);
+            }
           }}
-          // Native touch handlers for mobile only
-          onTouchStart={isMobile ? handleNativeTouchStart : undefined}
-          onTouchMove={isMobile ? handleNativeTouchMove : undefined}
-          onTouchEnd={isMobile ? handleNativeTouchEnd : undefined}
-          // Framer-motion drag for desktop only
+          onTouchMove={(e) => {
+            if (isMobile) {
+              handleNativeTouchMove(e);
+            }
+          }}
+          onTouchEnd={(e) => {
+            console.log('👆 MockupGalleryMobile onTouchEnd');
+            if (isMobile) {
+              handleNativeTouchEnd(e);
+            }
+          }}
+          // Framer-motion drag for desktop only (fallback)
           onDragStart={isMobile ? undefined : handleDragStart}
           onDrag={isMobile ? undefined : handleDrag}
           onDragEnd={isMobile ? undefined : handleDragEnd}
