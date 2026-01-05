@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -11,14 +11,29 @@ import { cn } from "@/lib/utils";
  * Portfolio List Item Component
  * Alternating layout with image and content side-by-side
  * Image is scrollable, content is always visible
+ * On mobile: image is clipped by default, click to toggle scroll
  */
 function PortfolioListItem({ project, index }) {
+  const [isMobileOverlayHidden, setIsMobileOverlayHidden] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const imageContainerRef = useRef(null);
   const itemRef = useRef(null);
 
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Prevent page scroll when scrolling inside image container
   useEffect(() => {
-    if (!imageContainerRef.current || !itemRef.current) return;
+    const shouldShowScroll = isMobile ? isMobileOverlayHidden : true;
+    if (!shouldShowScroll || !imageContainerRef.current || !itemRef.current) return;
 
     const container = imageContainerRef.current;
     const item = itemRef.current;
@@ -46,7 +61,21 @@ function PortfolioListItem({ project, index }) {
       item.removeEventListener('wheel', handleWheel, { capture: true });
       container.removeEventListener('wheel', handleWheel, { capture: true });
     };
-  }, []);
+  }, [isMobileOverlayHidden, isMobile]);
+
+  // Handle mobile click to toggle overlay
+  const handleImageClick = (e) => {
+    if (isMobile) {
+      e.preventDefault();
+      setIsMobileOverlayHidden(!isMobileOverlayHidden);
+      // If showing overlay again, reset scroll
+      if (isMobileOverlayHidden) {
+        if (imageContainerRef.current) {
+          imageContainerRef.current.scrollTop = 0;
+        }
+      }
+    }
+  };
 
   return (
     <motion.article
@@ -55,7 +84,7 @@ function PortfolioListItem({ project, index }) {
         "flex flex-col md:flex-row gap-4 md:gap-6",
         "bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl border border-white/5",
         "overflow-hidden",
-        "w-full max-w-full",
+        "w-full",
         "md:[&:nth-child(even)]:flex-row-reverse" // Reverse order for even items
       )}
       initial={{ opacity: 0, y: 40 }}
@@ -70,10 +99,18 @@ function PortfolioListItem({ project, index }) {
       {/* Column A: Scrollable Image */}
       <div 
         ref={imageContainerRef}
-        className="flex-1 h-[300px] md:h-[450px] overflow-y-auto overflow-x-hidden scrollbar-hide bg-neutral-950 w-full"
+        onClick={handleImageClick}
+        className={cn(
+          "flex-1 h-[300px] md:h-[450px] scrollbar-hide bg-neutral-950 w-full min-w-0",
+          "transition-all duration-500",
+          (isMobile && isMobileOverlayHidden) || !isMobile
+            ? "overflow-y-auto overflow-x-hidden"
+            : "overflow-hidden"
+        )}
         style={{
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch',
+          cursor: isMobile ? 'pointer' : 'default',
         }}
       >
         <img
@@ -92,7 +129,7 @@ function PortfolioListItem({ project, index }) {
       </div>
 
       {/* Column B: Content - Always visible */}
-      <div className="flex-1 flex flex-col justify-center p-4 md:p-6 lg:p-8 w-full">
+      <div className="flex-1 flex flex-col justify-center p-4 md:p-6 lg:p-8 w-full min-w-0">
         {/* Category Badge */}
         <motion.div
           className="mb-4"
@@ -161,17 +198,17 @@ export function PortfolioPage() {
       {/* Efekt ziarna na tle */}
       <div className="bg-grain" />
       
-      <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
+      <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col overflow-x-hidden w-full">
         <Navbar isModalOpen={false} />
         
-        <main className="pt-24 md:pt-28 flex-grow relative">
+        <main className="pt-24 md:pt-28 flex-grow relative w-full overflow-x-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
           </div>
 
-          <Container className="relative z-10 py-12 md:py-16 px-4 md:px-6">
+          <Container className="relative z-10 py-12 md:py-16">
             {/* Page Header */}
             <motion.div
               className="mb-12 md:mb-16 lg:mb-20 text-center"
@@ -207,7 +244,7 @@ export function PortfolioPage() {
             </motion.div>
 
             {/* Portfolio List: Single column with alternating layout */}
-            <div className="flex flex-col gap-6 md:gap-8 lg:gap-12">
+            <div className="flex flex-col gap-6 md:gap-8 lg:gap-12 w-full">
               {sortedProjects.map((project, index) => (
                 <PortfolioListItem
                   key={project.url}
