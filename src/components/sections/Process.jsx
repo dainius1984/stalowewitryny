@@ -9,28 +9,28 @@ const steps = [
     title: "Analiza",
     description: "Poznaję Twój biznes i cele sprzedażowe. Bez strategii nie ma efektów.",
     image: "/img/Analysis.png",
-    alt: "Analiza biznesowa - proces tworzenia taniej i solidnej strony internetowej dla firm",
+    alt: "Analiza biznesowa - tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk",
   },
   {
     number: "02",
     title: "Projekt",
     description: "Tworzę unikalny design UX/UI. Twoja strona nie będzie wyglądać jak tysiące innych.",
     image: "/img/Design Project.png",
-    alt: "Projektowanie UX/UI - proces tworzenia taniej i solidnej strony internetowej dla firm",
+    alt: "Projektowanie UX/UI - tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk",
   },
   {
     number: "03",
     title: "Kodowanie",
     description: "Piszę czysty kod od zera. Żadnych ciężkich wtyczek, tylko czysta szybkość i bezpieczeństwo.",
     image: "/img/Coding.png",
-    alt: "Kodowanie strony internetowej - proces tworzenia taniej i solidnej strony internetowej dla firm",
+    alt: "Kodowanie strony internetowej - tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk",
   },
   {
     number: "04",
     title: "Wsparcie",
     description: "Opiekuję się Twoją stroną po wdrożeniu. Jestem Twoim partnerem technologicznym.",
     image: "/img/Security.png",
-    alt: "Wsparcie techniczne - proces tworzenia taniej i solidnej strony internetowej dla firm",
+    alt: "Wsparcie techniczne - tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk",
   },
 ];
 

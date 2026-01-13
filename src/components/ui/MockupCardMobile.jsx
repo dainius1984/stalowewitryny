@@ -190,7 +190,7 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
               <div ref={containerRef} className="absolute inset-0 w-full h-full">
                 <img
                   src={images[currentImageIndex]}
-                  alt={`${alt} - Przykład szybkiej strony internetowej - widok ${currentImageIndex + 1}`}
+                  alt={`${alt} - Tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk - widok ${currentImageIndex + 1}`}
                   style={{ 
                     display: 'block',
                     width: '100%',

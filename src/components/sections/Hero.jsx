@@ -134,22 +134,22 @@ export function Hero({ onModalStateChange }) {
                 className="text-xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
                 variants={itemVariants}
               >
-                Profesjonalne Strony Internetowe we Wrocławiu
+                Tanie i Szybkie Strony Internetowe dla firm z Wrocławia
               </motion.h1>
               
               <motion.h2 
                 className="text-xs font-bold text-neutral-300 mt-0.5 font-sans text-center"
                 variants={itemVariants}
               >
-                Nowoczesne witryny dla małych i średnich firm z Dolnego Śląska
+                Dlaczego szybkie strony (React) to lepszy wybór?
               </motion.h2>
               
-              <motion.h3 
+              <motion.p 
                 className="text-[10px] font-semibold text-primary mt-0.5 font-sans text-center"
                 variants={itemVariants}
               >
-                Dlaczego Stalowe Witryny? Szybkość, SEO i UX
-              </motion.h3>
+                Tworzenie stron www bez abonamentu | Lokalny deweloper z Wrocławia
+              </motion.p>
               
               <motion.p 
                 className="text-[10px] text-neutral-400 mt-1 font-sans text-center leading-relaxed px-1"
@@ -212,22 +212,22 @@ export function Hero({ onModalStateChange }) {
                   className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white max-w-full"
                   variants={itemVariants}
                 >
-                  Profesjonalne Strony Internetowe we Wrocławiu
+                  Tanie i Szybkie Strony Internetowe dla firm z Wrocławia
                 </motion.h1>
                 
                 <motion.h2 
                   className="text-xl md:text-2xl font-bold text-neutral-300 mt-3 md:mt-4 font-sans"
                   variants={itemVariants}
                 >
-                  Nowoczesne witryny dla małych i średnich firm z Dolnego Śląska
+                  Dlaczego szybkie strony (React) to lepszy wybór?
                 </motion.h2>
                 
-                <motion.h3 
+                <motion.p 
                   className="text-lg md:text-xl font-semibold text-primary mt-3 md:mt-4 font-sans"
                   variants={itemVariants}
                 >
-                  Dlaczego Stalowe Witryny? Szybkość, SEO i UX
-                </motion.h3>
+                  Tworzenie stron www bez abonamentu | Lokalny deweloper z Wrocławia
+                </motion.p>
                 
                 <motion.p 
                   className="text-base md:text-lg text-neutral-400 mt-3 md:mt-4 font-sans leading-relaxed max-w-[90%]"

@@ -35,10 +35,10 @@ export function Comparison() {
         {/* Section Header */}
         <div className="mb-12 md:mb-16 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-white font-sans mb-4">
-            Ręcznie Kodowane vs Platformy – Porównanie
+            Tworzenie stron www bez abonamentu – Porównanie
           </h2>
           <p className="text-lg text-neutral-400 font-sans max-w-3xl mx-auto">
-            Zobacz, dlaczego <strong className="text-white">tanie i solidne strony internetowe</strong> kodowane ręcznie 
+            Zobacz, dlaczego <strong className="text-white">tanie i szybkie strony internetowe Wrocław</strong> kodowane ręcznie 
             to lepsza inwestycja niż platformy z abonamentem.
           </p>
         </div>

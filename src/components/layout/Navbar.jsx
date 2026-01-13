@@ -117,14 +117,24 @@ export function Navbar({ isModalOpen = false }) {
             {/* Desktop Layout */}
             <div className="hidden md:flex items-center justify-between gap-2 md:gap-6 relative">
               {/* Left: Logo */}
-              <div className="flex items-center flex-shrink-0 relative z-10">
+              <div className="flex items-center flex-shrink-0 relative z-10 gap-2">
                 <Link 
                   to="/"
-                  className="text-lg md:text-xl font-black tracking-tighter font-sans text-white touch-manipulation relative z-10" 
+                  className="flex items-center gap-2 text-lg md:text-xl font-black tracking-tighter font-sans text-white touch-manipulation relative z-10 hover:opacity-80 transition-opacity" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
-                  STALOWEWITRYNY
-                  <span className="text-primary">.</span>
+                  <img 
+                    src="/img/logo.png" 
+                    alt="Tania strona www Wrocław - Stalowe Witryny Logo" 
+                    className="h-6 w-6 md:h-7 md:w-7 object-contain"
+                    width="28"
+                    height="28"
+                    loading="eager"
+                  />
+                  <span>
+                    STALOWEWITRYNY
+                    <span className="text-primary">.</span>
+                  </span>
                 </Link>
               </div>
 
@@ -135,14 +145,24 @@ export function Navbar({ isModalOpen = false }) {
             {/* Mobile Layout - Hamburger Menu */}
             <div className="md:hidden flex items-center justify-between gap-2 relative">
               {/* Left: Logo */}
-              <div className="flex items-center flex-shrink-0 relative z-10">
+              <div className="flex items-center flex-shrink-0 relative z-10 gap-2">
                 <Link 
                   to="/"
-                  className="text-lg font-black tracking-tighter font-sans text-white touch-manipulation relative z-10" 
+                  className="flex items-center gap-2 text-lg font-black tracking-tighter font-sans text-white touch-manipulation relative z-10 hover:opacity-80 transition-opacity" 
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
-                  STALOWEWITRYNY
-                  <span className="text-primary">.</span>
+                  <img 
+                    src="/img/logo.png" 
+                    alt="Tania strona www Wrocław - Stalowe Witryny Logo" 
+                    className="h-5 w-5 object-contain"
+                    width="20"
+                    height="20"
+                    loading="eager"
+                  />
+                  <span>
+                    STALOWEWITRYNY
+                    <span className="text-primary">.</span>
+                  </span>
                 </Link>
               </div>
 

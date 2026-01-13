@@ -136,7 +136,7 @@ function PortfolioListItem({ project, index }) {
       >
         <img
           src={project.image}
-          alt={`${project.title} - ${project.category}`}
+          alt={`${project.title} - ${project.category} - Tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk`}
           className="w-full object-cover object-top"
           style={{
             // On mobile when overlay is visible: clip image to container height

@@ -83,9 +83,17 @@ export function Footer() {
                 }
                 scrollToTop();
               }}
-              className="inline-block" 
+              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity" 
               title="Stalowe Witryny - Strona główna"
             >
+              <img 
+                src="/img/logo.png" 
+                alt="Tania strona www Wrocław - projektowanie stron Dolny Śląsk" 
+                className="h-8 w-8 md:h-10 md:w-10 object-contain"
+                width="40"
+                height="40"
+                loading="lazy"
+              />
               <span className="text-2xl md:text-3xl font-black tracking-tighter font-sans text-white">
                 STALOWEWITRYNY
                 <span className="text-primary">.</span>
@@ -159,19 +167,58 @@ export function Footer() {
             {/* Service Areas - Local SEO */}
             <div className="mt-6 pt-6 border-t border-white/10">
               <h4 className="text-xs font-semibold text-white uppercase tracking-wider font-sans mb-3">
-                Obsługiwane miasta
+                Strony internetowe dla miast Dolnego Śląska
               </h4>
-              <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                {["Wrocław", "Legnica", "Lubin", "Świdnica", "Oleśnica", "Oława", "Dzierżoniów"].map((city) => (
-                  <span
-                    key={city}
-                    className="text-xs text-neutral-400 font-sans px-2 py-1 bg-neutral-900/50 rounded border border-white/5"
-                    title={`Strony internetowe ${city}`}
-                  >
-                    {city}
-                  </span>
-                ))}
-              </div>
+              <nav className="flex flex-col gap-2 items-center md:items-start">
+                <Link
+                  to="/"
+                  onClick={scrollToTop}
+                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  title="Strony internetowe Legnica - tanie i szybkie strony www"
+                >
+                  Strony internetowe Legnica
+                </Link>
+                <Link
+                  to="/"
+                  onClick={scrollToTop}
+                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  title="Strony internetowe Lubin - tanie i szybkie strony www"
+                >
+                  Strony internetowe Lubin
+                </Link>
+                <Link
+                  to="/"
+                  onClick={scrollToTop}
+                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  title="Strony internetowe Oleśnica - tanie i szybkie strony www"
+                >
+                  Strony internetowe Oleśnica
+                </Link>
+                <Link
+                  to="/"
+                  onClick={scrollToTop}
+                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  title="Strony internetowe Świdnica - tanie i szybkie strony www"
+                >
+                  Strony internetowe Świdnica
+                </Link>
+                <Link
+                  to="/"
+                  onClick={scrollToTop}
+                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  title="Strony internetowe Oława - tanie i szybkie strony www"
+                >
+                  Strony internetowe Oława
+                </Link>
+                <Link
+                  to="/"
+                  onClick={scrollToTop}
+                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  title="Strony internetowe Dzierżoniów - tanie i szybkie strony www"
+                >
+                  Strony internetowe Dzierżoniów
+                </Link>
+              </nav>
             </div>
           </div>
         </div>

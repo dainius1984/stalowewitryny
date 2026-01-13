@@ -7,6 +7,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Comparison } from "@/components/sections/Comparison";
 import { Process } from "@/components/sections/Process";
+import SEOContent from "@/components/sections/SEOContent";
 import { Footer } from "@/components/layout/Footer";
 import { PortfolioPage } from "@/pages/PortfolioPage";
 import { AboutPage } from "@/pages/AboutPage";
@@ -29,6 +30,7 @@ function HomePage() {
           <Comparison />
           <Portfolio limit={6} />
           <Process />
+          <SEOContent />
         </main>
         <Footer />
       </div>
