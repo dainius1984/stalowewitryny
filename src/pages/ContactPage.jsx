@@ -60,6 +60,20 @@ export function ContactPage() {
                 Wypełnij formularz poniżej, a otrzymasz <strong className="text-primary">bezpłatną wycenę</strong> 
                 w ciągu 24 godzin. Bez zobowiązań, bez ukrytych kosztów.
               </motion.p>
+              <motion.div
+                className="mt-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <a 
+                  href="mailto:kontakt@stalowewitryny.pl" 
+                  className="text-base text-primary hover:text-primary/80 transition-colors font-sans font-medium inline-flex items-center gap-2"
+                  title="Wyślij email do Stalowe Witryny"
+                >
+                  kontakt@stalowewitryny.pl
+                </a>
+              </motion.div>
             </motion.div>
           </Container>
 

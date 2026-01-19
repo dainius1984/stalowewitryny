@@ -102,6 +102,15 @@ export function Footer() {
             <p className="text-sm text-neutral-400 font-sans max-w-xs mx-auto md:mx-0">
               Tanie i solidne strony internetowe dla firm. Kodowane ręcznie, bez abonamentu, strona na własność.
             </p>
+            <div className="mt-4">
+              <a 
+                href="mailto:kontakt@stalowewitryny.pl" 
+                className="text-sm text-primary hover:text-primary/80 transition-colors font-sans font-medium"
+                title="Wyślij email do Stalowe Witryny"
+              >
+                kontakt@stalowewitryny.pl
+              </a>
+            </div>
           </div>
 
           {/* Navigation Links */}

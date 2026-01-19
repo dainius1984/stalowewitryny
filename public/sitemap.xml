@@ -47,4 +47,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+  
+  <!-- Email kontaktowy -->
+  <url>
+    <loc>mailto:kontakt@stalowewitryny.pl</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
