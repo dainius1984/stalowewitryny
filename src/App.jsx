@@ -14,6 +14,7 @@ import { AboutPage } from "@/pages/AboutPage";
 import { ContactPage } from "@/pages/ContactPage";
 import { PrivacyPolicyPage } from "@/pages/PrivacyPolicyPage";
 import { TermsPage } from "@/pages/TermsPage";
+import { CookieBanner } from "@/components/ui/CookieBanner";
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,6 +82,7 @@ function App() {
         <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />
         <Route path="/regulamin" element={<TermsPage />} />
       </Routes>
+      <CookieBanner />
     </BrowserRouter>
   );
 }
