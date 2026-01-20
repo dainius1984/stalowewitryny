@@ -76,6 +76,7 @@ export function Navbar({ isModalOpen = false }) {
     { label: "Strona Główna", href: "/", title: "Strona główna - Stalowe Witryny", isExternal: false },
     { label: "Portfolio", href: "/portfolio", title: "Zobacz wszystkie realizacje portfolio", isExternal: false },
     { label: "O Nas", href: "/o-nas", title: "Poznaj nas - kim jesteśmy i co robimy", isExternal: false },
+    { label: "Blog", href: "/blog", title: "Blog - Baza wiedzy o stronach internetowych", isExternal: false },
     { label: "Kontakt", href: "/kontakt", title: "Skontaktuj się - darmowa wycena strony internetowej", isExternal: false },
   ];
 

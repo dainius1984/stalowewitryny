@@ -60,7 +60,11 @@ export function Footer() {
       { label: "Strona Główna", href: "/", isHash: false },
       { label: "Portfolio", href: "/portfolio", isHash: false },
       { label: "O Nas", href: "/o-nas", isHash: false },
+      { label: "Blog", href: "/blog", isHash: false },
       { label: "Kontakt", href: "/kontakt", isHash: false },
+    ],
+    knowledge: [
+      { label: "Ile kosztuje strona internetowa we Wrocławiu?", href: "/blog/ile-kosztuje-strona-internetowa-wroclaw" },
     ],
     legal: [
       { label: "Polityka Prywatności", href: "/polityka-prywatnosci" },
@@ -71,7 +75,7 @@ export function Footer() {
   return (
     <footer id="kontakt" className="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
       <Container className="py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
           {/* Logo & Brand */}
           <div className="space-y-4 text-center md:text-left">
             <Link 
@@ -147,6 +151,28 @@ export function Footer() {
                     </Link>
                   );
                 }
+              })}
+            </nav>
+          </div>
+
+          {/* Baza wiedzy */}
+          <div className="space-y-4 text-center md:text-left">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider font-sans">
+              Baza wiedzy
+            </h3>
+            <nav className="flex flex-col gap-3 items-center md:items-start">
+              {footerLinks.knowledge.map((link) => {
+                return (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={scrollToTop}
+                    className="text-sm text-neutral-300 hover:text-primary transition-colors font-sans"
+                    title={`Przeczytaj ${link.label}`}
+                  >
+                    {link.label}
+                  </Link>
+                );
               })}
             </nav>
           </div>

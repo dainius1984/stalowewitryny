@@ -8,6 +8,7 @@ import { Portfolio } from "@/components/sections/Portfolio";
 import { Comparison } from "@/components/sections/Comparison";
 import { Process } from "@/components/sections/Process";
 import SEOContent from "@/components/sections/SEOContent";
+import { BlogPreview } from "@/components/sections/BlogPreview";
 import { Footer } from "@/components/layout/Footer";
 import { PortfolioPage } from "@/pages/PortfolioPage";
 import { AboutPage } from "@/pages/AboutPage";
@@ -15,6 +16,7 @@ import { ContactPage } from "@/pages/ContactPage";
 import { PrivacyPolicyPage } from "@/pages/PrivacyPolicyPage";
 import { TermsPage } from "@/pages/TermsPage";
 import { BlogPostPage } from "@/pages/BlogPostPage";
+import { BlogPage } from "@/pages/BlogPage";
 import { CookieBanner } from "@/components/ui/CookieBanner";
 
 function HomePage() {
@@ -33,6 +35,7 @@ function HomePage() {
           <Portfolio limit={6} />
           <Process />
           <SEOContent />
+          <BlogPreview />
         </main>
         <Footer />
       </div>
@@ -82,6 +85,7 @@ function App() {
         <Route path="/kontakt" element={<ContactPage />} />
         <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />
         <Route path="/regulamin" element={<TermsPage />} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/ile-kosztuje-strona-internetowa-wroclaw" element={<BlogPostPage />} />
       </Routes>
       <CookieBanner />

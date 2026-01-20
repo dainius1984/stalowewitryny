@@ -23,7 +23,7 @@ export function BlogPostPage() {
       metaDescription.setAttribute('name', 'description');
       document.head.appendChild(metaDescription);
     }
-    metaDescription.setAttribute('content', 'Sprawdź aktualne ceny tworzenia stron www we Wrocławiu. Dowiedz się, dlaczego warto wybrać stronę w React bez abonamentu. Przejrzysty cennik Stalowych Witryn.');
+    metaDescription.setAttribute('content', 'Sprawdź realne ceny stron www we Wrocławiu. Dowiedz się, dlaczego warto wybrać React bez abonamentu. Przejrzysty cennik Stalowych Witryn.');
     
     // Update canonical URL
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -74,7 +74,7 @@ export function BlogPostPage() {
             >
               {/* H1 Title */}
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-sans mb-6 leading-tight">
-                Ile kosztuje strona internetowa we Wrocławiu? Poznaj cennik 2026 i nie daj się naciągnąć na abonament.
+                Ile kosztuje strona internetowa we Wrocławiu? Cennik 2026
               </h1>
 
               {/* Meta info */}
@@ -121,11 +121,11 @@ export function BlogPostPage() {
                       </tr>
                       <tr className="bg-neutral-900/30 hover:bg-neutral-900/50 transition-colors">
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">Strona firmowa (5-10 podstron)</td>
-                        <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">3500 - 6000 zł</td>
+                        <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">3500 - 5500 zł</td>
                         <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">od 2500 zł</td>
                       </tr>
                       <tr className="bg-neutral-900/30 hover:bg-neutral-900/50 transition-colors">
-                        <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">Sklep internetowy (E-commerce)</td>
+                        <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">Portal / Sklep internetowy</td>
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">od 8000 zł</td>
                         <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">Wycena indywidualna</td>
                       </tr>

@@ -94,6 +94,7 @@ export function Hero({ onModalStateChange }) {
         autoPlay
         muted
         playsInline
+        preload="metadata"
         key={currentVideo}
       >
         <source src={videos[currentVideo]} type="video/mp4" />
@@ -152,7 +153,7 @@ export function Hero({ onModalStateChange }) {
               </motion.p>
               
               <motion.p 
-                className="text-[10px] text-neutral-400 mt-1 font-sans text-center leading-relaxed px-1"
+                className="text-[10px] text-neutral-300 mt-1 font-sans text-center leading-relaxed px-1"
                 variants={itemVariants}
               >
                 Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100. <strong className="text-primary">Google Analytics</strong> w standardzie – śledź ruch i optymalizuj wyniki.

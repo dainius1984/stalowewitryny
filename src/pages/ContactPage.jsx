@@ -61,18 +61,31 @@ export function ContactPage() {
                 w ciągu 24 godzin. Bez zobowiązań, bez ukrytych kosztów.
               </motion.p>
               <motion.div
-                className="mt-6"
+                className="mt-6 space-y-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <a 
-                  href="mailto:kontakt@stalowewitryny.pl" 
-                  className="text-base text-primary hover:text-primary/80 transition-colors font-sans font-medium inline-flex items-center gap-2"
-                  title="Wyślij email do Stalowe Witryny"
-                >
-                  kontakt@stalowewitryny.pl
-                </a>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <a 
+                    href="mailto:kontakt@stalowewitryny.pl" 
+                    className="text-base text-primary hover:text-primary/80 transition-colors font-sans font-medium inline-flex items-center gap-2"
+                    title="Wyślij email do Stalowe Witryny"
+                  >
+                    kontakt@stalowewitryny.pl
+                  </a>
+                  <span className="text-neutral-500 hidden sm:inline">•</span>
+                  <a 
+                    href="tel:+48532690876" 
+                    className="text-base text-primary hover:text-primary/80 transition-colors font-sans font-medium inline-flex items-center gap-2"
+                    title="Zadzwoń do Stalowe Witryny"
+                  >
+                    +48 532 690 876
+                  </a>
+                </div>
+                <p className="text-sm text-neutral-400 font-sans">
+                  ul. Sarbinowska 15/5, 54-320 Wrocław
+                </p>
               </motion.div>
             </motion.div>
           </Container>

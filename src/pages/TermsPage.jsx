@@ -571,14 +571,14 @@ export function TermsPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
                 >
-                  <p className="text-sm md:text-base text-neutral-400 font-sans">
+                  <p className="text-sm md:text-base text-neutral-300 font-sans">
                     Ostatnia aktualizacja: {new Date().toLocaleDateString('pl-PL', { 
                       year: 'numeric', 
                       month: 'long', 
                       day: 'numeric' 
                     })}
                   </p>
-                  <p className="text-sm text-neutral-400 mt-2 font-sans">
+                  <p className="text-sm text-neutral-300 mt-2 font-sans">
                     Regulamin wchodzi w życie z dniem publikacji w Serwisie.
                   </p>
                 </motion.div>
