@@ -84,7 +84,7 @@ export function Footer() {
                 scrollToTop();
               }}
               className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity" 
-              title="Stalowe Witryny - Strona główna"
+              title="Stalowe Witryny - Tworzenie Stron Internetowych Wrocław - Strona główna"
             >
               <img 
                 src="/img/logo.png" 
@@ -106,7 +106,7 @@ export function Footer() {
               <a 
                 href="mailto:kontakt@stalowewitryny.pl" 
                 className="text-sm text-primary hover:text-primary/80 transition-colors font-sans font-medium"
-                title="Wyślij email do Stalowe Witryny"
+                title="Wyślij email do Stalowe Witryny - Tworzenie Stron Internetowych Wrocław"
               >
                 kontakt@stalowewitryny.pl
               </a>
