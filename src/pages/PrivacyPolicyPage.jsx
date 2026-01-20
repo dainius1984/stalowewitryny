@@ -13,7 +13,7 @@ const companyData = {
   name: "ChmielIT Marcin Chmielnicki",
   address: "ul. Sarbinowska 15/5, 54-320 Wrocław",
   nip: "8942751087",
-  email: "[WSTAW_SWÓJ_EMAIL_TUTAJ]", // TODO: Replace with actual email
+  email: "kontakt@stalowewitryny.pl",
 };
 
 /**
