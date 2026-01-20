@@ -10,7 +10,7 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
   if (!image) {
     return (
       <div className="w-full h-[35vh] min-h-[240px] max-h-[280px] -mt-5 bg-neutral-900 rounded-xl flex items-center justify-center">
-        <div className="text-neutral-500 text-xs">Brak obrazu</div>
+        <div className="text-neutral-400 text-xs">Brak obrazu</div>
       </div>
     );
   }

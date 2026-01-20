@@ -99,7 +99,7 @@ export function Footer() {
                 <span className="text-primary">.</span>
               </span>
             </Link>
-            <p className="text-sm text-neutral-400 font-sans max-w-xs mx-auto md:mx-0">
+            <p className="text-sm text-neutral-300 font-sans max-w-xs mx-auto md:mx-0">
               Tanie i solidne strony internetowe dla firm. Kodowane ręcznie, bez abonamentu, strona na własność.
             </p>
             <div className="mt-4">
@@ -127,7 +127,7 @@ export function Footer() {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleHashLink(e, link.href)}
-                      className="text-sm text-neutral-400 hover:text-white transition-colors font-sans cursor-pointer"
+                      className="text-sm text-neutral-300 hover:text-white transition-colors font-sans cursor-pointer"
                       title={`Przejdź do sekcji ${link.label}`}
                     >
                       {link.label}
@@ -140,7 +140,7 @@ export function Footer() {
                       key={link.href}
                       to={link.href}
                       onClick={scrollToTop}
-                      className="text-sm text-neutral-400 hover:text-white transition-colors font-sans"
+                      className="text-sm text-neutral-300 hover:text-white transition-colors font-sans"
                       title={`Przejdź do ${link.label}`}
                     >
                       {link.label}
@@ -182,7 +182,7 @@ export function Footer() {
                 <Link
                   to="/"
                   onClick={scrollToTop}
-                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  className="text-xs text-neutral-300 hover:text-primary transition-colors font-sans"
                   title="Strony internetowe Legnica - tanie i szybkie strony www"
                 >
                   Strony internetowe Legnica
@@ -190,7 +190,7 @@ export function Footer() {
                 <Link
                   to="/"
                   onClick={scrollToTop}
-                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  className="text-xs text-neutral-300 hover:text-primary transition-colors font-sans"
                   title="Strony internetowe Lubin - tanie i szybkie strony www"
                 >
                   Strony internetowe Lubin
@@ -198,7 +198,7 @@ export function Footer() {
                 <Link
                   to="/"
                   onClick={scrollToTop}
-                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  className="text-xs text-neutral-300 hover:text-primary transition-colors font-sans"
                   title="Strony internetowe Oleśnica - tanie i szybkie strony www"
                 >
                   Strony internetowe Oleśnica
@@ -206,7 +206,7 @@ export function Footer() {
                 <Link
                   to="/"
                   onClick={scrollToTop}
-                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  className="text-xs text-neutral-300 hover:text-primary transition-colors font-sans"
                   title="Strony internetowe Świdnica - tanie i szybkie strony www"
                 >
                   Strony internetowe Świdnica
@@ -214,7 +214,7 @@ export function Footer() {
                 <Link
                   to="/"
                   onClick={scrollToTop}
-                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  className="text-xs text-neutral-300 hover:text-primary transition-colors font-sans"
                   title="Strony internetowe Oława - tanie i szybkie strony www"
                 >
                   Strony internetowe Oława
@@ -222,7 +222,7 @@ export function Footer() {
                 <Link
                   to="/"
                   onClick={scrollToTop}
-                  className="text-xs text-neutral-400 hover:text-primary transition-colors font-sans"
+                  className="text-xs text-neutral-300 hover:text-primary transition-colors font-sans"
                   title="Strony internetowe Dzierżoniów - tanie i szybkie strony www"
                 >
                   Strony internetowe Dzierżoniów
@@ -234,7 +234,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-neutral-500 font-sans">
+          <p className="text-sm text-neutral-400 font-sans">
             © {currentYear} STALOWEWITRYNY<span className="text-primary">.</span> Wszelkie prawa zastrzeżone.
           </p>
         </div>

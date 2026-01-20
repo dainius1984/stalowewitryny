@@ -296,7 +296,7 @@ export function Portfolio({ limit = 6 }) {
             Przykłady taniej i solidnej strony internetowej
           </motion.h2>
           <motion.p
-            className="text-lg text-neutral-400 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
+            className="text-lg text-neutral-300 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

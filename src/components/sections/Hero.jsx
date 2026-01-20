@@ -230,7 +230,7 @@ export function Hero({ onModalStateChange }) {
                 </motion.p>
                 
                 <motion.p 
-                  className="text-base md:text-lg text-neutral-400 mt-3 md:mt-4 font-sans leading-relaxed max-w-[90%]"
+                  className="text-base md:text-lg text-neutral-300 mt-3 md:mt-4 font-sans leading-relaxed max-w-[90%]"
                   variants={itemVariants}
                 >
                   Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100. <strong className="text-primary">Google Analytics</strong> w standardzie – śledź ruch i optymalizuj wyniki.

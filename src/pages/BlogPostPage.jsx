@@ -53,7 +53,7 @@ export function BlogPostPage() {
           <Container className="relative z-10 py-12 md:py-16">
             {/* Breadcrumb */}
             <motion.nav
-              className="mb-8 text-sm text-neutral-400 font-sans"
+              className="mb-8 text-sm text-neutral-300 font-sans"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -62,7 +62,7 @@ export function BlogPostPage() {
                 Strona główna
               </Link>
               <span className="mx-2">/</span>
-              <span className="text-neutral-500">Blog</span>
+              <span className="text-neutral-400">Blog</span>
             </motion.nav>
 
             {/* Article Header */}
@@ -78,7 +78,7 @@ export function BlogPostPage() {
               </h1>
 
               {/* Meta info */}
-              <div className="flex items-center gap-4 text-sm text-neutral-400 font-sans mb-8">
+              <div className="flex items-center gap-4 text-sm text-neutral-300 font-sans mb-8">
                 <time dateTime="2026-01-01">2026</time>
                 <span>•</span>
                 <span>Stalowe Witryny</span>

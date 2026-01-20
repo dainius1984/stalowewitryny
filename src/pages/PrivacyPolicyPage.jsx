@@ -258,7 +258,7 @@ export function PrivacyPolicyPage() {
                 Polityka Prywatności
               </motion.h1>
               <motion.p
-                className="text-lg md:text-xl text-neutral-400 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
+                className="text-lg md:text-xl text-neutral-300 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
@@ -301,7 +301,7 @@ export function PrivacyPolicyPage() {
                   day: 'numeric' 
                 })}
               </p>
-              <p className="text-sm text-neutral-500 mt-2 font-sans">
+              <p className="text-sm text-neutral-400 mt-2 font-sans">
                 Zastrzegamy sobie prawo do wprowadzania zmian w niniejszej Polityce Prywatności. 
                 O wszelkich zmianach będziemy informować na tej stronie.
               </p>

@@ -110,7 +110,7 @@ export function TermsPage() {
                             "w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 flex items-center gap-2",
                             isActive
                               ? "bg-primary/20 text-primary border border-primary/30"
-                              : "text-neutral-400 hover:text-white hover:bg-white/5"
+                              : "text-neutral-300 hover:text-white hover:bg-white/5"
                           )}
                         >
                           <Icon className="w-4 h-4 flex-shrink-0" />
@@ -148,7 +148,7 @@ export function TermsPage() {
                     Regulamin
                   </motion.h1>
                   <motion.p
-                    className="text-lg md:text-xl text-neutral-400 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
+                    className="text-lg md:text-xl text-neutral-300 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
@@ -578,7 +578,7 @@ export function TermsPage() {
                       day: 'numeric' 
                     })}
                   </p>
-                  <p className="text-sm text-neutral-500 mt-2 font-sans">
+                  <p className="text-sm text-neutral-400 mt-2 font-sans">
                     Regulamin wchodzi w życie z dniem publikacji w Serwisie.
                   </p>
                 </motion.div>

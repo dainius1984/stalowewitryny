@@ -37,7 +37,7 @@ export function Comparison() {
           <h2 className="text-3xl md:text-5xl font-bold text-white font-sans mb-4">
             Tworzenie stron www bez abonamentu – Porównanie
           </h2>
-          <p className="text-lg text-neutral-400 font-sans max-w-3xl mx-auto">
+          <p className="text-lg text-neutral-300 font-sans max-w-3xl mx-auto">
             Zobacz, dlaczego <strong className="text-white">tanie i szybkie strony internetowe Wrocław</strong> kodowane ręcznie 
             to lepsza inwestycja niż platformy z abonamentem.
           </p>
@@ -57,7 +57,7 @@ export function Comparison() {
                 <h3 className="text-2xl md:text-3xl font-bold text-primary font-sans mb-2">
                   {comparisonData.handcrafted.title}
                 </h3>
-                <p className="text-neutral-400 font-sans">
+                <p className="text-neutral-300 font-sans">
                   Strona na własność, bez abonamentu
                 </p>
               </div>
@@ -87,7 +87,7 @@ export function Comparison() {
                 <h3 className="text-2xl md:text-3xl font-bold text-white font-sans mb-2">
                   {comparisonData.platforms.title}
                 </h3>
-                <p className="text-neutral-400 font-sans">
+                <p className="text-neutral-300 font-sans">
                   Platformy z ukrytymi kosztami
                 </p>
               </div>
@@ -98,7 +98,7 @@ export function Comparison() {
                     <div className="flex-shrink-0 mt-0.5">
                       <X className="w-5 h-5 text-red-400" />
                     </div>
-                    <span className="text-neutral-400 font-sans line-through">{feature.text}</span>
+                    <span className="text-neutral-300 font-sans line-through opacity-60">{feature.text}</span>
                   </li>
                 ))}
               </ul>

@@ -56,7 +56,7 @@ const SEOContent = () => {
             <h3 className="text-xl md:text-2xl font-semibold mb-4 text-white font-sans">
               Obsługiwane lokalizacje na Dolnym Śląsku:
             </h3>
-            <ul className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm md:text-base text-neutral-400 font-sans">
+            <ul className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm md:text-base text-neutral-300 font-sans">
               <li className="flex items-center gap-2">
                 <span className="text-primary">•</span>
                 <span>Wrocław</span>

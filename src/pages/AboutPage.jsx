@@ -49,7 +49,7 @@ export function AboutPage() {
                 Tworzymy Szybkie Strony dla Biznesu
               </motion.h1>
               <motion.p
-                className="text-lg text-neutral-400 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
+                className="text-lg text-neutral-300 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
@@ -177,7 +177,7 @@ export function AboutPage() {
                 transition={{ duration: 0.6, delay: 0.7 }}
                 className="text-center"
               >
-                <p className="text-lg text-neutral-400 mb-6">
+                <p className="text-lg text-neutral-300 mb-6">
                   Gotowy na <strong className="text-white">szybką stronę</strong> dla Twojej firmy?
                 </p>
                 <a

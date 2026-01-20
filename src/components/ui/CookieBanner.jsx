@@ -67,7 +67,7 @@ export function CookieBanner() {
                 {/* Reject Button - Discrete */}
                 <button
                   onClick={handleReject}
-                  className="px-4 py-2 text-sm md:text-base text-neutral-400 hover:text-white font-sans font-medium transition-colors border border-white/10 hover:border-white/20 rounded-full bg-transparent"
+                  className="px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white font-sans font-medium transition-colors border border-white/10 hover:border-white/20 rounded-full bg-transparent"
                   aria-label="Odrzuć ciasteczka"
                 >
                   Odrzuć
