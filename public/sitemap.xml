@@ -48,6 +48,14 @@
     <priority>0.5</priority>
   </url>
   
+  <!-- Blog - Ile kosztuje strona internetowa we Wrocławiu -->
+  <url>
+    <loc>https://www.stalowewitryny.pl/blog/ile-kosztuje-strona-internetowa-wroclaw</loc>
+    <lastmod>2026-01-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- Email kontaktowy -->
   <url>
     <loc>mailto:kontakt@stalowewitryny.pl</loc>
