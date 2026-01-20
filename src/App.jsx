@@ -14,6 +14,7 @@ import { AboutPage } from "@/pages/AboutPage";
 import { ContactPage } from "@/pages/ContactPage";
 import { PrivacyPolicyPage } from "@/pages/PrivacyPolicyPage";
 import { TermsPage } from "@/pages/TermsPage";
+import { BlogPostPage } from "@/pages/BlogPostPage";
 import { CookieBanner } from "@/components/ui/CookieBanner";
 
 function HomePage() {
@@ -81,6 +82,7 @@ function App() {
         <Route path="/kontakt" element={<ContactPage />} />
         <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />
         <Route path="/regulamin" element={<TermsPage />} />
+        <Route path="/blog/ile-kosztuje-strona-internetowa-wroclaw" element={<BlogPostPage />} />
       </Routes>
       <CookieBanner />
     </BrowserRouter>
