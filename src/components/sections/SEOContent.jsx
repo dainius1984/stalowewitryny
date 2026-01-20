@@ -33,6 +33,23 @@ const SEOContent = () => {
               wysokie pozycje w wyszukiwarce Google dzięki optymalizacji SEO pod konkretne 
               dzielnice Wrocławia (Stare Miasto, Fabryczna, Krzyki, Psie Pole) oraz okoliczne miasta.
             </p>
+
+            <p>
+              Wśród moich realizacji znajdziesz strony dla różnych branż – od usług sprzątających, 
+              przez salony kosmetyczne, aż po firmy ogrodnicze. Przykładem może być strona dla 
+              <a 
+                href="https://www.zielonemile.pl/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary/80 underline font-medium"
+                title="Zielone Mile - projektowanie ogrodów i tarasów Wrocław"
+              >
+                Zielone Mile
+              </a>
+              – firmy specjalizującej się w projektowaniu ogrodów i tarasów we Wrocławiu. 
+              Każda realizacja to <strong className="text-white">strona na własność</strong>, 
+              bez miesięcznych opłat i z pełną kontrolą nad kodem źródłowym.
+            </p>
           </div>
 
           <div className="mt-10 pt-8 border-t border-white/10">
