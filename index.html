@@ -310,13 +310,78 @@
     }
     </script>
     
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Preconnect to font providers (early connection, no blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/video/1.mp4" as="video" type="video/mp4" />
+    <!-- Preload Google Fonts CSS (high priority, non-blocking) -->
+    <link 
+      rel="preload" 
+      as="style" 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      crossorigin
+    />
+    
+    <!-- Load Google Fonts asynchronously (non-render-blocking) -->
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" 
+      rel="stylesheet" 
+      media="print" 
+      onload="this.media='all'; this.onload=null;" 
+    />
+    
+    <!-- Fallback for no-JS users -->
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    </noscript>
+    
+    <!-- Critical CSS - Inline for instant rendering (prevents render-blocking) -->
+    <style>
+      /* Reset & Base - Immediate rendering */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      /* System font fallback while Inter loads (prevents FOUT) */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        background-color: #000000;
+        color: #ffffff;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Inter will override when loaded */
+      .font-sans {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      
+      /* Critical layout - Above the fold */
+      #root {
+        min-height: 100vh;
+        background-color: #000000;
+      }
+      
+      /* Prevent layout shift while JS loads */
+      .min-h-screen {
+        min-height: 100vh;
+      }
+      
+      /* Loading state (optional - prevents white flash) */
+      #root:empty::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000000;
+        z-index: 9999;
+      }
+    </style>
     
     <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -324,14 +389,27 @@
     <!-- Theme Color -->
     <meta name="theme-color" content="#000000" />
     
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MFP4FQPTSK"></script>
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    
+    <!-- Google Analytics - Deferred for performance -->
     <script>
+      // Defer GA until page is interactive (non-blocking)
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-MFP4FQPTSK');
+      
+      // Load GA after page load
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-MFP4FQPTSK';
+        script.async = true;
+        document.head.appendChild(script);
+        
+        script.onload = function() {
+          gtag('js', new Date());
+          gtag('config', 'G-MFP4FQPTSK');
+        };
+      });
     </script>
   </head>
   <body>
