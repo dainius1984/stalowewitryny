@@ -393,6 +393,10 @@
     <!-- DNS Prefetch for external resources -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
+    <!-- Preload LCP elements for faster initial render -->
+    <link rel="preload" href="/img/logo.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" href="/video/1.mp4" as="video" type="video/mp4" />
+    
     <!-- Google Analytics - Load only after user interaction -->
     <script>
       // Ultra-optimized GA loading (only after user interaction)

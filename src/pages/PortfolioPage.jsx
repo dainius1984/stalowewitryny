@@ -39,11 +39,21 @@ function PortfolioListItem({ project, index }) {
     const item = itemRef.current;
     let rafId = null;
 
+    // Cache dimensions to avoid repeated reads (prevents forced reflow)
+    let cachedScrollHeight = container.scrollHeight;
+    let cachedClientHeight = container.clientHeight;
+    
+    const updateCachedDimensions = () => {
+      cachedScrollHeight = container.scrollHeight;
+      cachedClientHeight = container.clientHeight;
+    };
+    
     const handleWheel = (e) => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const maxScroll = scrollHeight - clientHeight;
-      const isAtTop = scrollTop <= 1;
-      const isAtBottom = scrollTop >= maxScroll - 1;
+      // Batch all reads before writes to prevent layout thrashing
+      const currentScrollTop = container.scrollTop;
+      const maxScroll = cachedScrollHeight - cachedClientHeight;
+      const isAtTop = currentScrollTop <= 1;
+      const isAtBottom = currentScrollTop >= maxScroll - 1;
       const isScrollingDown = e.deltaY > 0;
       const isScrollingUp = e.deltaY < 0;
 
@@ -52,17 +62,14 @@ function PortfolioListItem({ project, index }) {
         e.preventDefault();
         e.stopPropagation();
         
-        // Use requestAnimationFrame for smooth scrolling
+        // Use requestAnimationFrame for smooth scrolling (batched writes)
         if (rafId) {
           cancelAnimationFrame(rafId);
         }
         
         rafId = requestAnimationFrame(() => {
-          const newScrollTop = Math.max(0, Math.min(maxScroll, scrollTop + e.deltaY));
-          container.scrollTo({
-            top: newScrollTop,
-            behavior: 'auto' // Use 'auto' for instant but smooth via RAF
-          });
+          const newScrollTop = Math.max(0, Math.min(maxScroll, currentScrollTop + e.deltaY));
+          container.scrollTop = newScrollTop; // Direct assignment is faster than scrollTo()
           rafId = null;
         });
       }
@@ -70,6 +77,10 @@ function PortfolioListItem({ project, index }) {
 
     item.addEventListener('wheel', handleWheel, { passive: false, capture: true });
     container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    
+    // Update cached dimensions on resize
+    const resizeObserver = new ResizeObserver(updateCachedDimensions);
+    resizeObserver.observe(container);
 
     return () => {
       if (rafId) {
@@ -77,6 +88,7 @@ function PortfolioListItem({ project, index }) {
       }
       item.removeEventListener('wheel', handleWheel, { capture: true });
       container.removeEventListener('wheel', handleWheel, { capture: true });
+      resizeObserver.disconnect();
     };
   }, [isMobileOverlayHidden, isMobile]);
 

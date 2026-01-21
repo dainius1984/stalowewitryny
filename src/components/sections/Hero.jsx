@@ -131,8 +131,9 @@ export function Hero({ onModalStateChange }) {
         autoPlay
         muted
         playsInline
-        preload="metadata"
+        preload="auto"
         poster="/img/logo.webp"
+        fetchpriority="high"
         key={currentVideo}
       >
         <source src={videos[currentVideo]} type="video/mp4" />
