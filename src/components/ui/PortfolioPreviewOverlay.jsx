@@ -45,6 +45,7 @@ export function PortfolioPreviewOverlay({
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const overlayRef = useRef(null);
+  const cachedRect = useRef(null);
 
   // Minimum swipe distance to close (in pixels)
   const minSwipeDistance = 100;
@@ -55,6 +56,13 @@ export function PortfolioPreviewOverlay({
       setIsLoading(true);
     }
   }, [isOpen, url]);
+  
+  // Cache overlay rect on open (prevents forced reflow)
+  useEffect(() => {
+    if (isOpen && overlayRef.current) {
+      cachedRect.current = overlayRef.current.getBoundingClientRect();
+    }
+  }, [isOpen]);
 
   // Add parameter to disable subscription modal on whiteeffect.pl
   const getIframeUrl = (originalUrl) => {
@@ -74,6 +82,10 @@ export function PortfolioPreviewOverlay({
   const onTouchStart = (e) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientY);
+    // Cache rect on touch start (prevents forced reflow)
+    if (overlayRef.current) {
+      cachedRect.current = overlayRef.current.getBoundingClientRect();
+    }
   };
 
   const onTouchMove = (e) => {
@@ -85,9 +97,9 @@ export function PortfolioPreviewOverlay({
     const distance = touchStart - touchEnd;
     const isDownSwipe = distance < -minSwipeDistance;
     
-    if (isDownSwipe && overlayRef.current) {
-      // Check if swipe started from top area of overlay
-      const overlayTop = overlayRef.current.getBoundingClientRect().top;
+    if (isDownSwipe && cachedRect.current) {
+      // Use cached rect to avoid forced reflow
+      const overlayTop = cachedRect.current.top;
       if (touchStart < overlayTop + 100) {
         onClose();
       }
