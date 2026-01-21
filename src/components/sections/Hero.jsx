@@ -173,7 +173,7 @@ export function Hero({ onModalStateChange }) {
                 className="text-xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
                 variants={itemVariants}
               >
-                Tworzenie stron internetowych Wrocław | Tanie i szybkie witryny
+                Strony internetowe Wrocław | Tanie, szybkie, bez abonamentu
               </motion.h1>
               
               <motion.h2 
@@ -251,7 +251,7 @@ export function Hero({ onModalStateChange }) {
                   className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] font-sans text-white max-w-full"
                   variants={itemVariants}
                 >
-                  Tworzenie stron internetowych Wrocław | Tanie i szybkie witryny
+                  Strony internetowe Wrocław | Tanie, szybkie, bez abonamentu
                 </motion.h1>
                 
                 <motion.h2 

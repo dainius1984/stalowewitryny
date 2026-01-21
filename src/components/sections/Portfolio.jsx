@@ -294,7 +294,7 @@ export function Portfolio({ limit = 6 }) {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Przykłady taniej i solidnej strony internetowej
+            Strony internetowe Wrocław - Nasze realizacje
           </motion.h2>
           <motion.p
             className="text-lg text-neutral-300 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
