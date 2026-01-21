@@ -201,6 +201,8 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
                     transformOrigin: 'top center',
                   }}
                   className="rounded-[1.5rem]"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     console.error('Image failed to load:', images[currentImageIndex]);
                     e.target.style.display = "none";

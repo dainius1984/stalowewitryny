@@ -187,6 +187,8 @@ export function MockupCardDesktop({ images, alt, delay, onHover, onLeave, onClic
                     transform: 'none',
                     transformOrigin: 'top center',
                   }}
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     console.error('Image failed to load:', images[currentImageIndex]);
                     e.target.style.display = "none";

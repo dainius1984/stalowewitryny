@@ -125,12 +125,14 @@ export function Navbar({ isModalOpen = false }) {
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
                   <img 
-                    src="/img/logo.png" 
+                    src="/img/logo.webp" 
                     alt="Tania strona www Wrocław - Stalowe Witryny Logo" 
                     className="h-6 w-6 md:h-7 md:w-7 object-contain"
                     width="28"
                     height="28"
                     loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                   />
                   <span>
                     STALOWEWITRYNY
@@ -153,12 +155,14 @@ export function Navbar({ isModalOpen = false }) {
                   title="Stalowe Witryny - Tanie i solidne strony internetowe"
                 >
                   <img 
-                    src="/img/logo.png" 
+                    src="/img/logo.webp" 
                     alt="Tania strona www Wrocław - Stalowe Witryny Logo" 
                     className="h-5 w-5 object-contain"
                     width="20"
                     height="20"
                     loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                   />
                   <span>
                     STALOWEWITRYNY

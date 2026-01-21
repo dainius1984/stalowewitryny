@@ -9,43 +9,43 @@ import { PortfolioPreviewOverlay } from "@/components/ui/PortfolioPreviewOverlay
 
 const mockupProjects = [
   {
-    desktopHero: "/img/projects/white1.png",
+    desktopHero: "/img/projects/white1.webp",
     alt: "White Effect - Portfolio Project",
     url: "https://www.whiteeffect.pl/",
     title: "White Effect",
   },
   {
-    desktopHero: "/img/projects/tarasy1.png",
+    desktopHero: "/img/projects/tarasy1.webp",
     alt: "Zielone Mile - Portfolio Project",
     url: "https://zielonemile.pl/",
     title: "Zielone Mile",
   },
   {
-    desktopHero: "/img/projects/oranzeria1.png",
+    desktopHero: "/img/projects/oranzeria1.webp",
     alt: "Oranzeria - Portfolio Project",
     url: "https://oraneria.vercel.app/",
     title: "Oranzeria",
   },
   {
-    desktopHero: "/img/projects/fryzjerka1.png",
+    desktopHero: "/img/projects/fryzjerka1.webp",
     alt: "Fryzjerka Małgosia - Portfolio Project",
     url: "https://www.fryzjerkamalgosia.pl/",
     title: "Fryzjerka Małgosia",
   },
   {
-    desktopHero: "/img/projects/figura1.png",
+    desktopHero: "/img/projects/figura1.webp",
     alt: "Studio Figura - Portfolio Project",
     url: "https://www.studiofigurastablowice.pl/",
     title: "Studio Figura",
   },
   {
-    desktopHero: "/img/projects/autyzm1.png",
+    desktopHero: "/img/projects/autyzm1.webp",
     alt: "Autyzm od Kuchni - Portfolio Project",
     url: "https://www.autyzmodkuchni.pl/",
     title: "Autyzm od Kuchni",
   },
   {
-    desktopHero: "/img/projects/open1.png",
+    desktopHero: "/img/projects/open1.webp",
     alt: "OpenPol - Portfolio Project",
     url: "https://openpol.pl/",
     title: "OpenPol",

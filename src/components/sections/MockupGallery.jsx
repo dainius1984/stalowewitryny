@@ -29,8 +29,8 @@ import { cn } from "@/lib/utils";
 // Structure: mobileHero (for mobile view), desktopHero (for desktop view)
 const mockupProjects = [
   {
-    mobileHero: "/img/projects/whitemobile.png", // Mobile hero section
-    desktopHero: "/img/projects/white1.png", // Desktop hero section
+    mobileHero: "/img/projects/whitemobile.webp", // Mobile hero section
+    desktopHero: "/img/projects/white1.webp", // Desktop hero section
     alt: "White Effect - Portfolio Project",
     url: "https://www.whiteeffect.pl/",
     url2: "https://www.whiteeffect.pl/", // Both mobile and desktop link to whiteeffect.pl
@@ -39,8 +39,8 @@ const mockupProjects = [
     delay: 0,
   },
   {
-    mobileHero: "/img/projects/tarasymobile.png", // Mobile hero section - Zielone Mile
-    desktopHero: "/img/projects/tarasy1.png", // Desktop hero section - Zielone Mile
+    mobileHero: "/img/projects/tarasymobile.webp", // Mobile hero section - Zielone Mile
+    desktopHero: "/img/projects/tarasy1.webp", // Desktop hero section - Zielone Mile
     alt: "Zielone Mile - Portfolio Project",
     url: "https://zielonemile.pl/",
     url2: "https://zielonemile.pl/", // Both mobile and desktop link to zielonemile.pl
@@ -49,8 +49,8 @@ const mockupProjects = [
     delay: 0.2,
   },
   {
-    mobileHero: "/img/projects/oranzeriamobile.png", // Mobile hero section
-    desktopHero: "/img/projects/oranzeria1.png", // Desktop hero section
+    mobileHero: "/img/projects/oranzeriamobile.webp", // Mobile hero section
+    desktopHero: "/img/projects/oranzeria1.webp", // Desktop hero section
     alt: "Oranzeria - Portfolio Project",
     url: "https://oraneria.vercel.app/",
     url2: "https://oraneria.vercel.app/", // Both mobile and desktop link to oraneria.vercel.app
@@ -59,8 +59,8 @@ const mockupProjects = [
     delay: 0.4,
   },
   {
-    mobileHero: "/img/projects/fryzjerkamobile.png", // Mobile hero section
-    desktopHero: "/img/projects/fryzjerka1.png", // Desktop hero section
+    mobileHero: "/img/projects/fryzjerkamobile.webp", // Mobile hero section
+    desktopHero: "/img/projects/fryzjerka1.webp", // Desktop hero section
     alt: "Fryzjerka Małgosia - Portfolio Project",
     url: "https://www.fryzjerkamalgosia.pl/",
     url2: "https://www.fryzjerkamalgosia.pl/", // Both mobile and desktop link to fryzjerkamalgosia.pl
@@ -69,8 +69,8 @@ const mockupProjects = [
     delay: 0.6,
   },
   {
-    mobileHero: "/img/projects/figuramobile.png", // Mobile hero section
-    desktopHero: "/img/projects/figura1.png", // Desktop hero section
+    mobileHero: "/img/projects/figuramobile.webp", // Mobile hero section
+    desktopHero: "/img/projects/figura1.webp", // Desktop hero section
     alt: "Studio Figura - Portfolio Project",
     url: "https://www.studiofigurastablowice.pl/",
     url2: "https://www.studiofigurastablowice.pl/", // Both mobile and desktop link to studiofigurastablowice.pl
@@ -79,8 +79,8 @@ const mockupProjects = [
     delay: 0.8,
   },
   {
-    mobileHero: "/img/projects/autyzmmobile.png", // Mobile hero section
-    desktopHero: "/img/projects/autyzm1.png", // Desktop hero section
+    mobileHero: "/img/projects/autyzmmobile.webp", // Mobile hero section
+    desktopHero: "/img/projects/autyzm1.webp", // Desktop hero section
     alt: "Autyzm od Kuchni - Portfolio Project",
     url: "https://www.autyzmodkuchni.pl/",
     url2: "https://www.autyzmodkuchni.pl/", // Both mobile and desktop link to autyzmodkuchni.pl
@@ -89,8 +89,8 @@ const mockupProjects = [
     delay: 1.0,
   },
   {
-    mobileHero: "/img/projects/openmobile.png", // Mobile hero section
-    desktopHero: "/img/projects/open1.png", // Desktop hero section
+    mobileHero: "/img/projects/openmobile.webp", // Mobile hero section
+    desktopHero: "/img/projects/open1.webp", // Desktop hero section
     alt: "OpenPol - Portfolio Project",
     url: "https://openpol.pl/",
     url2: "https://openpol.pl/", // Both mobile and desktop link to openpol.pl

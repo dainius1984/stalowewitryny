@@ -75,7 +75,7 @@ export function Footer() {
   return (
     <footer id="kontakt" className="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
       <Container className="py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 items-start">
           {/* Logo & Brand */}
           <div className="space-y-4 text-center md:text-left">
             <Link 
@@ -91,7 +91,7 @@ export function Footer() {
               title="Stalowe Witryny - Tworzenie Stron Internetowych Wrocław - Strona główna"
             >
               <img 
-                src="/img/logo.png" 
+                src="/img/logo.webp" 
                 alt="Tania strona www Wrocław - projektowanie stron Dolny Śląsk" 
                 className="h-8 w-8 md:h-10 md:w-10 object-contain"
                 width="40"
@@ -114,6 +114,15 @@ export function Footer() {
               >
                 kontakt@stalowewitryny.pl
               </a>
+              <div className="mt-2">
+                <a 
+                  href="tel:+48532690876" 
+                  className="text-sm text-primary hover:text-primary/80 transition-colors font-sans font-medium"
+                  title="Zadzwoń do Stalowe Witryny - Tworzenie Stron Internetowych Wrocław"
+                >
+                  +48 532 690 876
+                </a>
+              </div>
             </div>
           </div>
 

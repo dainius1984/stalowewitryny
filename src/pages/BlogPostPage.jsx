@@ -51,18 +51,42 @@ export function BlogPostPage() {
           </div>
 
           <Container className="relative z-10 py-12 md:py-16">
-            {/* Breadcrumb */}
+            {/* Breadcrumb - Optimized with proper Schema.org structure */}
             <motion.nav
-              className="mb-8 text-sm text-neutral-300 font-sans"
+              className="mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
+              aria-label="Breadcrumb"
             >
-              <Link to="/" className="hover:text-primary transition-colors">
-                Strona główna
-              </Link>
-              <span className="mx-2">/</span>
-              <span className="text-neutral-400">Blog</span>
+              <ol className="flex items-center text-sm text-neutral-300 font-sans" itemScope itemType="https://schema.org/BreadcrumbList">
+                <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                  <Link 
+                    to="/" 
+                    className="hover:text-primary transition-colors"
+                    itemProp="item"
+                  >
+                    <span itemProp="name">Strona główna</span>
+                  </Link>
+                  <meta itemProp="position" content="1" />
+                </li>
+                <span className="mx-2">/</span>
+                <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                  <Link 
+                    to="/blog" 
+                    className="hover:text-primary transition-colors"
+                    itemProp="item"
+                  >
+                    <span itemProp="name">Blog</span>
+                  </Link>
+                  <meta itemProp="position" content="2" />
+                </li>
+                <span className="mx-2">/</span>
+                <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                  <span className="text-neutral-400" itemProp="name">Ile kosztuje strona internetowa</span>
+                  <meta itemProp="position" content="3" />
+                </li>
+              </ol>
             </motion.nav>
 
             {/* Article Header */}
@@ -117,17 +141,17 @@ export function BlogPostPage() {
                       <tr className="bg-neutral-900/30 hover:bg-neutral-900/50 transition-colors">
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">Landing Page / Wizytówka</td>
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">1500 - 3000 zł</td>
-                        <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">od 1200 zł</td>
+                        <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">od 500 zł</td>
                       </tr>
                       <tr className="bg-neutral-900/30 hover:bg-neutral-900/50 transition-colors">
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">Strona firmowa (5-10 podstron)</td>
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">3500 - 5500 zł</td>
-                        <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">od 2500 zł</td>
+                        <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">od 1000 zł</td>
                       </tr>
                       <tr className="bg-neutral-900/30 hover:bg-neutral-900/50 transition-colors">
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">Portal / Sklep internetowy</td>
                         <td className="border border-white/10 px-4 py-3 text-neutral-300 font-sans">od 8000 zł</td>
-                        <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">Wycena indywidualna</td>
+                        <td className="border border-white/10 px-4 py-3 text-primary font-semibold font-sans">od 2000 zł</td>
                       </tr>
                     </tbody>
                   </table>
@@ -239,21 +263,44 @@ export function BlogPostPage() {
                 </div>
               </motion.section>
 
-              {/* Back to home link */}
-              <motion.div
-                className="text-center pt-8 border-t border-white/10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+              {/* Final Call to Action - Large CTA Button */}
+              <motion.section
+                className="mt-12 pt-10 border-t border-white/10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <Link 
-                  to="/"
-                  className="text-primary hover:text-primary/80 font-sans font-medium inline-flex items-center gap-2 transition-colors"
-                >
-                  <ArrowRight className="w-4 h-4 rotate-180" />
-                  Powrót do strony głównej
-                </Link>
-              </motion.div>
+                <div className="bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-3xl p-12 md:p-16 border-2 border-primary/30 text-center relative overflow-hidden">
+                  {/* Animated Background Elements */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+                    <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-sans mb-6 leading-tight">
+                      Gotowy na własną<br />Stalową Witrynę?
+                    </h2>
+                    <p className="text-xl md:text-2xl text-neutral-200 font-sans mb-10 max-w-3xl mx-auto leading-relaxed">
+                      Bezpłatny prototyp w 30 minut.<br />
+                      Żadnych zobowiązań. Tylko konkretna wycena.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                      <Link to="/kontakt" className="w-full sm:w-auto">
+                        <Button 
+                          className="w-full sm:w-auto text-xl md:text-2xl px-12 md:px-16 py-6 md:py-8 shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:shadow-[0_0_80px_hsl(var(--primary)/0.9)] transition-all duration-300 font-bold"
+                        >
+                          Darmowa wycena w 30 minut
+                          <ArrowRight className="w-6 h-6 md:w-7 md:h-7 ml-3" />
+                        </Button>
+                      </Link>
+                    </div>
+                    <p className="text-sm text-neutral-400 font-sans mt-6">
+                      ✓ Bez ukrytych kosztów  •  ✓ Lokalna obsługa Wrocław  •  ✓ PageSpeed 100/100
+                    </p>
+                  </div>
+                </div>
+              </motion.section>
             </motion.article>
           </Container>
         </main>

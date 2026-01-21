@@ -60,15 +60,52 @@ const itemVariants = {
 export function Hero({ onModalStateChange }) {
   const [currentVideo, setCurrentVideo] = useState(0);
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
+  const [secondVideoLoaded, setSecondVideoLoaded] = useState(false);
   const videoRef = useRef(null);
+  const heroSectionRef = useRef(null);
   const videos = ["/video/1.mp4", "/video/2.mp4"];
+
+  // Lazy load second video using Intersection Observer
+  useEffect(() => {
+    if (secondVideoLoaded) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Preload second video when Hero section is visible
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'video';
+            link.href = videos[1];
+            document.head.appendChild(link);
+            setSecondVideoLoaded(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    if (heroSectionRef.current) {
+      observer.observe(heroSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [secondVideoLoaded, videos]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     const handleVideoEnd = () => {
-      // Switch to next video
+      // Switch to next video only if second video is loaded
+      if (currentVideo === 0 && !secondVideoLoaded) {
+        // Loop first video until second is ready
+        video.currentTime = 0;
+        video.play().catch(() => {});
+        return;
+      }
       setCurrentVideo((prev) => (prev + 1) % videos.length);
     };
 
@@ -83,10 +120,10 @@ export function Hero({ onModalStateChange }) {
     return () => {
       video.removeEventListener("ended", handleVideoEnd);
     };
-  }, [currentVideo, videos.length]);
+  }, [currentVideo, videos.length, secondVideoLoaded]);
 
   return (
-    <div className="relative overflow-hidden min-h-0 md:h-[calc(100vh-6rem)] md:flex md:items-center pt-12 pb-2 md:py-0 flex flex-col md:justify-center">
+    <div ref={heroSectionRef} className="relative overflow-hidden min-h-0 md:h-[calc(100vh-6rem)] md:flex md:items-center pt-12 pb-2 md:py-0 flex flex-col md:justify-center">
       {/* Video Background - Looping between two videos */}
       <video
         ref={videoRef}
@@ -95,6 +132,7 @@ export function Hero({ onModalStateChange }) {
         muted
         playsInline
         preload="metadata"
+        poster="/img/logo.webp"
         key={currentVideo}
       >
         <source src={videos[currentVideo]} type="video/mp4" />
