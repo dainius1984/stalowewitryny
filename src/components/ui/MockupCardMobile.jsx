@@ -49,42 +49,64 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
     }
   }, [isHovered, images.length]);
 
-  // Smooth scroll effect on hover - scrolls down to show more content
+  // Smooth scroll effect on hover - optimized to prevent forced reflows
   useEffect(() => {
     if (isHovered && imageRef.current) {
       const container = imageRef.current;
       const img = container.querySelector('img');
       
       if (img) {
+        // Cache dimensions once (prevents forced reflow on every frame)
         const containerHeight = container.clientHeight;
         const imgHeight = img.offsetHeight;
         const maxScroll = Math.max(0, imgHeight - containerHeight);
         
         if (maxScroll > 0) {
-          scrollIntervalRef.current = setInterval(() => {
-            setScrollProgress((prev) => {
-              const newProgress = Math.min(prev + 0.8, 100);
-              if (container) {
-                container.scrollTop = (newProgress / 100) * maxScroll;
-              }
-              return newProgress;
-            });
-          }, 40);
+          let animationFrameId = null;
+          let lastTime = performance.now();
+          
+          const animate = (currentTime) => {
+            const deltaTime = currentTime - lastTime;
+            
+            // Update every ~40ms (25fps) for smooth scrolling
+            if (deltaTime >= 40) {
+              lastTime = currentTime;
+              
+              setScrollProgress((prev) => {
+                const newProgress = Math.min(prev + 0.8, 100);
+                // Batch writes in requestAnimationFrame
+                requestAnimationFrame(() => {
+                  if (container) {
+                    container.scrollTop = (newProgress / 100) * maxScroll;
+                  }
+                });
+                return newProgress;
+              });
+            }
+            
+            animationFrameId = requestAnimationFrame(animate);
+          };
+          
+          scrollIntervalRef.current = requestAnimationFrame(animate);
         }
       }
     } else {
       if (scrollIntervalRef.current) {
-        clearInterval(scrollIntervalRef.current);
+        cancelAnimationFrame(scrollIntervalRef.current);
       }
       setScrollProgress(0);
       if (imageRef.current) {
-        imageRef.current.scrollTop = 0;
+        requestAnimationFrame(() => {
+          if (imageRef.current) {
+            imageRef.current.scrollTop = 0;
+          }
+        });
       }
     }
 
     return () => {
       if (scrollIntervalRef.current) {
-        clearInterval(scrollIntervalRef.current);
+        cancelAnimationFrame(scrollIntervalRef.current);
       }
     };
   }, [isHovered, currentImageIndex]);

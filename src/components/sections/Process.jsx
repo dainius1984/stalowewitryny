@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
@@ -169,22 +169,65 @@ function ProcessCard({ step, index }) {
 export function Process() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMouseInSection, setIsMouseInSection] = useState(false);
+  const sectionRef = useRef(null);
+  const cachedRect = useRef(null);
+  const rafId = useRef(null);
+
+  // Cache rect on mount and window resize (prevents forced reflow)
+  useEffect(() => {
+    const updateRect = () => {
+      if (sectionRef.current) {
+        cachedRect.current = sectionRef.current.getBoundingClientRect();
+      }
+    };
+    
+    updateRect();
+    window.addEventListener('resize', updateRect, { passive: true });
+    return () => window.removeEventListener('resize', updateRect);
+  }, []);
 
   const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+    // Cancel previous frame if still pending
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+    }
+    
+    // Batch reads and writes in requestAnimationFrame
+    rafId.current = requestAnimationFrame(() => {
+      if (!cachedRect.current) {
+        cachedRect.current = e.currentTarget.getBoundingClientRect();
+      }
+      
+      setMousePosition({
+        x: e.clientX - cachedRect.current.left,
+        y: e.clientY - cachedRect.current.top,
+      });
     });
+  };
+  
+  const handleMouseEnter = () => {
+    setIsMouseInSection(true);
+    // Update cached rect on enter
+    if (sectionRef.current) {
+      cachedRect.current = sectionRef.current.getBoundingClientRect();
+    }
+  };
+  
+  const handleMouseLeave = () => {
+    setIsMouseInSection(false);
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+    }
   };
 
   return (
     <section 
+      ref={sectionRef}
       id="proces" 
       className="py-16 md:py-24 bg-black relative overflow-hidden"
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsMouseInSection(true)}
-      onMouseLeave={() => setIsMouseInSection(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Animated Spotlight Background */}
       {isMouseInSection && (
