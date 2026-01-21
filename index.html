@@ -14,7 +14,8 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://stalowewitryny.pl/" />
     
-    <!-- Favicon -->
+    <!-- Favicon (with fallback for older browsers) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=20260121" />
     <link rel="icon" type="image/webp" sizes="32x32" href="/img/logo.webp?v=20260121" />
     <link rel="icon" type="image/webp" sizes="16x16" href="/img/logo.webp?v=20260121" />
     <link rel="apple-touch-icon" sizes="180x180" href="/img/logo.webp?v=20260121" />
@@ -61,13 +62,13 @@
       "url": "https://stalowewitryny.pl",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stalowewitryny.pl/img/logo.png",
+        "url": "https://stalowewitryny.pl/img/logo.webp",
         "width": 512,
         "height": 512
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://stalowewitryny.pl/img/logo.png",
+        "url": "https://stalowewitryny.pl/img/logo.webp",
         "width": 1200,
         "height": 630
       },
@@ -100,17 +101,17 @@
       "url": "https://stalowewitryny.pl",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stalowewitryny.pl/img/logo.png",
+        "url": "https://stalowewitryny.pl/img/logo.webp",
         "width": 512,
         "height": 512
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://stalowewitryny.pl/img/logo.png",
+        "url": "https://stalowewitryny.pl/img/logo.webp",
         "width": 1200,
         "height": 630
       },
-      "telephone": "+48532690876",
+      "telephone": "+48 532 690 876",
       "email": "kontakt@stalowewitryny.pl",
       "priceRange": "$$",
       "address": {
@@ -200,13 +201,13 @@
       "url": "https://stalowewitryny.pl",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://stalowewitryny.pl/img/logo.png",
+        "url": "https://stalowewitryny.pl/img/logo.webp",
         "width": 512,
         "height": 512
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://stalowewitryny.pl/img/logo.png",
+        "url": "https://stalowewitryny.pl/img/logo.webp",
         "width": 1200,
         "height": 630
       },
@@ -280,7 +281,7 @@
           }
         ]
       },
-      "telephone": "+48532690876",
+      "telephone": "+48 532 690 876",
       "email": "kontakt@stalowewitryny.pl",
       "priceRange": "$$",
       "vatID": "PL8942751087"
@@ -392,14 +393,18 @@
     <!-- DNS Prefetch for external resources -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
-    <!-- Google Analytics - Deferred for performance -->
+    <!-- Google Analytics - Load only after user interaction -->
     <script>
-      // Defer GA until page is interactive (non-blocking)
+      // Ultra-optimized GA loading (only after user interaction)
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       
-      // Load GA after page load
-      window.addEventListener('load', function() {
+      var gaLoaded = false;
+      
+      function loadGA() {
+        if (gaLoaded) return;
+        gaLoaded = true;
+        
         var script = document.createElement('script');
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-MFP4FQPTSK';
         script.async = true;
@@ -407,8 +412,25 @@
         
         script.onload = function() {
           gtag('js', new Date());
-          gtag('config', 'G-MFP4FQPTSK');
+          gtag('config', 'G-MFP4FQPTSK', {
+            'page_path': window.location.pathname
+          });
         };
+      }
+      
+      // Load GA on first user interaction (scroll, click, touch)
+      var events = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
+      var timeout = setTimeout(loadGA, 5000); // Fallback: load after 5s
+      
+      events.forEach(function(event) {
+        window.addEventListener(event, function() {
+          clearTimeout(timeout);
+          loadGA();
+          // Remove listeners after first interaction
+          events.forEach(function(e) {
+            window.removeEventListener(e, arguments.callee);
+          });
+        }, { once: true, passive: true });
       });
     </script>
   </head>

@@ -106,6 +106,8 @@ function ProcessCard({ step, index }) {
         >
           <img
             src={step.image}
+            srcSet={`${step.image.replace('.webp', '-small.webp')} 400w, ${step.image.replace('.webp', '-medium.webp')} 800w, ${step.image} 1200w`}
+            sizes="(max-width: 640px) 250px, (max-width: 1024px) 350px, 450px"
             alt={step.alt || `${step.title} - proces tworzenia taniej i solidnej strony internetowej dla firm`}
             className="max-w-[85%] max-h-full object-contain drop-shadow-[0_0_25px_rgba(163,230,53,0.4)]"
             style={{

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Lenis from "lenis";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -7,17 +7,21 @@ import { Hero } from "@/components/sections/Hero";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Comparison } from "@/components/sections/Comparison";
 import { Process } from "@/components/sections/Process";
-import SEOContent from "@/components/sections/SEOContent";
-import { BlogPreview } from "@/components/sections/BlogPreview";
 import { Footer } from "@/components/layout/Footer";
-import { PortfolioPage } from "@/pages/PortfolioPage";
-import { AboutPage } from "@/pages/AboutPage";
-import { ContactPage } from "@/pages/ContactPage";
-import { PrivacyPolicyPage } from "@/pages/PrivacyPolicyPage";
-import { TermsPage } from "@/pages/TermsPage";
-import { BlogPostPage } from "@/pages/BlogPostPage";
-import { BlogPage } from "@/pages/BlogPage";
 import { CookieBanner } from "@/components/ui/CookieBanner";
+
+// Lazy load non-critical components (below the fold)
+const SEOContent = lazy(() => import("@/components/sections/SEOContent"));
+const BlogPreview = lazy(() => import("@/components/sections/BlogPreview").then(m => ({ default: m.BlogPreview })));
+
+// Lazy load all pages except HomePage (code splitting)
+const PortfolioPage = lazy(() => import("@/pages/PortfolioPage").then(m => ({ default: m.PortfolioPage })));
+const AboutPage = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
+const ContactPage = lazy(() => import("@/pages/ContactPage").then(m => ({ default: m.ContactPage })));
+const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage").then(m => ({ default: m.PrivacyPolicyPage })));
+const TermsPage = lazy(() => import("@/pages/TermsPage").then(m => ({ default: m.TermsPage })));
+const BlogPostPage = lazy(() => import("@/pages/BlogPostPage").then(m => ({ default: m.BlogPostPage })));
+const BlogPage = lazy(() => import("@/pages/BlogPage").then(m => ({ default: m.BlogPage })));
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,8 +38,10 @@ function HomePage() {
           <Comparison />
           <Portfolio limit={6} />
           <Process />
-          <SEOContent />
-          <BlogPreview />
+          <Suspense fallback={<div className="min-h-[200px]" />}>
+            <SEOContent />
+            <BlogPreview />
+          </Suspense>
         </main>
         <Footer />
       </div>
@@ -78,16 +84,22 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/portfolio" element={<PortfolioPage />} />
-        <Route path="/o-nas" element={<AboutPage />} />
-        <Route path="/kontakt" element={<ContactPage />} />
-        <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />
-        <Route path="/regulamin" element={<TermsPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/ile-kosztuje-strona-internetowa-wroclaw" element={<BlogPostPage />} />
-      </Routes>
+      <Suspense fallback={
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="text-white">Ładowanie...</div>
+        </div>
+      }>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/o-nas" element={<AboutPage />} />
+          <Route path="/kontakt" element={<ContactPage />} />
+          <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />
+          <Route path="/regulamin" element={<TermsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/ile-kosztuje-strona-internetowa-wroclaw" element={<BlogPostPage />} />
+        </Routes>
+      </Suspense>
       <CookieBanner />
     </BrowserRouter>
   );

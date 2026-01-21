@@ -31,6 +31,8 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
       >
         <img
           src={image}
+          srcSet={`${image.replace('.webp', '-small.webp')} 400w, ${image.replace('.webp', '-medium.webp')} 800w, ${image} 1200w`}
+          sizes="(max-width: 768px) 90vw, 400px"
           alt={alt || "Portfolio image"}
           draggable={false}
           className="w-full h-full object-cover object-center"

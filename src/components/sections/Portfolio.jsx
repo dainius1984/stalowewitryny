@@ -158,6 +158,8 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
       >
         <img
           src={project.image}
+          srcSet={`${project.image.replace('.webp', '-small.webp')} 400w, ${project.image.replace('.webp', '-medium.webp')} 800w, ${project.image} 1200w`}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           alt={`${project.title} - ${project.category} - Tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk`}
           className="w-full h-auto object-cover object-top"
           style={{
