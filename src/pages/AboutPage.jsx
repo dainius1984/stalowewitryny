@@ -48,15 +48,67 @@ export function AboutPage() {
               >
                 Tworzymy Szybkie Strony dla Biznesu
               </motion.h1>
-              <motion.p
-                className="text-lg text-neutral-300 mt-4 font-sans max-w-3xl mx-auto leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                Jestem <strong className="text-white">Marcin</strong>, twórcą <strong className="text-primary">Stalowych Witryn</strong>. 
-                Specjalizuję się w tworzeniu szybkich, ręcznie kodowanych stron internetowych dla małych i średnich firm.
-              </motion.p>
+            </motion.div>
+
+            {/* Personal Introduction Section with Photo */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mb-12 md:mb-16 max-w-4xl mx-auto"
+            >
+              <div className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 overflow-hidden">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                  {/* Family Photo */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="flex-shrink-0"
+                  >
+                    <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-lg shadow-primary/20">
+                      <img
+                        src="/img/Us.png"
+                        alt="Marcin z rodziną"
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                  </motion.div>
+
+                  {/* Text Content */}
+                  <div className="flex-1 text-center md:text-left">
+                    <motion.h2
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                      className="text-3xl md:text-4xl font-bold text-white font-sans mb-4"
+                    >
+                      Cześć, jestem <span className="text-primary">Marcin</span>
+                    </motion.h2>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.6 }}
+                      className="text-lg md:text-xl text-neutral-300 leading-relaxed mb-4"
+                    >
+                      Jestem <strong className="text-white">pasjonatem programowania</strong> i twórcą <strong className="text-primary">Stalowych Witryn</strong>. 
+                      Jako <strong className="text-primary">niezależny deweloper</strong>, specjalizuję się w tworzeniu szybkich, 
+                      ręcznie kodowanych stron internetowych dla małych i średnich firm.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.7 }}
+                      className="text-base md:text-lg text-neutral-400 leading-relaxed"
+                    >
+                      Każdy projekt traktuję indywidualnie, dbając o najwyższą jakość kodu i wydajność. 
+                      Moja pasja do programowania przekłada się na <strong className="text-white">strony, które działają szybko i bezawaryjnie</strong>.
+                    </motion.p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Content Sections */}
@@ -65,7 +117,7 @@ export function AboutPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
                 className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
@@ -82,7 +134,7 @@ export function AboutPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
                 className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
@@ -112,7 +164,7 @@ export function AboutPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
                 className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
@@ -137,7 +189,7 @@ export function AboutPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.65 }}
+                transition={{ duration: 0.6, delay: 1.05 }}
                 className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 w-full"
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-white font-sans mb-4">
@@ -174,7 +226,7 @@ export function AboutPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
+                transition={{ duration: 0.6, delay: 1.1 }}
                 className="text-center"
               >
                 <p className="text-lg text-neutral-300 mb-6">
