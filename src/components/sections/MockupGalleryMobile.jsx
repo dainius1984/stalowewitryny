@@ -10,6 +10,7 @@ import { PortfolioPreviewOverlay } from "@/components/ui/PortfolioPreviewOverlay
 const mockupProjects = [
   {
     desktopHero: "/img/projects/white1.webp",
+    mobileHero: "/img/projects/white1-small.webp", // Use small version for mobile LCP
     alt: "White Effect - Portfolio Project",
     url: "https://www.whiteeffect.pl/",
     title: "White Effect",
@@ -177,7 +178,7 @@ export function MockupGalleryMobile({ onModalStateChange }) {
             className="w-full"
           >
             <MockupCardMobileOnly
-              images={[currentProject.desktopHero]}
+              images={[currentProject.mobileHero || currentProject.desktopHero]}
               alt={currentProject.alt}
               project={currentProject}
               onClick={handleClick}

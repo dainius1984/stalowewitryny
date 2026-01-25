@@ -31,7 +31,8 @@ import { Button } from "@/components/ui/Button";
 // Lazy load desktop gallery - not needed on mobile initial load
 const MockupGallery = lazy(() => import("@/components/sections/MockupGallery").then(m => ({ default: m.MockupGallery })));
 import { MockupGalleryMobile } from "@/components/sections/MockupGalleryMobile";
-import { CompanySurvey } from "@/components/sections/CompanySurvey";
+// Lazy load modal - not needed for initial render
+const CompanySurvey = lazy(() => import("@/components/sections/CompanySurvey").then(m => ({ default: m.CompanySurvey })));
 import { cn } from "@/lib/utils";
 
 const containerVariants = {
@@ -62,9 +63,31 @@ export function Hero({ onModalStateChange }) {
   const [currentVideo, setCurrentVideo] = useState(0);
   const [isSurveyOpen, setIsSurveyOpen] = useState(false);
   const [secondVideoLoaded, setSecondVideoLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const videoRef = useRef(null);
   const heroSectionRef = useRef(null);
   const videos = ["/video/1.mp4", "/video/2.mp4"];
+
+  // Detect mobile and delay video loading on mobile for better LCP
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // On mobile, delay video loading to prioritize LCP image
+      if (mobile) {
+        // Delay video load by 1s to let LCP image load first
+        const timer = setTimeout(() => setShouldLoadVideo(true), 1000);
+        return () => clearTimeout(timer);
+      } else {
+        setShouldLoadVideo(true);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Lazy load second video using Intersection Observer
   useEffect(() => {
@@ -97,7 +120,7 @@ export function Hero({ onModalStateChange }) {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !shouldLoadVideo) return;
 
     const handleVideoEnd = () => {
       // Switch to next video only if second video is loaded
@@ -126,19 +149,26 @@ export function Hero({ onModalStateChange }) {
   return (
     <div ref={heroSectionRef} className="relative overflow-hidden min-h-0 md:h-[calc(100vh-6rem)] md:flex md:items-center pt-12 pb-2 md:py-0 flex flex-col md:justify-center">
       {/* Video Background - Looping between two videos */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        autoPlay
-        muted
-        playsInline
-        preload="auto"
-        poster="/img/logo.webp"
-        fetchpriority="high"
-        key={currentVideo}
-      >
-        <source src={videos[currentVideo]} type="video/mp4" />
-      </video>
+      {/* On mobile: delay video loading to prioritize LCP image */}
+      {shouldLoadVideo && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          autoPlay
+          muted
+          playsInline
+          preload={isMobile ? "metadata" : "auto"}
+          poster="/img/logo.webp"
+          fetchpriority={isMobile ? "low" : "high"}
+          key={currentVideo}
+        >
+          <source src={videos[currentVideo]} type="video/mp4" />
+        </video>
+      )}
+      {/* Fallback gradient on mobile while video loads */}
+      {!shouldLoadVideo && (
+        <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 z-0" />
+      )}
       
       {/* Dark Gradient Overlay for Text Readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80 z-[1]" />
@@ -320,8 +350,12 @@ export function Hero({ onModalStateChange }) {
         </motion.div>
       </Container>
       
-      {/* Company Survey Modal */}
-      <CompanySurvey isOpen={isSurveyOpen} onClose={() => setIsSurveyOpen(false)} />
+      {/* Company Survey Modal - Lazy loaded */}
+      {isSurveyOpen && (
+        <Suspense fallback={null}>
+          <CompanySurvey isOpen={isSurveyOpen} onClose={() => setIsSurveyOpen(false)} />
+        </Suspense>
+      )}
     </div>
   );
 }

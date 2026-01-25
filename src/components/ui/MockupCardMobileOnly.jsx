@@ -6,6 +6,17 @@ import { motion } from "framer-motion";
 
 export function MockupCardMobileOnly({ images, alt, project, onClick, className }) {
   const image = images && images.length > 0 ? images[0] : null;
+  
+  // Use small version on mobile for better LCP
+  const getOptimalImage = (img) => {
+    if (!img) return null;
+    // If already small version, use it; otherwise try to get small version
+    if (img.includes('-small.webp')) return img;
+    if (img.includes('.webp')) return img.replace('.webp', '-small.webp');
+    return img;
+  };
+  
+  const optimalImage = getOptimalImage(image);
 
   if (!image) {
     return (
@@ -30,10 +41,12 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
         transition={{ duration: 0.5 }}
       >
         <img
-          src={image}
+          src={optimalImage || image}
           srcSet={`${image.replace('.webp', '-small.webp')} 400w, ${image.replace('.webp', '-medium.webp')} 800w, ${image} 1200w`}
           sizes="(max-width: 768px) 100vw, 400px"
           fetchPriority="high"
+          width="400"
+          height="225"
           alt={alt || "Portfolio image"}
           draggable={false}
           className="w-full h-full object-cover object-center"

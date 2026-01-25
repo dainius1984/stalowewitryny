@@ -8,8 +8,9 @@ import { Hero } from "@/components/sections/Hero";
 const Portfolio = lazy(() => import("@/components/sections/Portfolio").then(m => ({ default: m.Portfolio })));
 const Comparison = lazy(() => import("@/components/sections/Comparison").then(m => ({ default: m.Comparison })));
 const Process = lazy(() => import("@/components/sections/Process").then(m => ({ default: m.Process })));
-import { Footer } from "@/components/layout/Footer";
-import { CookieBanner } from "@/components/ui/CookieBanner";
+// Lazy load Footer and CookieBanner - not critical for initial render
+const Footer = lazy(() => import("@/components/layout/Footer").then(m => ({ default: m.Footer })));
+const CookieBanner = lazy(() => import("@/components/ui/CookieBanner").then(m => ({ default: m.CookieBanner })));
 
 // Lazy load non-critical components (below the fold)
 const SEOContent = lazy(() => import("@/components/sections/SEOContent"));
@@ -44,7 +45,9 @@ function HomePage() {
             <BlogPreview />
           </Suspense>
         </main>
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </div>
     </>
   );
@@ -101,7 +104,9 @@ function App() {
           <Route path="/blog/ile-kosztuje-strona-internetowa-wroclaw" element={<BlogPostPage />} />
         </Routes>
       </Suspense>
-      <CookieBanner />
+      <Suspense fallback={null}>
+        <CookieBanner />
+      </Suspense>
     </BrowserRouter>
   );
 }
