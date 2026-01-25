@@ -56,6 +56,7 @@ export function AboutPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mb-12 md:mb-16 max-w-4xl mx-auto"
+              style={{ willChange: 'transform, opacity' }}
             >
               <div className="bg-neutral-900/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-10 border border-white/5 overflow-hidden">
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
@@ -65,6 +66,7 @@ export function AboutPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className="flex-shrink-0"
+                    style={{ willChange: 'transform, opacity' }}
                   >
                     <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-lg shadow-primary/20">
                       <img

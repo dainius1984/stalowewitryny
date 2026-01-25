@@ -49,47 +49,83 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
     }
   }, [isHovered, images.length]);
 
+  // Cache dimensions to prevent forced reflows
+  const cachedDimensions = useRef({ containerHeight: 0, imgHeight: 0, maxScroll: 0 });
+
+  // Update cached dimensions when image loads or changes
+  useEffect(() => {
+    if (!imageRef.current) return;
+    
+    const container = imageRef.current;
+    const img = container.querySelector('img');
+    
+    if (!img) return;
+    
+    const updateDimensions = () => {
+      // Batch all reads together to prevent forced reflow
+      requestAnimationFrame(() => {
+        if (container && img) {
+          cachedDimensions.current = {
+            containerHeight: container.clientHeight,
+            imgHeight: img.offsetHeight,
+            maxScroll: Math.max(0, img.offsetHeight - container.clientHeight)
+          };
+        }
+      });
+    };
+    
+    // Update on image load
+    img.addEventListener('load', updateDimensions, { once: true });
+    
+    // Use ResizeObserver to update dimensions when container or image size changes
+    const resizeObserver = new ResizeObserver(() => {
+      updateDimensions();
+    });
+    
+    resizeObserver.observe(container);
+    resizeObserver.observe(img);
+    
+    // Initial update
+    updateDimensions();
+    
+    return () => {
+      img.removeEventListener('load', updateDimensions);
+      resizeObserver.disconnect();
+    };
+  }, [currentImageIndex]);
+
   // Smooth scroll effect on hover - optimized to prevent forced reflows
   useEffect(() => {
-    if (isHovered && imageRef.current) {
+    if (isHovered && imageRef.current && cachedDimensions.current.maxScroll > 0) {
       const container = imageRef.current;
-      const img = container.querySelector('img');
+      const { maxScroll } = cachedDimensions.current;
       
-      if (img) {
-        // Cache dimensions once (prevents forced reflow on every frame)
-        const containerHeight = container.clientHeight;
-        const imgHeight = img.offsetHeight;
-        const maxScroll = Math.max(0, imgHeight - containerHeight);
+      let animationFrameId = null;
+      let lastTime = performance.now();
+      
+      const animate = (currentTime) => {
+        const deltaTime = currentTime - lastTime;
         
-        if (maxScroll > 0) {
-          let animationFrameId = null;
-          let lastTime = performance.now();
+        // Update every ~40ms (25fps) for smooth scrolling
+        if (deltaTime >= 40) {
+          lastTime = currentTime;
           
-          const animate = (currentTime) => {
-            const deltaTime = currentTime - lastTime;
-            
-            // Update every ~40ms (25fps) for smooth scrolling
-            if (deltaTime >= 40) {
-              lastTime = currentTime;
-              
-              setScrollProgress((prev) => {
-                const newProgress = Math.min(prev + 0.8, 100);
-                // Batch writes in requestAnimationFrame
-                requestAnimationFrame(() => {
-                  if (container) {
-                    container.scrollTop = (newProgress / 100) * maxScroll;
-                  }
-                });
-                return newProgress;
-              });
-            }
-            
-            animationFrameId = requestAnimationFrame(animate);
-          };
-          
-          scrollIntervalRef.current = requestAnimationFrame(animate);
+          setScrollProgress((prev) => {
+            const newProgress = Math.min(prev + 0.8, 100);
+            // Batch writes in requestAnimationFrame
+            requestAnimationFrame(() => {
+              if (container) {
+                container.scrollTop = (newProgress / 100) * maxScroll;
+              }
+            });
+            return newProgress;
+          });
         }
-      }
+        
+        animationFrameId = requestAnimationFrame(animate);
+      };
+      
+      scrollIntervalRef.current = requestAnimationFrame(animate);
     } else {
       if (scrollIntervalRef.current) {
         cancelAnimationFrame(scrollIntervalRef.current);

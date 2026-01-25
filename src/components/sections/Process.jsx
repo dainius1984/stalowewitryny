@@ -173,17 +173,34 @@ export function Process() {
   const cachedRect = useRef(null);
   const rafId = useRef(null);
 
-  // Cache rect on mount and window resize (prevents forced reflow)
+  // Cache rect on mount and resize using ResizeObserver (prevents forced reflow)
   useEffect(() => {
+    if (!sectionRef.current) return;
+    
     const updateRect = () => {
       if (sectionRef.current) {
-        cachedRect.current = sectionRef.current.getBoundingClientRect();
+        // Use requestAnimationFrame to batch reads
+        requestAnimationFrame(() => {
+          if (sectionRef.current) {
+            cachedRect.current = sectionRef.current.getBoundingClientRect();
+          }
+        });
       }
     };
     
+    // Initial cache
     updateRect();
-    window.addEventListener('resize', updateRect, { passive: true });
-    return () => window.removeEventListener('resize', updateRect);
+    
+    // Use ResizeObserver instead of window resize for better performance
+    const resizeObserver = new ResizeObserver(() => {
+      updateRect();
+    });
+    
+    resizeObserver.observe(sectionRef.current);
+    
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   const handleMouseMove = (e) => {
@@ -225,6 +242,7 @@ export function Process() {
       ref={sectionRef}
       id="proces" 
       className="py-16 md:py-24 bg-black relative overflow-hidden"
+      style={{ willChange: isMouseInSection ? 'transform' : 'auto' }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
