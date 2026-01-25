@@ -209,15 +209,19 @@ export function Process() {
       cancelAnimationFrame(rafId.current);
     }
     
-    // Batch reads and writes in requestAnimationFrame
+    // Use clientX/Y directly without getBoundingClientRect to avoid forced reflow
+    // Only use cached rect if we need relative positioning
     rafId.current = requestAnimationFrame(() => {
-      if (!cachedRect.current) {
-        cachedRect.current = e.currentTarget.getBoundingClientRect();
+      // Use cached rect if available, otherwise calculate once
+      if (!cachedRect.current && sectionRef.current) {
+        cachedRect.current = sectionRef.current.getBoundingClientRect();
       }
       
+      // Use clientX/Y directly with cached rect offset (avoids reflow)
+      const rect = cachedRect.current || { left: 0, top: 0 };
       setMousePosition({
-        x: e.clientX - cachedRect.current.left,
-        y: e.clientY - cachedRect.current.top,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
       });
     });
   };

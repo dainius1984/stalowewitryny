@@ -236,7 +236,9 @@ export function MockupCardDesktop({ images, alt, delay, onHover, onLeave, onClic
                 <img
                   src={images[currentImageIndex]}
                   srcSet={`${images[currentImageIndex].replace('.webp', '-small.webp')} 400w, ${images[currentImageIndex].replace('.webp', '-medium.webp')} 800w, ${images[currentImageIndex]} 1200w`}
-                  sizes="(max-width: 768px) 300px, (max-width: 1024px) 450px, 500px"
+                  sizes="(max-width: 768px) 300px, 480px"
+                  width="480"
+                  height="360"
                   alt={`${alt} - Tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk - widok ${currentImageIndex + 1}`}
                   style={{ 
                     display: 'block',

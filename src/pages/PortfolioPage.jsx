@@ -160,6 +160,7 @@ function PortfolioListItem({ project, index }) {
             display: "block",
             objectFit: "cover",
             objectPosition: "top center",
+            aspectRatio: "auto",
           }}
           loading="lazy"
           decoding="async"

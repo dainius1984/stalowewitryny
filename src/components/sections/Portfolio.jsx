@@ -179,6 +179,7 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
           style={{
             minHeight: "100%",
             display: "block",
+            aspectRatio: "auto",
           }}
           loading="lazy"
           decoding="async"

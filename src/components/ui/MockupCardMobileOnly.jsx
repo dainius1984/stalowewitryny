@@ -40,6 +40,7 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
             display: 'block',
             userSelect: 'none',
             pointerEvents: 'none',
+            aspectRatio: '16/9',
           }}
           loading="eager"
           fetchPriority="high"
