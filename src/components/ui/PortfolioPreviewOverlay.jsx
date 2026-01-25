@@ -60,7 +60,12 @@ export function PortfolioPreviewOverlay({
   // Cache overlay rect on open (prevents forced reflow)
   useEffect(() => {
     if (isOpen && overlayRef.current) {
-      cachedRect.current = overlayRef.current.getBoundingClientRect();
+      // Batch in requestAnimationFrame to avoid forced reflow
+      requestAnimationFrame(() => {
+        if (overlayRef.current) {
+          cachedRect.current = overlayRef.current.getBoundingClientRect();
+        }
+      });
     }
   }, [isOpen]);
 
@@ -82,10 +87,12 @@ export function PortfolioPreviewOverlay({
   const onTouchStart = (e) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientY);
-    // Cache rect on touch start (prevents forced reflow)
-    if (overlayRef.current) {
-      cachedRect.current = overlayRef.current.getBoundingClientRect();
-    }
+    // Cache rect on touch start - batch in requestAnimationFrame to avoid forced reflow
+    requestAnimationFrame(() => {
+      if (overlayRef.current) {
+        cachedRect.current = overlayRef.current.getBoundingClientRect();
+      }
+    });
   };
 
   const onTouchMove = (e) => {

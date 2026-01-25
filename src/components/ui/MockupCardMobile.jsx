@@ -112,12 +112,10 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
           
           setScrollProgress((prev) => {
             const newProgress = Math.min(prev + 0.8, 100);
-            // Batch writes in requestAnimationFrame
-            requestAnimationFrame(() => {
-              if (container) {
-                container.scrollTop = (newProgress / 100) * maxScroll;
-              }
-            });
+            // Direct write - we're already in requestAnimationFrame, no need to nest
+            if (container) {
+              container.scrollTop = (newProgress / 100) * maxScroll;
+            }
             return newProgress;
           });
         }

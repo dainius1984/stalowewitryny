@@ -228,10 +228,12 @@ export function Process() {
   
   const handleMouseEnter = () => {
     setIsMouseInSection(true);
-    // Update cached rect on enter
-    if (sectionRef.current) {
-      cachedRect.current = sectionRef.current.getBoundingClientRect();
-    }
+    // Update cached rect on enter - batch in requestAnimationFrame to avoid forced reflow
+    requestAnimationFrame(() => {
+      if (sectionRef.current) {
+        cachedRect.current = sectionRef.current.getBoundingClientRect();
+      }
+    });
   };
   
   const handleMouseLeave = () => {

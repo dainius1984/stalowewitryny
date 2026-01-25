@@ -412,6 +412,8 @@
     <!-- Preload LCP elements for faster initial render -->
     <link rel="preload" href="/img/logo.webp" as="image" type="image/webp" fetchpriority="high" />
     <link rel="preload" href="/video/1.mp4" as="video" type="video/mp4" />
+    <!-- Preload first mobile hero image (LCP on mobile) -->
+    <link rel="preload" href="/img/projects/white1-small.webp" as="image" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
     
     <!-- Google Analytics - Load only after user interaction -->
     <script>

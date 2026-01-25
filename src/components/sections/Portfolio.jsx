@@ -53,12 +53,20 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
     let cachedClientHeight = 0;
     
     const updateCachedDimensions = () => {
-      cachedScrollHeight = container.scrollHeight;
-      cachedClientHeight = container.clientHeight;
+      // ResizeObserver callbacks are already batched, but we batch reads for safety
+      if (container) {
+        cachedScrollHeight = container.scrollHeight;
+        cachedClientHeight = container.clientHeight;
+      }
     };
     
-    // Initial dimensions
-    updateCachedDimensions();
+    // Initial dimensions - batch in requestAnimationFrame
+    requestAnimationFrame(() => {
+      if (container) {
+        cachedScrollHeight = container.scrollHeight;
+        cachedClientHeight = container.clientHeight;
+      }
+    });
 
     const handleWheel = (e) => {
       // Batch all reads before writes to prevent layout thrashing

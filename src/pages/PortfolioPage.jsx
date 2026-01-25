@@ -40,13 +40,26 @@ function PortfolioListItem({ project, index }) {
     let rafId = null;
 
     // Cache dimensions to avoid repeated reads (prevents forced reflow)
-    let cachedScrollHeight = container.scrollHeight;
-    let cachedClientHeight = container.clientHeight;
+    let cachedScrollHeight = 0;
+    let cachedClientHeight = 0;
     
     const updateCachedDimensions = () => {
-      cachedScrollHeight = container.scrollHeight;
-      cachedClientHeight = container.clientHeight;
+      // Batch reads in requestAnimationFrame to avoid forced reflow
+      requestAnimationFrame(() => {
+        if (container) {
+          cachedScrollHeight = container.scrollHeight;
+          cachedClientHeight = container.clientHeight;
+        }
+      });
     };
+    
+    // Initial cache - also batch this
+    requestAnimationFrame(() => {
+      if (container) {
+        cachedScrollHeight = container.scrollHeight;
+        cachedClientHeight = container.clientHeight;
+      }
+    });
     
     const handleWheel = (e) => {
       // Batch all reads before writes to prevent layout thrashing

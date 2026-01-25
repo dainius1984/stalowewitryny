@@ -22,13 +22,14 @@
  * - Staggered text animations
  * - Responsive layout (different on mobile vs desktop)
  */
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Zap, Shield, Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BentoCard } from "@/components/ui/BentoCard";
 import { Button } from "@/components/ui/Button";
-import { MockupGallery } from "@/components/sections/MockupGallery";
+// Lazy load desktop gallery - not needed on mobile initial load
+const MockupGallery = lazy(() => import("@/components/sections/MockupGallery").then(m => ({ default: m.MockupGallery })));
 import { MockupGalleryMobile } from "@/components/sections/MockupGalleryMobile";
 import { CompanySurvey } from "@/components/sections/CompanySurvey";
 import { cn } from "@/lib/utils";
@@ -313,7 +314,9 @@ export function Hero({ onModalStateChange }) {
           </BentoCard>
 
           {/* Right Card - Span 1 column - Interactive Mockup Gallery */}
-          <MockupGallery onModalStateChange={onModalStateChange} />
+          <Suspense fallback={<div className="min-h-[400px]" />}>
+            <MockupGallery onModalStateChange={onModalStateChange} />
+          </Suspense>
         </motion.div>
       </Container>
       

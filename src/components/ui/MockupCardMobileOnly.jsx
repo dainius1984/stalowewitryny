@@ -32,7 +32,8 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
         <img
           src={image}
           srcSet={`${image.replace('.webp', '-small.webp')} 400w, ${image.replace('.webp', '-medium.webp')} 800w, ${image} 1200w`}
-          sizes="(max-width: 768px) 90vw, 400px"
+          sizes="(max-width: 768px) 100vw, 400px"
+          fetchPriority="high"
           alt={alt || "Portfolio image"}
           draggable={false}
           className="w-full h-full object-cover object-center"
@@ -43,7 +44,6 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
             aspectRatio: '16/9',
           }}
           loading="eager"
-          fetchPriority="high"
           decoding="async"
           onError={(e) => {
             console.error('Image failed to load:', image);

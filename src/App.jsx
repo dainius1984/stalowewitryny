@@ -4,9 +4,10 @@ import Lenis from "lenis";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { Portfolio } from "@/components/sections/Portfolio";
-import { Comparison } from "@/components/sections/Comparison";
-import { Process } from "@/components/sections/Process";
+// Lazy load below-the-fold components for mobile performance
+const Portfolio = lazy(() => import("@/components/sections/Portfolio").then(m => ({ default: m.Portfolio })));
+const Comparison = lazy(() => import("@/components/sections/Comparison").then(m => ({ default: m.Comparison })));
+const Process = lazy(() => import("@/components/sections/Process").then(m => ({ default: m.Process })));
 import { Footer } from "@/components/layout/Footer";
 import { CookieBanner } from "@/components/ui/CookieBanner";
 
@@ -35,10 +36,10 @@ function HomePage() {
         <Navbar isModalOpen={isModalOpen} />
         <main className="pt-24 md:pt-28 flex-grow">
           <Hero onModalStateChange={setIsModalOpen} />
-          <Comparison />
-          <Portfolio limit={6} />
-          <Process />
           <Suspense fallback={<div className="min-h-[200px]" />}>
+            <Comparison />
+            <Portfolio limit={6} />
+            <Process />
             <SEOContent />
             <BlogPreview />
           </Suspense>
