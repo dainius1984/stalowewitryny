@@ -161,7 +161,7 @@ export function Navbar({ isModalOpen = false }) {
                     width="20"
                     height="20"
                     loading="eager"
-                    fetchPriority="high"
+                    fetchPriority="low"
                     decoding="async"
                   />
                   <span>

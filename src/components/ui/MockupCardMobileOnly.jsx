@@ -38,7 +38,7 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
         className="relative w-full h-full rounded-xl overflow-hidden"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
       >
         <img
           src={optimalImage || image}

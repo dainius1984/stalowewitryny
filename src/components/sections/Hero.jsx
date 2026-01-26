@@ -35,24 +35,25 @@ import { MockupGalleryMobile } from "@/components/sections/MockupGalleryMobile";
 const CompanySurvey = lazy(() => import("@/components/sections/CompanySurvey").then(m => ({ default: m.CompanySurvey })));
 import { cn } from "@/lib/utils";
 
+// Optimized variants for mobile - faster animations
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
+      staggerChildren: 0.1, // Faster on mobile
+      delayChildren: 0, // No delay for faster LCP
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10 }, // Smaller movement on mobile
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.3, // Faster on mobile
       ease: "easeOut",
     },
   },
@@ -69,19 +70,14 @@ export function Hero({ onModalStateChange }) {
   const heroSectionRef = useRef(null);
   const videos = ["/video/1.mp4", "/video/2.mp4"];
 
-  // Detect mobile and delay video loading on mobile for better LCP
+  // Detect mobile - completely disable video on mobile for better LCP
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      // On mobile, delay video loading to prioritize LCP image
-      if (mobile) {
-        // Delay video load by 1s to let LCP image load first
-        const timer = setTimeout(() => setShouldLoadVideo(true), 1000);
-        return () => clearTimeout(timer);
-      } else {
-        setShouldLoadVideo(true);
-      }
+      // On mobile: completely disable video to prioritize LCP image
+      // On desktop: load video immediately
+      setShouldLoadVideo(!mobile);
     };
     
     checkMobile();
@@ -148,25 +144,24 @@ export function Hero({ onModalStateChange }) {
 
   return (
     <div ref={heroSectionRef} className="relative overflow-hidden min-h-0 md:h-[calc(100vh-6rem)] md:flex md:items-center pt-12 pb-2 md:py-0 flex flex-col md:justify-center">
-      {/* Video Background - Looping between two videos */}
-      {/* On mobile: delay video loading to prioritize LCP image */}
-      {shouldLoadVideo && (
+      {/* Video Background - Desktop only, completely disabled on mobile for better LCP */}
+      {shouldLoadVideo && !isMobile && (
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover z-0"
           autoPlay
           muted
           playsInline
-          preload={isMobile ? "metadata" : "auto"}
+          preload="auto"
           poster="/img/logo.webp"
-          fetchpriority={isMobile ? "low" : "high"}
+          fetchpriority="high"
           key={currentVideo}
         >
           <source src={videos[currentVideo]} type="video/mp4" />
         </video>
       )}
-      {/* Fallback gradient on mobile while video loads */}
-      {!shouldLoadVideo && (
+      {/* Static gradient background on mobile - no video for better performance */}
+      {isMobile && (
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 z-0" />
       )}
       
@@ -185,22 +180,27 @@ export function Hero({ onModalStateChange }) {
       <Container className="relative z-10">
         {/* Mobile Layout: Portfolio Slider First, Then Banner */}
         <div className="md:hidden flex flex-col gap-2 justify-start py-2">
-          {/* Portfolio Slider First on Mobile */}
+          {/* Portfolio Slider First on Mobile - Reduced animation delay for faster LCP */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="flex-shrink-0 flex items-center justify-center -mx-2 -mb-[10px]"
             style={{ pointerEvents: 'none' }} // Allow touch events to pass through
+            transition={{ staggerChildren: 0.05, delayChildren: 0 }} // Faster on mobile
           >
             <div className="w-full px-2" style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
               <MockupGalleryMobile onModalStateChange={onModalStateChange} />
             </div>
           </motion.div>
 
-          {/* Banner Below on Mobile */}
+          {/* Banner Below on Mobile - Reduced animation for faster render */}
           <BentoCard className="w-full flex flex-col justify-center p-3 flex-shrink-0">
-            <motion.div className="space-y-1.5" variants={containerVariants}>
+            <motion.div 
+              className="space-y-1.5" 
+              variants={containerVariants}
+              transition={{ staggerChildren: 0.05, delayChildren: 0.05 }} // Faster stagger
+            >
               <motion.h1 
                 className="text-xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
                 variants={itemVariants}
