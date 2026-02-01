@@ -52,7 +52,7 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
   // Cache dimensions to prevent forced reflows
   const cachedDimensions = useRef({ containerHeight: 0, imgHeight: 0, maxScroll: 0 });
 
-  // Update cached dimensions when image loads or changes
+  // Update cached dimensions when image loads or changes (batched to avoid forced reflow)
   useEffect(() => {
     if (!imageRef.current) return;
     
@@ -61,35 +61,37 @@ export function MockupCardMobile({ images, alt, delay, onHover, onLeave, onClick
     
     if (!img) return;
     
-    const updateDimensions = () => {
-      // Batch all reads together to prevent forced reflow
-      requestAnimationFrame(() => {
-        if (container && img) {
-          cachedDimensions.current = {
-            containerHeight: container.clientHeight,
-            imgHeight: img.offsetHeight,
-            maxScroll: Math.max(0, img.offsetHeight - container.clientHeight)
-          };
-        }
-      });
+    const readDimensions = () => {
+      if (!container || !img) return;
+      cachedDimensions.current = {
+        containerHeight: container.clientHeight,
+        imgHeight: img.offsetHeight,
+        maxScroll: Math.max(0, img.offsetHeight - container.clientHeight)
+      };
     };
     
-    // Update on image load
-    img.addEventListener('load', updateDimensions, { once: true });
-    
-    // Use ResizeObserver to update dimensions when container or image size changes
+    // ResizeObserver runs after layout - read synchronously in callback (no extra rAF)
     const resizeObserver = new ResizeObserver(() => {
-      updateDimensions();
+      readDimensions();
     });
     
     resizeObserver.observe(container);
     resizeObserver.observe(img);
     
-    // Initial update
-    updateDimensions();
+    const onLoad = () => readDimensions();
+    img.addEventListener('load', onLoad, { once: true });
+    
+    // Initial read after first paint (double rAF) to avoid forced reflow on mount
+    let raf1;
+    let raf2;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(readDimensions);
+    });
     
     return () => {
-      img.removeEventListener('load', updateDimensions);
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+      img.removeEventListener('load', onLoad);
       resizeObserver.disconnect();
     };
   }, [currentImageIndex]);

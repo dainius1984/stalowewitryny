@@ -15,7 +15,7 @@ const steps = [
     number: "02",
     title: "Projekt",
     description: "Tworzę unikalny design UX/UI. Twoja strona nie będzie wyglądać jak tysiące innych.",
-    image: "/img/Design Project.webp",
+    image: "/img/Design%20Project.webp",
     alt: "Projektowanie UX/UI - tania strona www Wrocław, szybki kod React, projektowanie stron Dolny Śląsk",
   },
   {
@@ -177,63 +177,47 @@ export function Process() {
   useEffect(() => {
     if (!sectionRef.current) return;
     
-    const updateRect = () => {
+    const el = sectionRef.current;
+    
+    const readRect = () => {
       if (sectionRef.current) {
-        // Use requestAnimationFrame to batch reads
-        requestAnimationFrame(() => {
-          if (sectionRef.current) {
-            cachedRect.current = sectionRef.current.getBoundingClientRect();
-          }
-        });
+        cachedRect.current = sectionRef.current.getBoundingClientRect();
       }
     };
     
-    // Initial cache
-    updateRect();
+    // ResizeObserver runs after layout - read synchronously (no rAF)
+    const resizeObserver = new ResizeObserver(readRect);
+    resizeObserver.observe(el);
     
-    // Use ResizeObserver instead of window resize for better performance
-    const resizeObserver = new ResizeObserver(() => {
-      updateRect();
+    // Initial read after first paint (double rAF) to avoid forced reflow on mount
+    let raf1;
+    let raf2;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(readRect);
     });
     
-    resizeObserver.observe(sectionRef.current);
-    
     return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
       resizeObserver.disconnect();
     };
   }, []);
 
   const handleMouseMove = (e) => {
-    // Cancel previous frame if still pending
-    if (rafId.current) {
-      cancelAnimationFrame(rafId.current);
-    }
-    
-    // Use clientX/Y directly without getBoundingClientRect to avoid forced reflow
-    // Only use cached rect if we need relative positioning
+    if (rafId.current) cancelAnimationFrame(rafId.current);
+    const rect = cachedRect.current || { left: 0, top: 0 };
     rafId.current = requestAnimationFrame(() => {
-      // Use cached rect if available, otherwise calculate once
-      if (!cachedRect.current && sectionRef.current) {
-        cachedRect.current = sectionRef.current.getBoundingClientRect();
-      }
-      
-      // Use clientX/Y directly with cached rect offset (avoids reflow)
-      const rect = cachedRect.current || { left: 0, top: 0 };
       setMousePosition({
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
+      rafId.current = null;
     });
   };
   
   const handleMouseEnter = () => {
     setIsMouseInSection(true);
-    // Update cached rect on enter - batch in requestAnimationFrame to avoid forced reflow
-    requestAnimationFrame(() => {
-      if (sectionRef.current) {
-        cachedRect.current = sectionRef.current.getBoundingClientRect();
-      }
-    });
+    // Rect updated by ResizeObserver; avoid getBoundingClientRect here to prevent reflow
   };
   
   const handleMouseLeave = () => {

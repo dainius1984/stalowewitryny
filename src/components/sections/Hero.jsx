@@ -180,60 +180,37 @@ export function Hero({ onModalStateChange }) {
       <Container className="relative z-10">
         {/* Mobile Layout: Portfolio Slider First, Then Banner */}
         <div className="md:hidden flex flex-col gap-2 justify-start py-2">
-          {/* Portfolio Slider First on Mobile - Reduced animation delay for faster LCP */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+          {/* Portfolio Slider First on Mobile - NO animation wrapper for instant LCP */}
+          <div
             className="flex-shrink-0 flex items-center justify-center -mx-2 -mb-[10px]"
             style={{ pointerEvents: 'none' }} // Allow touch events to pass through
-            transition={{ staggerChildren: 0.05, delayChildren: 0 }} // Faster on mobile
           >
             <div className="w-full px-2" style={{ pointerEvents: 'auto' }}> {/* Re-enable for child */}
               <MockupGalleryMobile onModalStateChange={onModalStateChange} />
             </div>
-          </motion.div>
+          </div>
 
-          {/* Banner Below on Mobile - Reduced animation for faster render */}
+          {/* Banner Below on Mobile - NO animations for faster FCP */}
           <BentoCard className="w-full flex flex-col justify-center p-3 flex-shrink-0">
-            <motion.div 
-              className="space-y-1.5" 
-              variants={containerVariants}
-              transition={{ staggerChildren: 0.05, delayChildren: 0.05 }} // Faster stagger
-            >
-              <motion.h1 
-                className="text-xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center"
-                variants={itemVariants}
-              >
+            <div className="space-y-1.5">
+              <h1 className="text-xl font-extrabold tracking-tight leading-[1.1] font-sans text-white text-center">
                 Strony internetowe Wrocław | Tanie, szybkie, bez abonamentu
-              </motion.h1>
+              </h1>
               
-              <motion.h2 
-                className="text-xs font-bold text-neutral-300 mt-0.5 font-sans text-center"
-                variants={itemVariants}
-              >
+              <h2 className="text-xs font-bold text-neutral-300 mt-0.5 font-sans text-center">
                 Dlaczego szybkie strony (React) to lepszy wybór?
-              </motion.h2>
+              </h2>
               
-              <motion.p 
-                className="text-[10px] font-semibold text-primary mt-0.5 font-sans text-center"
-                variants={itemVariants}
-              >
+              <p className="text-[10px] font-semibold text-primary mt-0.5 font-sans text-center">
                 Tworzenie stron www bez abonamentu | Lokalny deweloper z Wrocławia
-              </motion.p>
+              </p>
               
-              <motion.p 
-                className="text-[10px] text-neutral-300 mt-1 font-sans text-center leading-relaxed px-1"
-                variants={itemVariants}
-              >
+              <p className="text-[10px] text-neutral-300 mt-1 font-sans text-center leading-relaxed px-1">
                 Ręcznie kodowane strony internetowe na własność. <strong className="text-white">Brak opłat miesięcznych</strong>, pełna własność kodu, responsywne strony www z wynikiem PageSpeed 100/100. <strong className="text-primary">Google Analytics</strong> w standardzie – śledź ruch i optymalizuj wyniki.
-              </motion.p>
+              </p>
               
               {/* Trust Bar - USP Highlights */}
-              <motion.div 
-                className="flex flex-wrap items-center justify-center gap-1.5 pt-0.5"
-                variants={itemVariants}
-              >
+              <div className="flex flex-wrap items-center justify-center gap-1.5 pt-0.5">
                 <div className="flex items-center gap-1 text-[9px] text-neutral-300 font-sans">
                   <Zap className="w-2.5 h-2.5 text-primary" />
                   <span className="font-medium">Szybkość 100/100</span>
@@ -246,12 +223,9 @@ export function Hero({ onModalStateChange }) {
                   <Search className="w-2.5 h-2.5 text-primary" />
                   <span className="font-medium">SEO Friendly</span>
                 </div>
-              </motion.div>
+              </div>
               
-              <motion.div 
-                className="pt-1.5 flex justify-center"
-                variants={itemVariants}
-              >
+              <div className="pt-1.5 flex justify-center">
                 <Button 
                   variant="primary"
                   onClick={() => setIsSurveyOpen(true)}
@@ -260,8 +234,8 @@ export function Hero({ onModalStateChange }) {
                 >
                   Darmowa Wycena
                 </Button>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </BentoCard>
         </div>
 

@@ -168,23 +168,35 @@ export function MockupGalleryMobile({ onModalStateChange }) {
         onTouchEnd={handleTouchEnd}
         style={{ touchAction: 'pan-x pan-y' }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="w-full"
-          >
+        {/* First image (LCP) - NO animation for instant render */}
+        {currentIndex === 0 ? (
+          <div className="w-full">
             <MockupCardMobileOnly
               images={[currentProject.mobileHero || currentProject.desktopHero]}
               alt={currentProject.alt}
               project={currentProject}
               onClick={handleClick}
             />
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="w-full"
+            >
+              <MockupCardMobileOnly
+                images={[currentProject.mobileHero || currentProject.desktopHero]}
+                alt={currentProject.alt}
+                project={currentProject}
+                onClick={handleClick}
+              />
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
 
       <PortfolioPreviewOverlay

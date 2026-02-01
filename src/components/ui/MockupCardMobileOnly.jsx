@@ -1,9 +1,7 @@
 /**
  * MockupCardMobileOnly Component - SIMPLIFIED FOR MOBILE
- * Simple card displaying one image
+ * Simple card displaying one image - NO ANIMATIONS for faster LCP
  */
-import { motion } from "framer-motion";
-
 export function MockupCardMobileOnly({ images, alt, project, onClick, className }) {
   const image = images && images.length > 0 ? images[0] : null;
   
@@ -17,6 +15,11 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
   };
   
   const optimalImage = getOptimalImage(image);
+  // Build srcset only for .webp paths (avoids broken srcset for paths with spaces etc.)
+  const isWebp = image && typeof image === 'string' && image.endsWith('.webp');
+  const srcSetValue = isWebp
+    ? `${image.replace('.webp', '-small.webp')} 400w, ${image.replace('.webp', '-medium.webp')} 800w, ${image} 1200w`
+    : undefined;
 
   if (!image) {
     return (
@@ -34,15 +37,11 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
       }}
       onClick={() => onClick && project && onClick(project)}
     >
-      <motion.div
-        className="relative w-full h-full rounded-xl overflow-hidden"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
+      {/* NO FRAMER MOTION - Render immediately for LCP */}
+      <div className="relative w-full h-full rounded-xl overflow-hidden">
         <img
           src={optimalImage || image}
-          srcSet={`${image.replace('.webp', '-small.webp')} 400w, ${image.replace('.webp', '-medium.webp')} 800w, ${image} 1200w`}
+          {...(srcSetValue ? { srcSet: srcSetValue } : {})}
           sizes="(max-width: 768px) 100vw, 400px"
           fetchPriority="high"
           width="400"
@@ -59,9 +58,14 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
           loading="eager"
           decoding="async"
           onError={(e) => {
-            console.error('Image failed to load:', image);
-            e.target.style.display = "none";
-            const parent = e.target.parentElement;
+            const target = e.target;
+            if (optimalImage && optimalImage !== image) {
+              target.src = image;
+              target.onerror = null;
+              return;
+            }
+            target.style.display = "none";
+            const parent = target.parentElement;
             if (parent) {
               parent.style.background = "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)";
               parent.style.display = "flex";
@@ -74,7 +78,7 @@ export function MockupCardMobileOnly({ images, alt, project, onClick, className 
           }}
         />
         <div className="absolute inset-0 border-2 rounded-xl border-white/20 pointer-events-none" />
-      </motion.div>
+      </div>
     </div>
   );
 }

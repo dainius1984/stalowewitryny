@@ -51,45 +51,39 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
     // Cache dimensions to avoid repeated reads (prevents forced reflow)
     let cachedScrollHeight = 0;
     let cachedClientHeight = 0;
+    let lastScrollTop = 0;
     
     const updateCachedDimensions = () => {
-      // ResizeObserver callbacks are already batched, but we batch reads for safety
       if (container) {
         cachedScrollHeight = container.scrollHeight;
         cachedClientHeight = container.clientHeight;
+        lastScrollTop = container.scrollTop;
       }
     };
     
-    // Initial dimensions - batch in requestAnimationFrame
-    requestAnimationFrame(() => {
-      if (container) {
-        cachedScrollHeight = container.scrollHeight;
-        cachedClientHeight = container.clientHeight;
-      }
+    // Initial dimensions - double rAF to read after layout
+    let initRaf2;
+    const initRaf1 = requestAnimationFrame(() => {
+      initRaf2 = requestAnimationFrame(updateCachedDimensions);
     });
 
     const handleWheel = (e) => {
-      // Batch all reads before writes to prevent layout thrashing
-      const currentScrollTop = container.scrollTop;
-      const maxScroll = cachedScrollHeight - cachedClientHeight;
-      const isAtTop = currentScrollTop <= 1;
-      const isAtBottom = currentScrollTop >= maxScroll - 1;
-      const isScrollingDown = e.deltaY > 0;
-      const isScrollingUp = e.deltaY < 0;
+      const deltaY = e.deltaY;
+      const maxScroll = Math.max(0, cachedScrollHeight - cachedClientHeight);
+      const isScrollingDown = deltaY > 0;
+      const isScrollingUp = deltaY < 0;
+      const isAtTop = lastScrollTop <= 1;
+      const isAtBottom = lastScrollTop >= maxScroll - 1;
 
-      // Prevent page scroll if scrolling within tile bounds
       if ((isScrollingDown && !isAtBottom) || (isScrollingUp && !isAtTop)) {
         e.preventDefault();
         e.stopPropagation();
-        
-        // Use requestAnimationFrame for smooth scrolling (batched writes)
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-        }
-        
+        if (rafId) cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(() => {
-          const newScrollTop = Math.max(0, Math.min(maxScroll, currentScrollTop + e.deltaY));
-          container.scrollTop = newScrollTop; // Direct assignment is faster than scrollTo()
+          const currentScrollTop = container.scrollTop;
+          const newScrollTop = Math.max(0, Math.min(maxScroll, currentScrollTop + deltaY));
+          container.scrollTop = newScrollTop;
+          lastScrollTop = newScrollTop;
           rafId = null;
         });
       }
@@ -99,16 +93,16 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
     container.addEventListener('wheel', handleWheel, { passive: false, capture: true });
     
     // Update cached dimensions on resize
-    const resizeObserver = new ResizeObserver(updateCachedDimensions);
-    resizeObserver.observe(container);
+    const ro = new ResizeObserver(updateCachedDimensions);
+    ro.observe(container);
 
     return () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
+      cancelAnimationFrame(initRaf1);
+      if (initRaf2) cancelAnimationFrame(initRaf2);
+      if (rafId) cancelAnimationFrame(rafId);
       tile.removeEventListener('wheel', handleWheel, { capture: true });
       container.removeEventListener('wheel', handleWheel, { capture: true });
-      resizeObserver.disconnect();
+      ro.disconnect();
     };
   }, [isHovered, isMobileOverlayHidden, isMobile]);
 

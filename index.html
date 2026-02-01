@@ -315,13 +315,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Preload critical Inter font files (reduces 365ms critical path) -->
+    <!-- Preload Inter fonts on desktop only - mobile uses system font first to shorten critical path -->
     <link 
       rel="preload" 
       as="font" 
       type="font/woff2" 
       href="https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" 
       crossorigin
+      media="(min-width: 768px)"
     />
     <link 
       rel="preload" 
@@ -329,6 +330,7 @@
       type="font/woff2" 
       href="https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2JL7.woff2" 
       crossorigin
+      media="(min-width: 768px)"
     />
     
     <!-- Preload Google Fonts CSS (high priority, non-blocking) -->

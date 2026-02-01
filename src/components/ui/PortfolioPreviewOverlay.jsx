@@ -57,16 +57,22 @@ export function PortfolioPreviewOverlay({
     }
   }, [isOpen, url]);
   
-  // Cache overlay rect on open (prevents forced reflow)
+  // Cache overlay rect on open (double rAF to read after layout, prevents forced reflow)
   useEffect(() => {
-    if (isOpen && overlayRef.current) {
-      // Batch in requestAnimationFrame to avoid forced reflow
-      requestAnimationFrame(() => {
+    if (!isOpen || !overlayRef.current) return;
+    let raf1;
+    let raf2;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
         if (overlayRef.current) {
           cachedRect.current = overlayRef.current.getBoundingClientRect();
         }
       });
-    }
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
   }, [isOpen]);
 
   // Add parameter to disable subscription modal on whiteeffect.pl
@@ -83,16 +89,10 @@ export function PortfolioPreviewOverlay({
     }
   };
 
-  // Swipe down to close on mobile
   const onTouchStart = (e) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientY);
-    // Cache rect on touch start - batch in requestAnimationFrame to avoid forced reflow
-    requestAnimationFrame(() => {
-      if (overlayRef.current) {
-        cachedRect.current = overlayRef.current.getBoundingClientRect();
-      }
-    });
+    // Use cached rect only; avoid getBoundingClientRect in touch handler to prevent reflow
   };
 
   const onTouchMove = (e) => {
