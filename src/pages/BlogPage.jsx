@@ -29,7 +29,7 @@ export function BlogPage() {
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', 'https://stalowewitryny.pl/blog');
+    canonical.setAttribute('href', 'https://www.stalowewitryny.pl/blog');
   }, []);
 
   const blogPosts = [

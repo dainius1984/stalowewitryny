@@ -32,7 +32,7 @@ export function BlogPostPage() {
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', 'https://stalowewitryny.pl/blog/ile-kosztuje-strona-internetowa-wroclaw');
+    canonical.setAttribute('href', 'https://www.stalowewitryny.pl/blog/ile-kosztuje-strona-internetowa-wroclaw');
   }, []);
 
   return (
