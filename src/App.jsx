@@ -23,6 +23,7 @@ const ContactPage = lazy(() => import("@/pages/ContactPage").then(m => ({ defaul
 const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage").then(m => ({ default: m.PrivacyPolicyPage })));
 const TermsPage = lazy(() => import("@/pages/TermsPage").then(m => ({ default: m.TermsPage })));
 const BlogPostPage = lazy(() => import("@/pages/BlogPostPage").then(m => ({ default: m.BlogPostPage })));
+const BlogPostSpeedPage = lazy(() => import("@/pages/BlogPostSpeedPage").then(m => ({ default: m.BlogPostSpeedPage })));
 const BlogPage = lazy(() => import("@/pages/BlogPage").then(m => ({ default: m.BlogPage })));
 
 function HomePage() {
@@ -102,6 +103,7 @@ function App() {
           <Route path="/regulamin" element={<TermsPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/ile-kosztuje-strona-internetowa-wroclaw" element={<BlogPostPage />} />
+          <Route path="/blog/szybkosc-strony-internetowej-seo-wroclaw" element={<BlogPostSpeedPage />} />
         </Routes>
       </Suspense>
       <Suspense fallback={null}>

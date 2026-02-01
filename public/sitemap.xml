@@ -56,6 +56,14 @@
     <priority>0.9</priority>
   </url>
   
+  <!-- Blog - Szybkość strony a SEO Wrocław -->
+  <url>
+    <loc>https://www.stalowewitryny.pl/blog/szybkosc-strony-internetowej-seo-wroclaw</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- Blog - Ile kosztuje strona internetowa we Wrocławiu -->
   <url>
     <loc>https://www.stalowewitryny.pl/blog/ile-kosztuje-strona-internetowa-wroclaw</loc>

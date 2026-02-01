@@ -34,6 +34,13 @@ export function BlogPage() {
 
   const blogPosts = [
     {
+      slug: "szybkosc-strony-internetowej-seo-wroclaw",
+      title: "Szybkość strony a SEO – dlaczego 0.8s LCP to klucz?",
+      excerpt: "Dowiedz się, jak szybkość strony wpływa na pozycję w Google i zyski. Dlaczego strony w React są szybsze od WordPressa. Optymalizacja SEO Wrocław.",
+      date: "2026-01-25",
+      category: "SEO",
+    },
+    {
       slug: "ile-kosztuje-strona-internetowa-wroclaw",
       title: "Ile kosztuje strona internetowa we Wrocławiu? Cennik 2026",
       excerpt: "Sprawdź aktualne ceny tworzenia stron www we Wrocławiu. Dowiedz się, dlaczego warto wybrać stronę w React bez abonamentu. Przejrzysty cennik Stalowych Witryn.",
