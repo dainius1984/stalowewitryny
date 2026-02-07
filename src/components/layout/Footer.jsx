@@ -75,9 +75,9 @@ export function Footer() {
   return (
     <footer id="kontakt" className="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
       <Container className="py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 items-start">
-          {/* Logo & Brand - ograniczona szerokość, żeby nazwa nie nachodziła na kolejną kolumnę */}
-          <div className="space-y-4 text-center md:text-left min-w-0 lg:max-w-[16rem]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[minmax(18rem,1fr)_1fr_1fr_1fr] gap-8 lg:gap-12 items-start">
+          {/* Logo & Brand – pierwsza kolumna ma min. 18rem, żeby nazwa mieściła się w jednej linii */}
+          <div className="space-y-4 text-center md:text-left min-w-0">
             <Link 
               to="/" 
               onClick={(e) => {
@@ -87,7 +87,7 @@ export function Footer() {
                 }
                 scrollToTop();
               }}
-              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity flex-wrap max-w-full" 
+              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity" 
               title="Stalowe Witryny - Tworzenie Stron Internetowych Wrocław - Strona główna"
             >
               <img 
@@ -98,10 +98,8 @@ export function Footer() {
                 height="40"
                 loading="lazy"
               />
-              <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter font-sans text-white break-words">
-                STALOWE
-                <wbr />
-                WITRYNY<span className="text-primary">.</span>
+              <span className="text-2xl md:text-3xl font-black tracking-tighter font-sans text-white whitespace-nowrap">
+                STALOWEWITRYNY<span className="text-primary">.</span>
               </span>
             </Link>
             <p className="text-sm text-neutral-300 font-sans max-w-xs mx-auto md:mx-0">
