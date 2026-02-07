@@ -11,9 +11,52 @@
   <!-- Portfolio -->
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <!-- Portfolio – realizacje (podstrony pod SEO) -->
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/white-effect</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/autyzm-od-kuchni</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/studio-figura</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/zielone-mile</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/fryzjerka-malgosia</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/oranzeria</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.stalowewitryny.pl/portfolio/openpol</loc>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   
   <!-- O nas -->

@@ -18,6 +18,7 @@ const BlogPreview = lazy(() => import("@/components/sections/BlogPreview").then(
 
 // Lazy load all pages except HomePage (code splitting)
 const PortfolioPage = lazy(() => import("@/pages/PortfolioPage").then(m => ({ default: m.PortfolioPage })));
+const PortfolioProjectPage = lazy(() => import("@/pages/PortfolioProjectPage").then(m => ({ default: m.PortfolioProjectPage })));
 const AboutPage = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
 const ContactPage = lazy(() => import("@/pages/ContactPage").then(m => ({ default: m.ContactPage })));
 const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage").then(m => ({ default: m.PrivacyPolicyPage })));
@@ -97,6 +98,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/portfolio/:slug" element={<PortfolioProjectPage />} />
           <Route path="/o-nas" element={<AboutPage />} />
           <Route path="/kontakt" element={<ContactPage />} />
           <Route path="/polityka-prywatnosci" element={<PrivacyPolicyPage />} />

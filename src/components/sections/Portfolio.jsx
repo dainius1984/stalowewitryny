@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -120,7 +120,10 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
     return "";
   };
 
+  const slug = project.slug || project.title?.toLowerCase().replace(/\s+/g, '-') || '';
+
   return (
+    <Link to={`/portfolio/${slug}`} className="block" title={`Zobacz projekt: ${project.title}`}>
     <motion.div
       ref={tileRef}
       className={cn(
@@ -141,20 +144,6 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
         }
       }}
       onMouseLeave={handleMouseLeave}
-      onClick={(e) => {
-        if (isMobile) {
-          // On mobile, toggle overlay on click
-          e.preventDefault();
-          setIsMobileOverlayHidden(!isMobileOverlayHidden);
-          // If showing overlay, reset scroll
-          if (isMobileOverlayHidden) {
-            if (imageContainerRef.current) {
-              imageContainerRef.current.scrollTop = 0;
-            }
-          }
-        }
-      }}
-      title={`Zobacz ${project.title} - ${project.category}`}
     >
       {/* Layer 0: Full-height website screenshot */}
       <div
@@ -248,7 +237,7 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
         )}
       </AnimatePresence>
 
-      {/* Hover State: Click to visit indicator */}
+      {/* Hover State: Odwiedź stronę (external) – nie nawiguje do /portfolio/slug */}
       {((isMobile && isMobileOverlayHidden) || (!isMobile && isHovered)) && (
         <motion.a
           href={project.url}
@@ -260,7 +249,9 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
           onClick={(e) => {
-            e.stopPropagation(); // Prevent tile click from firing
+            e.preventDefault();
+            e.stopPropagation();
+            window.open(project.url, '_blank', 'noopener,noreferrer');
           }}
         >
           <span>Odwiedź stronę</span>
@@ -268,6 +259,7 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
         </motion.a>
       )}
     </motion.div>
+    </Link>
   );
 }
 
@@ -276,7 +268,10 @@ export function PortfolioTile({ project, index, isLastInRow, totalItems }) {
  * Shows only 6 projects with "View More" button
  */
 export function Portfolio({ limit = 6 }) {
-  const sortedProjects = portfolioProjects.sort((a, b) => (a.order || 0) - (b.order || 0));
+  const sortedProjects = useMemo(
+    () => [...portfolioProjects].sort((a, b) => (a.order || 0) - (b.order || 0)),
+    []
+  );
   const displayedProjects = sortedProjects.slice(0, limit);
   const hasMore = sortedProjects.length > limit;
 
@@ -331,7 +326,7 @@ export function Portfolio({ limit = 6 }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedProjects.map((project, index) => (
             <PortfolioTile
-              key={project.url}
+              key={project.slug || project.url}
               project={project}
               index={index}
               isLastInRow={false}

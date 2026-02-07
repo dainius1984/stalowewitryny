@@ -1,12 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { portfolioProjects } from "@/data/portfolioProjects";
+import { portfolioProjects, FILTER_CATEGORIES } from "@/data/portfolioProjects";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BASE_URL } from "@/lib/constants";
+
+const FILTER_ALL = "Wszystkie";
 
 /**
  * Portfolio List Item Component
@@ -109,6 +112,8 @@ function PortfolioListItem({ project, index }) {
     }
   };
 
+  const slug = project.slug || project.title?.toLowerCase().replace(/\s+/g, '-') || '';
+
   return (
     <motion.article
       ref={itemRef}
@@ -128,6 +133,11 @@ function PortfolioListItem({ project, index }) {
         ease: [0.4, 0, 0.2, 1],
       }}
     >
+      <Link
+        to={`/portfolio/${slug}`}
+        className="contents"
+        aria-label={`Zobacz projekt: ${project.title}`}
+      >
       {/* Column A: Scrollable Image */}
       <div 
         ref={imageContainerRef}
@@ -241,7 +251,9 @@ function PortfolioListItem({ project, index }) {
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
             onClick={(e) => {
-              e.stopPropagation(); // Prevent image click from firing
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(project.url, '_blank', 'noopener,noreferrer');
             }}
           >
             <span>Odwiedź stronę</span>
@@ -289,7 +301,7 @@ function PortfolioListItem({ project, index }) {
           </motion.p>
         )}
 
-        {/* CTA Button */}
+        {/* CTA Button - external site, nie nawiguje do /portfolio/slug */}
         <motion.a
           href={project.url}
           target="_blank"
@@ -299,21 +311,37 @@ function PortfolioListItem({ project, index }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: index * 0.1 + 0.25 }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.open(project.url, '_blank', 'noopener,noreferrer');
+          }}
         >
           <span>Odwiedź stronę</span>
           <ArrowRight className="w-5 h-5" />
         </motion.a>
       </div>
+      </Link>
     </motion.article>
   );
 }
 
 /**
  * Full Portfolio Page
- * Displays all portfolio projects in alternating list layout
+ * Filtry kategorii (Wszystkie, Zdrowie, Biznes, Gastronomia), karty linkują do /portfolio/[slug].
  */
 export function PortfolioPage() {
-  const sortedProjects = portfolioProjects.sort((a, b) => (a.order || 0) - (b.order || 0));
+  const [activeFilter, setActiveFilter] = useState(FILTER_ALL);
+
+  const sortedProjects = useMemo(
+    () => [...portfolioProjects].sort((a, b) => (a.order || 0) - (b.order || 0)),
+    []
+  );
+
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === FILTER_ALL) return sortedProjects;
+    return sortedProjects.filter((p) => p.filterCategory === activeFilter);
+  }, [sortedProjects, activeFilter]);
 
   useEffect(() => {
     document.title = "Portfolio | Stalowe Witryny";
@@ -376,15 +404,74 @@ export function PortfolioPage() {
               </motion.p>
             </motion.div>
 
+            {/* Filter Bar */}
+            <motion.nav
+              className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10 md:mb-12"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              aria-label="Filtruj projekty po kategorii"
+            >
+              <button
+                type="button"
+                onClick={() => setActiveFilter(FILTER_ALL)}
+                className={cn(
+                  "px-4 py-2.5 rounded-full text-sm font-semibold font-sans transition-all duration-200",
+                  activeFilter === FILTER_ALL
+                    ? "bg-primary text-black shadow-lg shadow-primary/25"
+                    : "bg-white/5 text-neutral-300 border border-white/10 hover:bg-white/10 hover:text-white"
+                )}
+              >
+                Wszystkie
+              </button>
+              {FILTER_CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveFilter(cat)}
+                  className={cn(
+                    "px-4 py-2.5 rounded-full text-sm font-semibold font-sans transition-all duration-200",
+                    activeFilter === cat
+                      ? "bg-primary text-black shadow-lg shadow-primary/25"
+                      : "bg-white/5 text-neutral-300 border border-white/10 hover:bg-white/10 hover:text-white"
+                  )}
+                >
+                  {cat}
+                </button>
+              ))}
+            </motion.nav>
+
             {/* Portfolio List: Single column with alternating layout */}
             <div className="flex flex-col gap-6 md:gap-8 lg:gap-12 w-full">
-              {sortedProjects.map((project, index) => (
-                <PortfolioListItem
-                  key={project.url}
-                  project={project}
-                  index={index}
-                />
-              ))}
+              <AnimatePresence mode="popLayout">
+                {filteredProjects.length === 0 ? (
+                  <motion.p
+                    key="empty"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-neutral-400 text-center py-12"
+                  >
+                    Brak projektów w tej kategorii.
+                  </motion.p>
+                ) : (
+                  filteredProjects.map((project, index) => (
+                    <motion.div
+                      key={project.slug}
+                      layout
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -12 }}
+                      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                    >
+                      <PortfolioListItem
+                        project={project}
+                        index={index}
+                      />
+                    </motion.div>
+                  ))
+                )}
+              </AnimatePresence>
             </div>
           </Container>
         </main>
