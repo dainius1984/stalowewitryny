@@ -1,9 +1,11 @@
 {
-  "rewrites": [
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/:path*",
+      "destination": "https://www.stalowewitryny.pl/:path*",
+      "permanent": true,
+      "has": [{ "type": "host", "value": "stalowewitryny.pl" }]
     }
   ]
 }
-

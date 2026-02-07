@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { portfolioProjects } from "@/data/portfolioProjects";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 
 /**
  * Portfolio List Item Component
@@ -313,6 +314,17 @@ function PortfolioListItem({ project, index }) {
  */
 export function PortfolioPage() {
   const sortedProjects = portfolioProjects.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  useEffect(() => {
+    document.title = "Portfolio | Stalowe Witryny";
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${BASE_URL}/portfolio`);
+  }, []);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "@/lib/constants";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -29,7 +30,7 @@ export function BlogPage() {
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', 'https://www.stalowewitryny.pl/blog');
+    canonical.setAttribute('href', `${BASE_URL}/blog`);
   }, []);
 
   const blogPosts = [

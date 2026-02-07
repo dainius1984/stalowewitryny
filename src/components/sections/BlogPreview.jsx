@@ -4,8 +4,19 @@ import { Container } from "@/components/ui/Container";
 import { ArrowRight, Calendar } from "lucide-react";
 
 /**
+ * Linki do podstron dla indeksacji (Internal Linking - Discovered by Googlebot).
+ * Ścieżki relatywne, aby robot mógł nimi przejść.
+ */
+const BLOG_AND_PAGES = [
+  { href: "/blog", label: "Blog – wszystkie artykuły" },
+  { href: "/blog/ile-kosztuje-strona-internetowa-wroclaw", label: "Ile kosztuje strona internetowa we Wrocławiu?" },
+  { href: "/blog/szybkosc-strony-internetowej-seo-wroclaw", label: "Szybkość strony a SEO Wrocław" },
+  { href: "/regulamin", label: "Regulamin" },
+];
+
+/**
  * Blog Preview Section
- * Displays latest blog post preview on homepage
+ * Displays latest blog post preview on homepage + direct links for indexing (GSC).
  */
 export function BlogPreview() {
   const latestPost = {
@@ -91,6 +102,32 @@ export function BlogPreview() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </div>
+
+          {/* Artykuły i regulamin – bezpośrednie linki dla Google (Internal Linking / Discovered) */}
+          <motion.nav
+            className="mt-12 pt-10 border-t border-white/10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            aria-label="Blog i regulamin"
+          >
+            <h3 className="text-lg font-semibold text-white font-sans mb-4 text-center">
+              Artykuły i regulamin
+            </h3>
+            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-sans">
+              {BLOG_AND_PAGES.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    to={item.href}
+                    className="text-neutral-300 hover:text-primary transition-colors underline underline-offset-2"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.nav>
         </motion.div>
       </Container>
     </section>

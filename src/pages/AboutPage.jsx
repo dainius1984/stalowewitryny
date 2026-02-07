@@ -1,14 +1,27 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Process } from "@/components/sections/Process";
+import { BASE_URL } from "@/lib/constants";
 
 /**
  * About Page (O Nas)
  * Information about the company and services
  */
 export function AboutPage() {
+  useEffect(() => {
+    document.title = "O nas | Stalowe Witryny";
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${BASE_URL}/o-nas`);
+  }, []);
+
   return (
     <>
       {/* Efekt ziarna na tle */}

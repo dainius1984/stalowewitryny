@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Accordion } from "@/components/ui/Accordion";
 import { Shield, Building2, Mail, Cookie, Lock, Scale } from "lucide-react";
+import { BASE_URL } from "@/lib/constants";
 
 /**
  * Company Data
@@ -21,6 +23,17 @@ const companyData = {
  * RODO-compliant privacy policy page with accordion sections
  */
 export function PrivacyPolicyPage() {
+  useEffect(() => {
+    document.title = "Polityka prywatności | Stalowe Witryny";
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${BASE_URL}/polityka-prywatnosci`);
+  }, []);
+
   const accordionItems = [
     {
       icon: <Shield className="w-6 h-6" />,

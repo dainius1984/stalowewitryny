@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FileText, Gavel, PenTool, CheckCircle, Download, Building2, Mail, Scale } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 
 /**
  * Company Data
@@ -24,6 +25,17 @@ const companyData = {
 export function TermsPage() {
   const [activeSection, setActiveSection] = useState("section-1");
   const sectionsRef = useRef({});
+
+  useEffect(() => {
+    document.title = "Regulamin | Stalowe Witryny";
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${BASE_URL}/regulamin`);
+  }, []);
 
   // Scroll spy - detect which section is in view
   useEffect(() => {

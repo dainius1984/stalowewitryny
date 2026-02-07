@@ -3,7 +3,8 @@ import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CompanySurvey } from "@/components/sections/CompanySurvey";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { BASE_URL } from "@/lib/constants";
 
 /**
  * Contact Page (Kontakt)
@@ -11,6 +12,17 @@ import { useState } from "react";
  */
 export function ContactPage() {
   const [isSurveyOpen, setIsSurveyOpen] = useState(true);
+
+  useEffect(() => {
+    document.title = "Kontakt | Stalowe Witryny";
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${BASE_URL}/kontakt`);
+  }, []);
 
   return (
     <>
