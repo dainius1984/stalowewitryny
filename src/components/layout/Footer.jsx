@@ -76,8 +76,8 @@ export function Footer() {
     <footer id="kontakt" className="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
       <Container className="py-12 md:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 items-start">
-          {/* Logo & Brand */}
-          <div className="space-y-4 text-center md:text-left">
+          {/* Logo & Brand - ograniczona szerokość, żeby nazwa nie nachodziła na kolejną kolumnę */}
+          <div className="space-y-4 text-center md:text-left min-w-0 lg:max-w-[16rem]">
             <Link 
               to="/" 
               onClick={(e) => {
@@ -87,20 +87,21 @@ export function Footer() {
                 }
                 scrollToTop();
               }}
-              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity" 
+              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity flex-wrap max-w-full" 
               title="Stalowe Witryny - Tworzenie Stron Internetowych Wrocław - Strona główna"
             >
               <img 
                 src="/img/logo.webp" 
                 alt="Tania strona www Wrocław - projektowanie stron Dolny Śląsk" 
-                className="h-8 w-8 md:h-10 md:w-10 object-contain"
+                className="h-8 w-8 md:h-10 md:w-10 object-contain flex-shrink-0"
                 width="40"
                 height="40"
                 loading="lazy"
               />
-              <span className="text-2xl md:text-3xl font-black tracking-tighter font-sans text-white">
-                STALOWEWITRYNY
-                <span className="text-primary">.</span>
+              <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter font-sans text-white break-words">
+                STALOWE
+                <wbr />
+                WITRYNY<span className="text-primary">.</span>
               </span>
             </Link>
             <p className="text-sm text-neutral-300 font-sans max-w-xs mx-auto md:mx-0">
