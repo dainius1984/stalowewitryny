@@ -139,7 +139,7 @@ export function AboutPage() {
                   Misja
                 </h2>
                 <p className="text-base md:text-lg text-neutral-300 leading-relaxed">
-                  Moja misja to udostępnienie każdej firmie <strong className="text-primary">profesjonalnej strony internetowej</strong> 
+                  Moja misja to udostępnienie każdej firmie <strong className="text-primary">profesjonalnej strony internetowej </strong> 
                   bez astronomicznych kosztów i miesięcznych abonamentów. Tworzę <strong className="text-white">strony na własność</strong> – 
                   płacisz raz, strona jest Twoja na zawsze.
                 </p>
