@@ -86,31 +86,43 @@ export function PortfolioProjectPage() {
               <span className="text-white">{project.title}</span>
             </motion.nav>
 
-            {/* Hero: H1 + kategoria + zdjęcie */}
+            {/* Hero: H1 + kategoria + mały scrollujący podgląd w lewym górnym rogu */}
             <motion.header
               className="mb-12 md:mb-16"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <span className="inline-block px-3 py-1.5 text-xs font-semibold uppercase tracking-wider bg-primary/20 text-primary border border-primary/40 rounded-full font-sans mb-6">
-                {project.category}
-              </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-sans mb-6 bg-gradient-to-r from-white via-white to-primary/80 bg-clip-text text-transparent">
-                Projekt i wdrożenie strony: {project.title}
-              </h1>
-              {project.description && (
-                <p className="text-lg text-neutral-300 font-sans max-w-2xl mb-8">
-                  {project.description}
-                </p>
-              )}
-              <div className="rounded-2xl overflow-hidden border border-white/10 bg-neutral-900/50">
-                <img
-                  src={project.image}
-                  alt={`Strona internetowa ${project.title} - realizacja Stalowe Witryny`}
-                  className="w-full h-auto object-cover object-top"
-                  loading="eager"
-                />
+              <div className="grid gap-8 md:gap-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,2fr)] items-start">
+                {/* Mały scrollujący podgląd strony w lewym górnym rogu */}
+                <div className="order-2 md:order-1">
+                  <div className="w-full max-w-xs md:max-w-sm aspect-[4/3] rounded-2xl border border-white/10 bg-neutral-900/50 overflow-y-auto overflow-x-hidden">
+                    <img
+                      src={project.image}
+                      alt={`Strona internetowa ${project.title} - realizacja Stalowe Witryny`}
+                      className="w-full h-auto object-top"
+                      loading="eager"
+                    />
+                  </div>
+                  <p className="mt-3 text-xs text-neutral-500 font-sans">
+                    Podgląd strony – możesz przewinąć obraz, aby zobaczyć całą stronę.
+                  </p>
+                </div>
+
+                {/* Tytuł, kategoria i opis */}
+                <div className="order-1 md:order-2">
+                  <span className="inline-block px-3 py-1.5 text-xs font-semibold uppercase tracking-wider bg-primary/20 text-primary border border-primary/40 rounded-full font-sans mb-6">
+                    {project.category}
+                  </span>
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-sans mb-6 bg-gradient-to-r from-white via-white to-primary/80 bg-clip-text text-transparent">
+                    Projekt i wdrożenie strony: {project.title}
+                  </h1>
+                  {project.description && (
+                    <p className="text-lg text-neutral-300 font-sans max-w-2xl">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
               </div>
             </motion.header>
 
