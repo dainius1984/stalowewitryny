@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Navbar } from "@/components/layout/Navbar";
@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { portfolioProjects } from "@/data/portfolioProjects";
 import { BASE_URL } from "@/lib/constants";
 import { ArrowRight } from "lucide-react";
+import { useStructuredData } from "@/lib/useStructuredData";
 
 /**
  * Dynamiczna podstrona portfolio: /portfolio/[slug]
@@ -15,6 +16,30 @@ import { ArrowRight } from "lucide-react";
 export function PortfolioProjectPage() {
   const { slug } = useParams();
   const project = portfolioProjects.find((p) => p.slug === slug);
+
+  const schemaData = useMemo(() => {
+    if (!project) return null;
+    const url = `${BASE_URL}/portfolio/${project.slug}`;
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+      url,
+      name: project.metaTitle || `Projekt i wdrożenie strony: ${project.title} | Stalowe Witryny`,
+      headline: `Projekt i wdrożenie strony: ${project.title}`,
+      description:
+        project.metaDescription ||
+        project.description ||
+        `Realizacja strony internetowej: ${project.title} – portfolio Stalowe Witryny.`,
+      image: project.image ? `${BASE_URL}${project.image}` : undefined,
+      inLanguage: "pl-PL",
+      isPartOf: {
+        "@type": "WebSite",
+        "@id": `${BASE_URL}/#website`,
+      },
+    };
+  }, [project]);
 
   useEffect(() => {
     if (!project) return;
@@ -35,6 +60,12 @@ export function PortfolioProjectPage() {
     }
     canonical.setAttribute("href", `${BASE_URL}/portfolio/${project.slug}`);
   }, [project]);
+
+  // Dynamiczne Schema.org dla podstrony portfolio
+  useStructuredData(
+    project ? `portfolio-${project.slug}` : null,
+    schemaData
+  );
 
   if (!project) {
     return (
@@ -96,12 +127,12 @@ export function PortfolioProjectPage() {
               <div className="grid gap-8 md:gap-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,2fr)] items-start">
                 {/* Mały scrollujący podgląd strony w lewym górnym rogu */}
                 <div className="order-2 md:order-1">
-                  <div className="w-full max-w-xs md:max-w-sm aspect-[4/3] rounded-2xl border border-white/10 bg-neutral-900/50 overflow-y-auto overflow-x-hidden">
+                  <div className="w-full md:w-auto max-w-full md:max-w-xs lg:max-w-sm aspect-[4/3] rounded-2xl border border-white/10 bg-neutral-900/50 overflow-y-auto overflow-x-hidden">
                     <img
                       src={project.image}
-                      alt={`Strona internetowa ${project.title} - realizacja Stalowe Witryny`}
+                      alt={`Zrzut ekranu realizacji: ${project.title} - projekt strony internetowej`}
                       className="w-full h-auto object-top"
-                      loading="eager"
+                      loading="lazy"
                     />
                   </div>
                   <p className="mt-3 text-xs text-neutral-500 font-sans">

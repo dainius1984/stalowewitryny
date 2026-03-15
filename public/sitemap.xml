@@ -3,7 +3,7 @@
   <!-- Strona główna -->
   <url>
     <loc>https://www.stalowewitryny.pl/</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,50 +11,50 @@
   <!-- Portfolio -->
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <!-- Portfolio – realizacje (podstrony pod SEO) -->
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/white-effect</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/autyzm-od-kuchni</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/studio-figura</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/zielone-mile</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/fryzjerka-malgosia</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/oranzeria</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.stalowewitryny.pl/portfolio/openpol</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -62,7 +62,7 @@
   <!-- O nas -->
   <url>
     <loc>https://www.stalowewitryny.pl/o-nas</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -70,7 +70,7 @@
   <!-- Kontakt -->
   <url>
     <loc>https://www.stalowewitryny.pl/kontakt</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -78,7 +78,7 @@
   <!-- Polityka prywatności -->
   <url>
     <loc>https://www.stalowewitryny.pl/polityka-prywatnosci</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -86,7 +86,7 @@
   <!-- Regulamin -->
   <url>
     <loc>https://www.stalowewitryny.pl/regulamin</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -94,7 +94,7 @@
   <!-- Blog - Strona główna -->
   <url>
     <loc>https://www.stalowewitryny.pl/blog</loc>
-    <lastmod>2026-01-05</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -102,7 +102,7 @@
   <!-- Blog - Szybkość strony a SEO Wrocław -->
   <url>
     <loc>https://www.stalowewitryny.pl/blog/szybkosc-strony-internetowej-seo-wroclaw</loc>
-    <lastmod>2026-01-25</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -110,7 +110,7 @@
   <!-- Blog - Ile kosztuje strona internetowa we Wrocławiu -->
   <url>
     <loc>https://www.stalowewitryny.pl/blog/ile-kosztuje-strona-internetowa-wroclaw</loc>
-    <lastmod>2026-01-05</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

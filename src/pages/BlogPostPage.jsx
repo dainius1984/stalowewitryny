@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "@/lib/constants";
@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, Phone, Mail } from "lucide-react";
+import { useStructuredData } from "@/lib/useStructuredData";
 
 /**
  * Blog Post Page - Ile kosztuje strona internetowa we Wrocławiu
@@ -35,6 +36,42 @@ export function BlogPostPage() {
     }
     canonical.setAttribute('href', `${BASE_URL}/blog/ile-kosztuje-strona-internetowa-wroclaw`);
   }, []);
+
+  const schemaData = useMemo(() => {
+    const url = `${BASE_URL}/blog/ile-kosztuje-strona-internetowa-wroclaw`;
+    return {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": `${url}#article`,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": url,
+      },
+      headline: "Ile kosztuje strona internetowa we Wrocławiu? Cennik 2026",
+      description:
+        "Sprawdź realne ceny stron www we Wrocławiu. Dowiedz się, dlaczego warto wybrać React bez abonamentu. Przejrzysty cennik Stalowych Witryn.",
+      author: {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: "Stalowe Witryny",
+      },
+      publisher: {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: "Stalowe Witryny",
+        logo: {
+          "@type": "ImageObject",
+          url: `${BASE_URL}/img/logo.webp`,
+        },
+      },
+      datePublished: "2026-01-01",
+      dateModified: "2026-03-15",
+      image: `${BASE_URL}/img/logo.webp`,
+      inLanguage: "pl-PL",
+    };
+  }, []);
+
+  useStructuredData("blog-ile-kosztuje", schemaData);
 
   return (
     <>

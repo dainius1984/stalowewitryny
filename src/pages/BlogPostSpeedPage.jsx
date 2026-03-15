@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "@/lib/constants";
@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, Phone, Mail, Zap } from "lucide-react";
+import { useStructuredData } from "@/lib/useStructuredData";
 
 /**
  * Blog Post - Szybkość strony a SEO Wrocław
@@ -35,6 +36,42 @@ export function BlogPostSpeedPage() {
     }
     canonical.setAttribute('href', `${BASE_URL}/blog/szybkosc-strony-internetowej-seo-wroclaw`);
   }, []);
+
+  const schemaData = useMemo(() => {
+    const url = `${BASE_URL}/blog/szybkosc-strony-internetowej-seo-wroclaw`;
+    return {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": `${url}#article`,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": url,
+      },
+      headline: "Szybkość strony a SEO – dlaczego 0.8s LCP to klucz?",
+      description:
+        "Dowiedz się, jak szybkość strony wpływa na Twoją pozycję w Google i zyski. Sprawdź, dlaczego strony w React są szybsze od WordPressa. Optymalizacja SEO Wrocław.",
+      author: {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: "Stalowe Witryny",
+      },
+      publisher: {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: "Stalowe Witryny",
+        logo: {
+          "@type": "ImageObject",
+          url: `${BASE_URL}/img/logo.webp`,
+        },
+      },
+      datePublished: "2026-01-25",
+      dateModified: "2026-03-15",
+      image: `${BASE_URL}/img/logo.webp`,
+      inLanguage: "pl-PL",
+    };
+  }, []);
+
+  useStructuredData("blog-szybkosc-strony", schemaData);
 
   return (
     <>
